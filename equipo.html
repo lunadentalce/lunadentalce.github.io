@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1F1F22">
+<link rel="icon" href="assets/marcador.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&amp;display=swap">
+<link rel="stylesheet" href="estilos/base.css">
+<link rel="stylesheet" href="efectos/base.css">
+<link rel="stylesheet" href="efectos/calma.css">
+<link rel="stylesheet" href="efectos/toque.css">
+<link rel="stylesheet" href="efectos/transicion.css">
+<link rel="stylesheet" href="efectos/clinica.css">
+<style>:root { --fx-bg: #FBF8F2; --fx-paper: #FFFFFF; --fx-accent: #D9B25F; --fx-ink: #1F1F22; --fx-deep: #1F1F22; --fx-pop: #EFE8DB; --fx-mancha-1: #E5C068; --fx-mancha-2: #B8933A; --fx-mancha-3: #1F1F22; --fx-font: "Montserrat", sans-serif; --fx-font-disp: "Montserrat", sans-serif; --fx-font-txt: "Montserrat", sans-serif; --fx-rosa: #EFE8DB; --fx-rosa-2: #D9B25F; --fx-metal-1: #B8933A; --fx-metal-2: #D9B25F; --fx-metal-3: #F1DFA8; }</style>
+
+<title>Panel del equipo · Luna Dental</title>
+<meta name="description" content="Panel del equipo de Luna Dental: solicitudes, agenda, caja y presupuestos.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="estilos/paneles.css">
+<link rel="stylesheet" href="modulos/clinica/clinica-panel.css">
+</head>
+<body data-pagina="Panel del equipo" data-secciones='["Solicitudes", "Agenda", "Caja", "Presupuestos", "Ajustes"]'>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11.5a7 7 0 0 0-14 0C5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></symbol>
+  <symbol id="i-burger" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0z"/><path d="M3.5 13.5h17M4 17h16a0 0 0 0 1 0 0 3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M9 7h.01M13 6.5h.01M15.5 8h.01"/></symbol>
+  <symbol id="i-bolsa" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-moto" viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h5l2-6h-4M16 11l2 6M12 11 10 7H7"/></symbol>
+  <symbol id="i-envio" viewBox="0 0 24 24"><path d="M21 4 3 11l7 3 3 7z"/><path d="m10 14 4-4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-web" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9h17M7 6.8h.01M9.5 6.8h.01"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-pago" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M3 10h18M7 14h3"/></symbol>
+  <symbol id="i-llave" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-foto" viewBox="0 0 24 24"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-lista" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-copa" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6" height="6" rx="1"/><rect x="14.5" y="3.5" width="6" height="6" rx="1"/><rect x="3.5" y="14.5" width="6" height="6" rx="1"/><path d="M14.5 14.5h2v2h-2zM18.5 14.5h2M14.5 18.5h2M18.5 18.5v2"/></symbol>
+  <symbol id="i-estrella" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8-4.3-4.1 5.9-.9z"/></symbol>
+  <symbol id="i-tarjeta" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></symbol>
+  <symbol id="i-caja" viewBox="0 0 24 24"><path d="M6 3.5h12v5H6zM4 8.5h16l-1.5 11h-13z"/><path d="M9 13h6"/></symbol>
+  <symbol id="i-equipo" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3"/><circle cx="17" cy="9.5" r="2.3"/><path d="M3.5 19c.5-3.5 2.7-5.5 5.5-5.5s5 2 5.5 5.5M15 14.2c2.6-.4 4.7 1 5.5 4.3"/></symbol>
+  <symbol id="i-juego" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/></symbol>
+  <symbol id="i-agenda" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M13 14h3M8 17h2"/></symbol>
+  <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-diente" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/></symbol>
+  <symbol id="i-endodoncia" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/><path d="M10 9.5c0 2 .5 3.5.7 5.5M14 9.5c0 2-.5 3.5-.7 5.5"/></symbol>
+  <symbol id="i-brackets" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/><rect x="9.2" y="7.2" width="5.6" height="4" rx=".9"/><path d="M5 9.2h4.2M14.8 9.2H19"/></symbol>
+  <symbol id="i-sonrisa" viewBox="0 0 24 24"><path d="M3.5 12.5c1.2 4.6 4.7 7 8.5 7s7.3-2.4 8.5-7"/><path d="M5 12.8h14M9 13v4.6M12 13v5.3M15 13v4.6"/><path d="M12 3.5v3M10.5 5h3"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M8 17v-6c0-1 .6-1.6 1.4-1.6S10.8 10 10.8 11v6M13.2 17v-6c0-1 .6-1.6 1.4-1.6S16 10 16 11v6"/></symbol>
+</defs></svg>
+
+
+<header class="cabecera"><div class="wrap">
+  <a class="marca" href="index.html"><img src="assets/marcador.svg" alt="" width="52" height="52"><span><b>Luna Dental</b><small>Panel del equipo</small></span></a>
+  <a class="volver" href="index.html">Volver a la página</a>
+</div></header>
+<main>
+<section class="oscuro cab-pag"><div class="wrap">
+  <h1 class="doble fx-entra fx-d1"><span>El panel de tu equipo:</span>solicitudes, agenda y caja</h1>
+  <p class="intro fx-entra fx-d2" style="color:var(--fx-soft)">Aquí llegan las solicitudes de tu página. Las conviertes en citas con su hora y su doctor, y llevas la agenda, la caja y los presupuestos de toda la clínica.</p>
+  
+</div></section>
+
+<section class="sec" style="padding-top:36px"><div class="wrap">
+  <div id="puerta" hidden></div>
+  <div id="contenido" hidden>
+  <div class="app" style="grid-template-columns:84px minmax(0,1fr)">
+    <nav class="riel" role="tablist" aria-label="Secciones del panel">
+      <button type="button" role="tab" id="t-solicitudes" aria-selected="true" aria-controls="v-solicitudes"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>Solicitudes <span class="n" id="n-sol" hidden></span></button>
+      <button type="button" role="tab" id="t-agenda" aria-selected="false" aria-controls="v-agenda"><svg viewBox="0 0 24 24"><use href="#i-agenda"/></svg>Agenda</button>
+      <button type="button" role="tab" id="t-caja" aria-selected="false" aria-controls="v-caja"><svg viewBox="0 0 24 24"><use href="#i-caja"/></svg>Caja</button>
+      <button type="button" role="tab" id="t-presupuestos" aria-selected="false" aria-controls="v-presupuestos"><svg viewBox="0 0 24 24"><use href="#i-pago"/></svg>Presupuestos</button>
+      <button type="button" role="tab" id="t-ajustes" aria-selected="false" aria-controls="v-ajustes" hidden><svg viewBox="0 0 24 24"><use href="#i-panel"/></svg>Ajustes</button>
+    </nav>
+    <div>
+      <div class="barra-sesion"><span><span class="rol-chip" id="s-rol"></span> <span id="s-nombre"></span></span>
+        <span><a href="dueno.html" id="s-dueno" hidden>Panel del dueño</a> <button type="button" id="s-salir">Salir</button></span></div>
+
+      <div class="vista" id="v-solicitudes" role="tabpanel" aria-labelledby="t-solicitudes">
+        <h2>Solicitudes de cita</h2><p class="sub">Cada solicitud llega de la página con el consentimiento del paciente. Confírmala con día y hora exactos y quedará en la agenda.</p>
+        <div class="ctrl" id="sol-filtro" aria-label="Estado"><button type="button" class="cb" data-e="nueva" aria-pressed="true">Nuevas</button><button type="button" class="cb" data-e="agendada" aria-pressed="false">Agendadas</button><button type="button" class="cb" data-e="descartada" aria-pressed="false">Descartadas</button></div>
+        <div class="tarjetas" id="sol-lista" aria-live="polite"></div>
+      </div>
+
+      <div class="vista" id="v-agenda" role="tabpanel" aria-labelledby="t-agenda" hidden>
+        <h2>Agenda de todos tus doctores</h2><p class="sub">Mira el día o la semana, filtra por doctor y cambia el estado de cada cita. Los cambios quedan guardados.</p>
+        <div class="ctrl"><button type="button" class="cb" id="ag-ant">Anterior</button><button type="button" class="cb hoy" id="ag-hoy">Hoy</button><button type="button" class="cb" id="ag-sig">Siguiente</button>
+          <span style="width:8px"></span><button type="button" class="cb" id="vi-dia" aria-pressed="true">Por día</button><button type="button" class="cb" id="vi-sem" aria-pressed="false">Por semana</button></div>
+        <div class="ctrl" id="ag-docs" aria-label="Doctores"></div>
+        <div class="agenda" data-lenis-prevent><div class="ag-grid" id="ag-grid"></div></div>
+        <div class="detalle" id="ag-det" hidden></div>
+        <div class="leyenda" id="ag-ley"></div>
+      </div>
+
+      <div class="vista" id="v-caja" role="tabpanel" aria-labelledby="t-caja" hidden>
+        <h2>Caja diaria</h2><p class="sub">Anota lo que entra y lo que sale. Cada movimiento queda con su hora, su doctor y quién lo registró; se corrige anulando con un motivo, nunca borrando.</p>
+        <div class="fila" style="max-width:260px"><div class="campo"><label for="c-dia">Día</label><input id="c-dia" type="date"></div></div>
+        <div class="kpis" id="caja-kpis" style="margin-bottom:16px"></div>
+        <form class="fila" id="caja-form" autocomplete="off">
+          <div class="campo"><label for="c-desc">Descripción</label><input id="c-desc" required maxlength="80" placeholder="ej.: 1 control"></div>
+          <div class="campo"><label for="c-imp">Importe</label><input id="c-imp" type="number" step="0.01" min="0.01" max="100000" required placeholder="ej.: 35.00"></div>
+          <div class="campo"><label for="c-tipo">Tipo</label><select id="c-tipo"><option value="ing">Ingreso</option><option value="egr">Egreso</option></select></div>
+          <div class="campo"><label for="c-doc">Doctor</label><select id="c-doc"></select></div>
+          <button class="btn" type="submit">Añadir</button>
+        </form>
+        <p class="err-f" id="c-err" role="alert"></p>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Hora</th><th>Descripción</th><th>Doctor</th><th class="n">Importe</th><th></th></tr></thead><tbody id="caja-lista"></tbody></table></div>
+      </div>
+
+      <div class="vista" id="v-presupuestos" role="tabpanel" aria-labelledby="t-presupuestos" hidden>
+        <h2>Presupuestos que se aceptan más rápido</h2><p class="sub">El precio de cada tratamiento sale del tarifario de la clínica; el total lo calcula el sistema. Guárdalo, envíalo por WhatsApp y dale seguimiento.</p>
+        <div class="dos">
+          <div>
+            <div class="campo" style="margin-bottom:10px"><label for="p-pac">Paciente</label><input id="p-pac" maxlength="80" autocomplete="off"></div>
+            <div class="fila"><div class="campo"><label for="p-item">Tratamiento</label><select id="p-item"></select></div>
+              <div class="campo"><label for="p-cant">Cantidad</label><input id="p-cant" type="number" min="1" max="20" value="1"></div>
+              <button type="button" class="btn" id="p-add">Agregar</button></div>
+            <div class="fila"><div class="campo"><label for="p-doc">Doctor</label><select id="p-doc"></select></div>
+              <div class="campo"><label for="p-desc">Descuento (%)</label><input id="p-desc" type="number" min="0" max="50" value="0"></div>
+              <div class="campo"><label for="p-seg">Seguimiento</label><input id="p-seg" type="date"></div></div>
+            <table class="tabla"><thead><tr><th>Descripción</th><th class="n">Cant.</th><th class="n">Importe</th><th></th></tr></thead><tbody id="p-lista"></tbody></table>
+            <div class="tot" style="display:flex;justify-content:space-between;font:800 1.3rem var(--fx-font-disp);padding-top:10px;margin-top:6px;border-top:2px solid var(--fx-deep)"><span>Total (aprox.)</span><span id="p-total"></span></div>
+            <p class="err-f" id="p-err" role="alert"></p>
+            <div class="acciones" style="margin-top:6px"><button type="button" class="btn" id="p-guardar">Guardar y enviar por WhatsApp</button></div>
+          </div>
+          <div><h3 style="font:800 1.15rem var(--fx-font-disp);margin-bottom:8px">Guardados</h3>
+            <div class="ctrl" id="pl-filtro"><button type="button" class="cb" data-e="" aria-pressed="true">Todos</button><button type="button" class="cb" data-e="enviado" aria-pressed="false">En espera</button><button type="button" class="cb" data-e="aceptado" aria-pressed="false">Aceptados</button><button type="button" class="cb" data-e="rechazado" aria-pressed="false">Rechazados</button></div>
+            <div class="tarjetas" id="pl-lista"></div></div>
+        </div>
+      </div>
+
+      <div class="vista" id="v-ajustes" role="tabpanel" aria-labelledby="t-ajustes" hidden>
+        <h2>Ajustes de la clínica</h2><p class="sub">Solo el administrador. Los doctores aparecen en la agenda y en la caja; el tarifario fija el precio de los presupuestos.</p>
+        <h3 style="font:800 1.15rem var(--fx-font-disp);margin:8px 0">Doctores</h3>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Nombre</th><th>Especialidad</th><th>Color</th><th>Activo</th><th></th></tr></thead><tbody id="aj-doc"></tbody></table></div>
+        <h3 style="font:800 1.15rem var(--fx-font-disp);margin:22px 0 8px">Tarifario</h3>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Tratamiento</th><th class="n">Precio (USD)</th><th>Activo</th><th></th></tr></thead><tbody id="aj-tar"></tbody></table></div>
+        <p class="err-f" id="aj-err" role="alert"></p>
+      </div>
+    </div>
+  </div>
+  </div>
+</div></section>
+</main>
+
+<dialog class="mini-dlg" id="dlg-motivo"><form method="dialog" id="dlg-form"><h3>Anular movimiento</h3><p id="dlg-txt"></p>
+  <div class="campo"><label for="dlg-m">Motivo (obligatorio)</label><input id="dlg-m" maxlength="120" required></div>
+  <div class="acciones"><button class="btn" type="submit" value="ok">Anular</button><button class="btn btn-linea" type="button" id="dlg-x">Cancelar</button></div></form></dialog>
+
+<script src="config.js"></script>
+
+<script src="modulos/clinica/clinica-api.js"></script>
+<script src="modulos/clinica/clinica-ui.js"></script>
+<script>
+const { esc, $, $$, usd, hoy, suma, dif, dow, lunes, fechaCorta, fechaLarga, tel09, wa, msgErr, aviso } = CLUI, C = CLINICA;
+const falla = (el, e) => { const t = msgErr(e); el ? (el.textContent = t) : null; aviso(t, 'mal'); };
+let YO = null, DOCS = [], TAR = [], HORARIO = { h0: 8, h1: 17 };
+const docNombre = id => (DOCS.find(d => d.id === id) || { nombre: 'Sin asignar' }).nombre;
+const docColor = id => (DOCS.find(d => d.id === id) || { color: '#8E8F94' }).color;
+
+/* ---------- pestañas (teclado: flechas) ---------- */
+const tabs = $$('.riel button[role=tab]');
+const visibles = () => tabs.filter(b => !b.hidden);
+function ir(t) { tabs.forEach(b => { const on = b === t; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; $('#' + b.getAttribute('aria-controls')).hidden = !on; }); (CARGAR[t.id] || (() => {}))(); }
+tabs.forEach(b => { b.onclick = () => ir(b); b.onkeydown = e => { const v = visibles(), i = v.indexOf(b), d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (d) { e.preventDefault(); const n = v[(i + d + v.length) % v.length]; n.focus(); ir(n); } }; });
+
+/* ---------- solicitudes ---------- */
+const FR = { manana: 'Mañana', tarde: 'Tarde', cualquiera: 'Cualquier horario' };
+let solEstado = 'nueva';
+const horas = () => { const o = []; for (let m = HORARIO.h0 * 60; m < HORARIO.h1 * 60; m += 30) o.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); return o; };
+async function pintarSolicitudes() {
+  const cont = $('#sol-lista');
+  try {
+    const l = await C.rpc('solicitudes_lista', { p_estado: solEstado });
+    if (solEstado === 'nueva') { const n = $('#n-sol'); n.textContent = l.length; n.hidden = !l.length; }
+    cont.innerHTML = l.length ? l.map(s => `<article class="sol" data-id="${s.id}">
+      <h3>${esc(s.nombre)}</h3>
+      <div class="meta"><span>📱 ${esc(tel09(s.telefono))}</span><span>📅 ${esc(fechaCorta(s.dia))} · ${esc(FR[s.franja] || s.franja)}</span><span>Recibida ${esc(new Date(s.creado).toLocaleString('es-EC', { timeZone: CLUI.TZ, day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }))}</span></div>
+      <div class="chips">${s.servicios.map(x => `<span class="pill">${esc(x.nombre)}</span>`).join('')}${s.para_menor ? `<span class="pill menor">Menor de edad · autoriza ${esc(s.representante)}</span>` : ''}</div>
+      ${solEstado === 'nueva' ? `<div class="acciones"><button type="button" class="btn" data-agendar="${s.id}">Agendar</button>
+        <a class="btn btn-linea" target="_blank" rel="noopener" href="${wa(s.telefono, `Hola ${s.nombre.split(' ')[0]}, te escribimos de ${DEMO.cliente} por tu solicitud de cita (${s.servicios.map(x => x.nombre).join(', ')}).`)}">Escribir por WhatsApp</a>
+        <button type="button" class="mini" data-descartar="${s.id}">Descartar</button></div><div class="agendar" hidden></div>` : ''}
+    </article>`).join('') : `<p class="vacio">${solEstado === 'nueva' ? 'No hay solicitudes nuevas. Cuando un paciente pida cita desde la página, aparecerá aquí.' : 'Nada por aquí todavía.'}</p>`;
+    $$('[data-agendar]', cont).forEach(b => b.onclick = () => abrirAgendar(b.closest('.sol'), l.find(x => x.id == b.dataset.agendar)));
+    $$('[data-descartar]', cont).forEach(b => b.onclick = async () => { if (!confirm('¿Descartar esta solicitud?')) return; try { await C.rpc('solicitud_descartar', { p_id: +b.dataset.descartar }); aviso('Solicitud descartada.'); pintarSolicitudes(); } catch (e) { falla(null, e); } });
+  } catch (e) { cont.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; }
+}
+function abrirAgendar(card, s) {
+  const f = $('.agendar', card); f.hidden = !f.hidden; if (f.hidden) return;
+  f.innerHTML = `<div class="campo"><label>Tratamiento</label><select class="a-sv">${s.servicios.map(x => `<option value="${x.id}">${esc(x.nombre)}</option>`).join('')}</select></div>
+    <div class="campo"><label>Día</label><input class="a-dia" type="date" value="${esc(s.dia)}" min="${hoy()}"></div>
+    <div class="campo"><label>Hora</label><select class="a-hora">${horas().map(h => `<option ${h === (s.franja === 'tarde' ? '15:00' : '09:00') ? 'selected' : ''}>${h}</option>`).join('')}</select></div>
+    <div class="campo"><label>Doctor</label><select class="a-doc"><option value="">Sin asignar</option>${DOCS.filter(d => d.activo).map(d => `<option value="${d.id}">${esc(d.nombre)}</option>`).join('')}</select></div>
+    <button type="button" class="btn a-ok">Confirmar cita</button><p class="err-f a-err" role="alert" style="grid-column:1/-1"></p>`;
+  $('.a-ok', f).onclick = async () => {
+    try {
+      const r = await C.rpc('solicitud_agendar', { p_id: s.id, p_servicio: +$('.a-sv', f).value, p_dia: $('.a-dia', f).value, p_hora: $('.a-hora', f).value, p_doctor: $('.a-doc', f).value ? +$('.a-doc', f).value : null });
+      aviso(`Cita confirmada para ${r.nombre}.`); window.open(wa(s.telefono, `Hola ${s.nombre.split(' ')[0]}, tu cita en ${DEMO.cliente} quedó confirmada: ${fechaLarga($('.a-dia', f).value)} a las ${$('.a-hora', f).value}. Te esperamos.`), '_blank', 'noopener');
+      pintarSolicitudes();
+    } catch (e) { falla($('.a-err', f), e); }
+  };
+}
+$$('#sol-filtro .cb').forEach(b => b.onclick = () => { solEstado = b.dataset.e; $$('#sol-filtro .cb').forEach(x => x.setAttribute('aria-pressed', x === b)); pintarSolicitudes(); });
+
+/* ---------- agenda ---------- */
+const IH = 44;
+const ag = { dia: hoy(), vista: 'dia', docs: new Set(), citas: [], sel: null };
+const hm = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+const mins = s => +s.slice(0, 2) * 60 + +s.slice(3, 5);
+const ESTADO = { pendiente: 'Por confirmar', confirmada: 'Confirmada', atendida: 'Atendida', no_vino: 'No vino', cancelada: 'Cancelada' };
+async function cargarAgenda() {
+  const d0 = ag.vista === 'dia' ? ag.dia : lunes(ag.dia), d1 = ag.vista === 'dia' ? ag.dia : suma(lunes(ag.dia), 5);
+  try { ag.citas = await C.rpc('clinica_agenda', { p_desde: d0, p_hasta: d1 }); } catch (e) { ag.citas = []; falla(null, e); }
+  pintarAgenda(); detalle();
+}
+function pintarAgenda() {
+  const activos = DOCS.filter(d => d.activo || ag.citas.some(c => c.doctor_id === d.id));
+  if (!ag.docs.size) activos.forEach(d => ag.docs.add(d.id));
+  const sinAsignar = ag.citas.some(c => c.doctor_id == null);
+  const cols = ag.vista === 'dia'
+    ? [...activos.filter(d => ag.docs.has(d.id)).map(d => ({ t: d.nombre, f: c => c.doctor_id === d.id })), ...(sinAsignar ? [{ t: 'Sin asignar', f: c => c.doctor_id == null }] : [])]
+    : [0, 1, 2, 3, 4, 5].map(i => { const dia = suma(lunes(ag.dia), i); return { t: fechaCorta(dia), f: c => c.dia === dia && (c.doctor_id == null || ag.docs.has(c.doctor_id)) }; });
+  const H0 = HORARIO.h0 * 60, filas = (HORARIO.h1 - HORARIO.h0) * 2, g = $('#ag-grid');
+  g.style.gridTemplateColumns = `56px repeat(${Math.max(cols.length, 1)}, minmax(130px, 1fr))`;
+  let h = `<div class="ag-cab">${ag.vista === 'dia' ? esc(fechaCorta(ag.dia)) : 'Semana'}</div>` + cols.map(c => `<div class="ag-cab">${esc(c.t)}</div>`).join('');
+  h += `<div>${Array.from({ length: filas }, (_, i) => `<div class="ag-hora">${i % 2 ? '' : hm(H0 + i * 30)}</div>`).join('')}</div>`;
+  const botonCita = (c, i, n) => { const top = (mins(c.hora) - H0) / 30 * IH; if (top < 0 || top > filas * IH) return '';
+    return `<button type="button" class="cita" data-id="${c.id}" aria-pressed="${ag.sel === c.id}" style="--c:${docColor(c.doctor_id)};top:${top}px;height:${Math.max(c.duracion / 30 * IH - 2, 30)}px;left:calc(${i} * 100% / ${n} + 3px);right:calc(${n - 1 - i} * 100% / ${n} + 3px)${c.estado === 'atendida' ? ';opacity:.6' : ''}${c.estado === 'no_vino' ? ';text-decoration:line-through' : ''}"><b>${esc(c.hora)} · ${esc(c.nombre)}</b>${esc(c.servicio)}${c.estado === 'pendiente' ? ' · por confirmar' : ''}</button>`; };
+  /* citas que se solapan en la misma columna (varias cabinas, o una atendida que sigue ahí) se reparten el ancho */
+  const carriles = lista => { const o = lista.slice().sort((x, y) => mins(x.hora) - mins(y.hora) || x.id - y.id), fin = [], out = []; let grupo = [];
+    const cerrar = () => { const n = Math.max(1, ...grupo.map(g => g.i + 1)); grupo.forEach(g => out.push(botonCita(g.c, g.i, n))); grupo = []; };
+    o.forEach(c => { const ini = mins(c.hora); if (grupo.length && ini >= Math.max(...fin)) { cerrar(); fin.length = 0; }
+      let i = fin.findIndex(f => f <= ini); if (i < 0) i = fin.length; fin[i] = ini + c.duracion; grupo.push({ c, i }); }); cerrar(); return out.join(''); };
+  cols.forEach(col => { h += `<div class="ag-col" style="height:${filas * IH}px">` + carriles(ag.citas.filter(col.f)) + '</div>'; });
+  g.innerHTML = h;
+  $$('.cita', g).forEach(b => b.onclick = () => { ag.sel = ag.sel == b.dataset.id ? null : +b.dataset.id; pintarAgenda(); detalle(); });
+}
+function detalle() {
+  const c = ag.citas.find(x => x.id === ag.sel), d = $('#ag-det'); d.hidden = !c; if (!c) return;
+  d.innerHTML = `<b>${esc(c.nombre)} · ${esc(c.hora)} (${c.duracion} min)</b><span>${esc(c.servicio)} · ${esc(docNombre(c.doctor_id))} · <span class="pill">${esc(ESTADO[c.estado])}</span></span>
+    <div class="campo" style="max-width:260px"><label for="d-doc">Doctor</label><select id="d-doc"><option value="">Sin asignar</option>${DOCS.filter(x => x.activo || x.id === c.doctor_id).map(x => `<option value="${x.id}" ${x.id === c.doctor_id ? 'selected' : ''}>${esc(x.nombre)}</option>`).join('')}</select></div>
+    <div class="estado-btns">${['confirmada', 'atendida', 'no_vino', 'cancelada'].map(e => `<button type="button" class="cb" data-est="${e}" aria-pressed="${c.estado === e}">${esc(ESTADO[e])}</button>`).join('')}</div>
+    <div class="acciones"><a class="btn" target="_blank" rel="noopener" href="${wa(c.telefono, `Hola ${c.nombre.split(' ')[0]}, te escribimos de ${DEMO.cliente} para confirmar tu cita (${c.servicio}) el ${fechaLarga(c.dia)} a las ${c.hora}.`)}">Confirmar por WhatsApp</a><button type="button" class="btn btn-linea" id="det-x">Cerrar</button></div><p class="err-f" id="d-err" role="alert"></p>`;
+  $('#det-x').onclick = () => { ag.sel = null; pintarAgenda(); detalle(); };
+  $('#d-doc').onchange = async e => { try { await C.rpc('cita_doctor', { p_cita: c.id, p_doctor: e.target.value ? +e.target.value : null }); aviso('Doctor actualizado.'); cargarAgenda(); } catch (er) { falla($('#d-err'), er); } };
+  $$('[data-est]', d).forEach(b => b.onclick = async () => { try { await C.rpc('cita_estado', { p_cita: c.id, p_estado: b.dataset.est }); aviso('Estado actualizado.'); if (b.dataset.est === 'cancelada') ag.sel = null; cargarAgenda(); } catch (er) { falla($('#d-err'), er); } });
+}
+const paso = () => ag.vista === 'dia' ? 1 : 7;
+$('#ag-ant').onclick = () => { ag.dia = suma(ag.dia, -paso()); cargarAgenda(); };
+$('#ag-sig').onclick = () => { ag.dia = suma(ag.dia, paso()); cargarAgenda(); };
+$('#ag-hoy').onclick = () => { ag.dia = hoy(); cargarAgenda(); };
+[['#vi-dia', 'dia'], ['#vi-sem', 'sem']].forEach(([s, v]) => $(s).onclick = () => { ag.vista = v; $('#vi-dia').setAttribute('aria-pressed', v === 'dia'); $('#vi-sem').setAttribute('aria-pressed', v === 'sem'); cargarAgenda(); });
+function pintarFiltroDocs() {
+  $('#ag-docs').innerHTML = DOCS.filter(d => d.activo).map(d => `<button type="button" class="cb doc-chip" data-d="${d.id}" aria-pressed="${ag.docs.has(d.id)}" style="--c:${d.color}"><i></i>${esc(d.nombre)}</button>`).join('');
+  $$('#ag-docs .cb').forEach(b => b.onclick = () => { const id = +b.dataset.d; ag.docs.has(id) ? ag.docs.delete(id) : ag.docs.add(id); b.setAttribute('aria-pressed', ag.docs.has(id)); pintarAgenda(); });
+  $('#ag-ley').innerHTML = DOCS.filter(d => d.activo).map(d => `<span><i style="--c:${d.color}"></i>${esc(d.nombre)}${d.especialidad ? ' · ' + esc(d.especialidad) : ''}</span>`).join('');
+}
+
+/* ---------- caja ---------- */
+let cajaDia = hoy(), motivoDe = null;
+async function pintarCaja() {
+  try {
+    const r = await C.rpc('caja_dia', { p_dia: cajaDia });
+    $('#caja-kpis').innerHTML = [['Ingresos', usd(r.ingresos), 'del día'], ['Egresos', usd(r.egresos), 'del día'], ['Saldo', usd(r.ingresos - r.egresos), 'ingresos menos egresos']].map(([a, b, c]) => `<div class="kpi"><small>${a}</small><b>${b}</b><span>${c}</span></div>`).join('');
+    $('#caja-lista').innerHTML = r.items.length ? r.items.slice().reverse().map(m => `<tr class="${m.anulado ? 'anulado' : ''}"><td>${esc(m.hora)}</td><td>${esc(m.descripcion)}${m.anulado && m.motivo ? `<br><small>Anulado: ${esc(m.motivo)}</small>` : ''}</td><td>${esc(docNombre(m.doctor_id))}</td><td class="n ${m.tipo}">${m.tipo === 'egr' ? '−' : '+'}${usd(m.importe)}</td><td>${m.anulado ? 'Anulado' : `<button type="button" class="mini" data-a="${m.id}" data-d="${esc(m.descripcion)}">Anular</button>`}</td></tr>`).join('') : '<tr><td colspan="5">Sin movimientos este día.</td></tr>';
+    $$('[data-a]').forEach(b => b.onclick = () => { motivoDe = +b.dataset.a; $('#dlg-txt').textContent = `Vas a anular «${b.dataset.d}». Queda el registro con tu nombre y el motivo.`; $('#dlg-m').value = ''; $('#dlg-motivo').showModal(); });
+  } catch (e) { $('#caja-lista').innerHTML = `<tr><td colspan="5">${esc(msgErr(e))}</td></tr>`; }
+}
+$('#dlg-x').onclick = () => $('#dlg-motivo').close();
+$('#dlg-form').onsubmit = async e => { e.preventDefault(); try { await C.rpc('caja_anular', { p_id: motivoDe, p_motivo: $('#dlg-m').value }); $('#dlg-motivo').close(); aviso('Movimiento anulado.'); pintarCaja(); } catch (er) { falla(null, er); } };
+$('#c-dia').value = cajaDia; $('#c-dia').max = hoy(); $('#c-dia').onchange = e => { cajaDia = e.target.value || hoy(); pintarCaja(); };
+$('#caja-form').onsubmit = async e => { e.preventDefault(); const er = $('#c-err'); er.textContent = '';
+  try { await C.rpc('caja_registrar', { p_descripcion: $('#c-desc').value, p_importe: parseFloat($('#c-imp').value), p_tipo: $('#c-tipo').value, p_doctor: $('#c-doc').value ? +$('#c-doc').value : null });
+    e.target.reset(); aviso('Movimiento registrado.'); cajaDia = hoy(); $('#c-dia').value = cajaDia; pintarCaja(); } catch (x) { falla(er, x); } };
+
+/* ---------- presupuestos ---------- */
+let pres = [], plEstado = '';
+const totalP = () => Math.round(pres.reduce((s, l) => s + l.precio * l.cant, 0) * (100 - Math.min(50, Math.max(0, +$('#p-desc').value || 0))) ) / 100;
+function pintarPres() {
+  $('#p-lista').innerHTML = pres.length ? pres.map((l, i) => `<tr><td>${esc(l.nombre)}</td><td class="n">${l.cant}</td><td class="n">${usd(l.precio * l.cant)}</td><td><button type="button" class="mini" data-q="${i}" aria-label="Quitar ${esc(l.nombre)}">Quitar</button></td></tr>`).join('') : '<tr><td colspan="4">Agrega tratamientos para armar el presupuesto.</td></tr>';
+  $('#p-total').textContent = usd(totalP());
+  $$('[data-q]').forEach(b => b.onclick = () => { pres.splice(+b.dataset.q, 1); pintarPres(); });
+}
+$('#p-add').onclick = () => { const t = TAR.find(x => x.id == $('#p-item').value); if (!t) return; const c = Math.min(20, Math.max(1, parseInt($('#p-cant').value) || 1)); const ex = pres.find(l => l.id === t.id); ex ? ex.cant = Math.min(20, ex.cant + c) : pres.push({ id: t.id, nombre: t.nombre, precio: +t.precio, cant: c }); pintarPres(); };
+$('#p-desc').oninput = pintarPres;
+$('#p-guardar').onclick = async () => { const er = $('#p-err'); er.textContent = '';
+  if (!pres.length) { er.textContent = 'Agrega al menos un tratamiento.'; return; }
+  try {
+    const nombre = $('#p-pac').value.trim(), r = await C.rpc('presupuesto_guardar', { p_paciente: nombre, p_doctor: $('#p-doc').value ? +$('#p-doc').value : null, p_descuento: Math.round(+$('#p-desc').value || 0), p_items: pres.map(l => ({ tarifario_id: l.id, cant: l.cant })), p_seguimiento: $('#p-seg').value || null });
+    window.open(wa('', `Presupuesto de ${DEMO.cliente} para ${nombre}:\n` + pres.map(l => `${l.cant} × ${l.nombre}`).join('\n') + (+$('#p-desc').value ? `\nDescuento: ${Math.round(+$('#p-desc').value)} %` : '') + `\nTotal: ${usd(r.total)}\n(Sujeto a valoración. Válido por 15 días.)`), '_blank', 'noopener');
+    aviso(`Presupuesto guardado: ${usd(r.total)}.`); pres = []; $('#p-pac').value = ''; $('#p-desc').value = 0; $('#p-seg').value = ''; pintarPres(); pintarListaPres();
+  } catch (e) { falla(er, e); } };
+async function pintarListaPres() {
+  const c = $('#pl-lista');
+  try {
+    const l = await C.rpc('presupuestos_lista', { p_estado: plEstado || null }), E = { enviado: ['En espera', 'esp'], aceptado: ['Aceptado', 'ok'], rechazado: ['Rechazado', 'mal'] };
+    c.innerHTML = l.length ? l.map(p => `<article class="sol"><h3>${esc(p.paciente)} · ${usd(p.total)}</h3>
+      <div class="meta"><span>${esc(fechaCorta(p.creado))}</span><span>${esc(docNombre(p.doctor_id))}</span>${p.seguimiento ? `<span>Seguimiento: ${esc(fechaCorta(p.seguimiento))}</span>` : ''}<span class="pill ${E[p.estado][1]}">${E[p.estado][0]}</span></div>
+      <div class="meta">${(p.items || []).map(i => `${i.cant} × ${esc(i.descripcion)}`).join(' · ')}${p.descuento ? ` · desc. ${p.descuento} %` : ''}</div>
+      ${p.estado === 'enviado' ? `<div class="acciones"><button type="button" class="btn" data-ok="${p.id}">Lo aceptó</button><button type="button" class="btn btn-linea" data-no="${p.id}">Lo rechazó</button></div>` : ''}</article>`).join('') : '<p class="vacio">Todavía no hay presupuestos.</p>';
+    const marcar = async (id, est) => { try { await C.rpc('presupuesto_estado', { p_id: id, p_estado: est }); aviso('Presupuesto actualizado.'); pintarListaPres(); } catch (e) { falla(null, e); } };
+    $$('[data-ok]', c).forEach(b => b.onclick = () => marcar(+b.dataset.ok, 'aceptado')); $$('[data-no]', c).forEach(b => b.onclick = () => marcar(+b.dataset.no, 'rechazado'));
+  } catch (e) { c.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; }
+}
+$$('#pl-filtro .cb').forEach(b => b.onclick = () => { plEstado = b.dataset.e; $$('#pl-filtro .cb').forEach(x => x.setAttribute('aria-pressed', x === b)); pintarListaPres(); });
+
+/* ---------- ajustes (admin) ---------- */
+async function pintarAjustes() {
+  const er = $('#aj-err'); er.textContent = '';
+  $('#aj-doc').innerHTML = DOCS.map(d => `<tr data-id="${d.id}"><td><input value="${esc(d.nombre)}" maxlength="80" aria-label="Nombre"></td><td><input value="${esc(d.especialidad || '')}" maxlength="80" aria-label="Especialidad"></td><td><input type="color" value="${esc(d.color)}" aria-label="Color"></td><td><input type="checkbox" ${d.activo ? 'checked' : ''} aria-label="Activo"></td><td><button type="button" class="mini" data-gd="${d.id}">Guardar</button></td></tr>`).join('')
+    + `<tr data-id=""><td><input placeholder="Nuevo doctor" maxlength="80" aria-label="Nombre"></td><td><input placeholder="Especialidad" maxlength="80" aria-label="Especialidad"></td><td><input type="color" value="#B8933A" aria-label="Color"></td><td><input type="checkbox" checked aria-label="Activo"></td><td><button type="button" class="mini" data-gd="">Añadir</button></td></tr>`;
+  $('#aj-tar').innerHTML = TAR.map(t => `<tr data-id="${t.id}"><td><input value="${esc(t.nombre)}" maxlength="80" aria-label="Tratamiento"></td><td class="n"><input type="number" step="0.01" min="0" value="${t.precio}" aria-label="Precio"></td><td><input type="checkbox" ${t.activo ? 'checked' : ''} aria-label="Activo"></td><td><button type="button" class="mini" data-gt="${t.id}">Guardar</button></td></tr>`).join('')
+    + `<tr data-id=""><td><input placeholder="Nuevo tratamiento" maxlength="80" aria-label="Tratamiento"></td><td class="n"><input type="number" step="0.01" min="0" placeholder="0.00" aria-label="Precio"></td><td><input type="checkbox" checked aria-label="Activo"></td><td><button type="button" class="mini" data-gt="">Añadir</button></td></tr>`;
+  $$('[data-gd]').forEach(b => b.onclick = async () => { const tr = b.closest('tr'), [n, e, c, a] = $$('input', tr);
+    try { await C.rpc('doctor_guardar', { p_id: tr.dataset.id ? +tr.dataset.id : null, p_nombre: n.value, p_especialidad: e.value, p_color: c.value, p_activo: a.checked }); aviso('Doctor guardado.'); await cargarBase(); pintarAjustes(); } catch (x) { falla(er, x); } });
+  $$('[data-gt]').forEach(b => b.onclick = async () => { const tr = b.closest('tr'), [n, p, a] = $$('input', tr);
+    try { await C.rpc('tarifario_guardar', { p_id: tr.dataset.id ? +tr.dataset.id : null, p_nombre: n.value, p_precio: parseFloat(p.value), p_activo: a.checked }); aviso('Tarifario guardado.'); await cargarBase(); pintarAjustes(); } catch (x) { falla(er, x); } });
+}
+
+const CARGAR = { 't-solicitudes': pintarSolicitudes, 't-agenda': () => { pintarFiltroDocs(); cargarAgenda(); }, 't-caja': pintarCaja, 't-presupuestos': () => { pintarListaPres(); }, 't-ajustes': pintarAjustes };
+
+/* ---------- arranque ---------- */
+async function cargarBase() {
+  [DOCS, TAR] = await Promise.all([C.rpc('doctores_lista'), C.rpc('tarifario_lista')]);
+  const op = (l, f) => l.map(f).join('');
+  $('#c-doc').innerHTML = '<option value="">Sin doctor</option>' + op(DOCS.filter(d => d.activo), d => `<option value="${d.id}">${esc(d.nombre)}</option>`);
+  $('#p-doc').innerHTML = '<option value="">Sin doctor</option>' + op(DOCS.filter(d => d.activo), d => `<option value="${d.id}">${esc(d.nombre)}</option>`);
+  $('#p-item').innerHTML = op(TAR.filter(t => t.activo), t => `<option value="${t.id}">${esc(t.nombre)} · ${usd(t.precio)}</option>`);
+  ag.docs = new Set(DOCS.filter(d => d.activo).map(d => d.id));
+}
+async function iniciar(yo) {
+  YO = yo; $('#s-rol').textContent = yo.rol === 'admin' ? 'Administración' : 'Recepción'; $('#s-nombre').textContent = yo.nombre;
+  $('#s-dueno').hidden = $('#t-ajustes').hidden = yo.rol !== 'admin'; $('#t-ajustes').hidden = yo.rol !== 'admin';
+  $('#s-salir').onclick = () => { C.staff.salir(); location.reload(); };
+  try { await cargarBase(); } catch (e) { aviso(msgErr(e), 'mal'); }
+  try { const cfg = await C.rpc('config_admin'); const hs = (cfg.horario || []).filter(h => h.abre); if (hs.length) HORARIO = { h0: Math.min(...hs.map(h => +h.abre.slice(0, 2))), h1: Math.max(...hs.map(h => Math.ceil(+h.cierra.slice(0, 2) + (+h.cierra.slice(3, 5) ? .5 : 0)))) }; } catch (e) { /* horario por defecto 8–17 */ }
+  pintarPres(); ir(tabs[0]);
+}
+CLUI.puerta({ alEntrar: iniciar }).then(yo => { if (yo && !YO) iniciar(yo); });
+</script>
+<script src="fx.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.css">
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script>
+/* Scroll suave y calmado (clínica): lerp bajo, sin inercia exagerada. Sin Lenis si el usuario pidió menos movimiento o si el CDN no cargó (la página scrollea normal).
+   Los enlaces #ancla respetan scroll-padding-top de la página (cabecera fija).
+   Para frenar a Lenis dentro de un mapa, un modal o un contenedor con scroll propio: atributo data-lenis-prevent. */
+(function () {
+  if (typeof Lenis === 'undefined' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const lenis = new Lenis({ lerp: 0.08, smoothWheel: true, anchors: true });
+  if (window.gsap && window.ScrollTrigger) {   /* si la página usa GSAP ScrollTrigger, Lenis va en su ticker */
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  } else {
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+  window.lenis = lenis;
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+/* efectos/clinica.css · complemento OPCIONAL de estilo "clínica luminosa" (se elige con efectos.usar = ["clinica"]). Se carga después de calma.css.
+   Referencia: captura de Daniel (web dental azul: hero claro con formas orgánicas, la persona recortada sobre una mancha de color, botón píldora,
+   fila de servicios con íconos de línea en una tarjeta blanca). NO copia su logo, textos ni fotos: la forma es de la referencia, el color es el de la marca
+   (en Dentiident: negro y plata medidos del logo). Fuentes sugeridas: Montserrat (titulares de dos pesos) + Inter o la misma Montserrat para el texto.
+   Todo es estático: manchas y tarjetas no se animan. Sin animaciones infinitas nuevas. Colores solo por variables --fx-* (el degradado de la mancha usa
+   --fx-mancha-1/2 y la mancha pequeña --fx-mancha-3; si faltan, salen de la paleta).
+   Hero con recorte: la foto del hero debe ser un PNG/WebP con fondo transparente, recortado hasta el borde inferior (como la referencia). */
+:root {
+  --fx-dur: .8s; --fx-ease: cubic-bezier(.2, .7, .2, 1); --fx-dist: 22px; --fx-fast: .35s;
+  --fx-rv-dur: 800; --fx-rv-step: 100; --fx-rv-ease: cubic-bezier(.2, .7, .2, 1); --fx-rv-dist: 22px; --fx-rv-scale: 1;
+  --fx-mancha-1: var(--fx-accent); --fx-mancha-2: color-mix(in srgb, var(--fx-accent) 60%, var(--fx-deep)); --fx-mancha-3: var(--fx-deep);
+  --fx-radio: 28px;
+}
+
+/* Titulares: dos pesos de la misma familia, en minúscula (no forzada a mayúsculas) */
+.doble, body .hero h1 { text-transform: none; letter-spacing: -.02em; }
+.doble { font-weight: 800; line-height: 1.05; font-size: clamp(2.1rem, 5vw, 3.4rem); }
+.doble span { font-weight: 300; font-size: .62em; margin-bottom: .1em; }
+body .hero h1 { line-height: 1; }
+body .hero h1 .fino { font: 300 clamp(2.1rem, 5.2vw, 3.5rem)/1.05 var(--fx-font-disp); text-transform: none; }
+body .hero h1 .grueso { font: 800 clamp(3rem, 8.6vw, 6rem)/1 var(--fx-font-disp); text-transform: none; letter-spacing: -.03em; }
+body .hero .lead { font-style: italic; font-weight: 400; max-width: 36ch; }
+body .paso h3, body .caja h3, body .chat h3, body .caja-cab b, body .reco b, body .reco .precio, body .pd-precio, body .pd-info h3, body .pd-cat h2, body .pd-hoja-tit, body .pd-res { text-transform: none; letter-spacing: -.01em; }
+/* Nombres largos de tratamiento (Odontopediatría) no deben empujar el botón fuera de la tarjeta en 375 px */
+body .pd-info { min-width: 0; }
+body .pd-info h3 { font-size: clamp(1.1rem, 5.2vw, 1.45rem); overflow-wrap: break-word; hyphens: auto; }
+body .pd-cat h2 .grueso { font-weight: 800; }
+body .pd-cat h2 .fino { font-weight: 300; }
+
+/* Botones píldora: oscuro sobre fondo claro, claro sobre fondo oscuro */
+.btn { min-height: 52px; padding: 0 28px; border: 0; border-radius: 999px; background: var(--fx-deep); color: var(--fx-bg); font: 700 1rem/1 var(--fx-font-txt); box-shadow: 0 8px 20px color-mix(in srgb, var(--fx-deep) 22%, transparent); transition: transform var(--fx-fast) var(--fx-ease); }
+.btn:active { transform: scale(.97); }
+.btn-linea { background: transparent; color: var(--fx-deep); box-shadow: inset 0 0 0 1.5px var(--fx-deep); }
+.oscuro .btn { background: var(--fx-pop); color: var(--fx-deep); box-shadow: none; }
+.oscuro .btn-linea { background: transparent; color: var(--fx-bg); box-shadow: inset 0 0 0 1.5px var(--fx-pop); }
+body .pd-btn { border-radius: 999px; font-weight: 700; letter-spacing: normal; box-shadow: none; }
+
+/* Barra, cabecera y marca: claras, con la marca en negro */
+.barra { background: var(--fx-deep); }
+.barra a { border-radius: 999px; }
+.cabecera { background: color-mix(in srgb, var(--fx-paper) 92%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--fx-ink) 10%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.cabecera .marca, .cabecera nav a { color: var(--fx-ink); }
+.cabecera .volver { color: var(--fx-ink); }
+.marca b { font: 800 1.35rem/1 var(--fx-font-disp); letter-spacing: -.01em; }
+.marca small { color: var(--fx-ink); opacity: .6; }
+.cabecera nav a { font: 600 .98rem/1 var(--fx-font-txt); border-radius: 999px; }
+.ico { border-width: 1.5px; }
+.ico svg, .barra svg { stroke-width: 1.5; }
+.paso .ico { color: var(--fx-pop); }
+
+/* El hero es claro aunque lleve la clase .oscuro de la plantilla: sus botones vuelven a ser oscuros */
+.hero.oscuro .btn { background: var(--fx-deep); color: var(--fx-bg); box-shadow: 0 8px 20px color-mix(in srgb, var(--fx-deep) 22%, transparent); }
+.hero.oscuro .btn-linea { background: transparent; color: var(--fx-deep); box-shadow: inset 0 0 0 1.5px var(--fx-deep); }
+
+/* Hero claro con manchas orgánicas y la persona recortada (referencia: hero azul de la captura) */
+.hero.oscuro { background: linear-gradient(180deg, var(--fx-bg) 0%, color-mix(in srgb, var(--fx-bg) 82%, var(--fx-pop)) 100%); color: var(--fx-ink); overflow: hidden; }
+.hero.oscuro::before { content: ""; position: absolute; right: -8%; top: -10%; width: 62%; height: 120%; border-radius: 46% 54% 40% 60% / 58% 42% 58% 42%; background: color-mix(in srgb, var(--fx-pop) 55%, var(--fx-bg)); }
+.hero .wrap { position: relative; z-index: 1; align-items: end; }
+body .hero .wrap { padding-bottom: 0; }
+body .hero .wrap > div:first-child { align-self: center; padding-bottom: clamp(48px, 7vw, 96px); }
+body .hero .lead { color: color-mix(in srgb, var(--fx-ink) 78%, var(--fx-bg)); }
+body .hero .hero-media { align-self: end; width: min(100%, 520px); }
+.hero .hero-media::before, .hero .hero-media::after { content: ""; position: absolute; z-index: 0; pointer-events: none; }
+.hero .hero-media::before { width: 17%; aspect-ratio: 1.3; left: 2%; top: 10%; background: var(--fx-mancha-3); border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%; transform: rotate(-14deg); }
+.hero .hero-media::after { width: 10%; aspect-ratio: 1; right: -2%; bottom: 36%; background: var(--fx-bg); border-radius: 50%; box-shadow: -34px 64px 0 -2px var(--fx-mancha-3); }
+body .hero .hero-foto { position: relative; z-index: 1; aspect-ratio: 1 / 1.08; overflow: visible; border-radius: 0; box-shadow: none; background: none; }
+body .hero .hero-foto::before { content: ""; position: absolute; z-index: 0; left: 4%; right: 0; top: 8%; bottom: 0; border-radius: 56% 44% 8% 8% / 46% 40% 0 0; background: linear-gradient(155deg, var(--fx-mancha-1), var(--fx-mancha-2)); }
+body .hero .hero-foto img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; }
+@media (max-width: 860px) {
+  body .hero .wrap > div:first-child { padding-bottom: 0; }
+  body .hero .hero-media { order: 0; width: min(88%, 380px); justify-self: center; }
+  body .hero .hero-foto { aspect-ratio: 1 / 1.02; }
+}
+
+/* Fila de servicios: tarjeta blanca que sube sobre el hero, íconos de línea en círculo */
+.franja-serv { position: relative; z-index: 3; margin-top: -42px; padding-bottom: clamp(20px, 4vw, 44px); }
+.franja-card { background: var(--fx-paper); border-radius: var(--fx-radio); padding: clamp(22px, 3.4vw, 36px) clamp(16px, 3vw, 40px); text-align: center; box-shadow: 0 -10px 40px color-mix(in srgb, var(--fx-ink) 8%, transparent), 0 14px 36px color-mix(in srgb, var(--fx-ink) 9%, transparent); }
+.franja-card h2 { font: 800 clamp(1.5rem, 3.2vw, 2rem)/1.1 var(--fx-font-disp); letter-spacing: -.02em; }
+.franja-card > p { margin-top: 6px; font-style: italic; color: color-mix(in srgb, var(--fx-ink) 70%, var(--fx-bg)); }
+.franja-card ul { list-style: none; margin: clamp(18px, 3vw, 28px) 0 0; padding: 0; display: grid; gap: 18px 10px; grid-template-columns: repeat(auto-fit, minmax(min(46%, 150px), 1fr)); }
+.franja-card li a { display: flex; flex-direction: column; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; color: var(--fx-ink); }
+.franja-card .ico { width: 72px; height: 72px; border-width: 1.5px; color: var(--fx-ink); transition: transform var(--fx-fast) var(--fx-ease), background var(--fx-fast); }
+.franja-card .ico svg { width: 34px; height: 34px; stroke-width: 1.4; }
+.franja-card li a b { font: 600 .98rem/1.2 var(--fx-font-txt); }
+.franja-card li:first-child .ico { background: var(--fx-deep); color: var(--fx-bg); border-color: var(--fx-deep); }
+.franja-card li:first-child .ico svg { stroke: var(--fx-bg); }
+.franja-card li a:active .ico { transform: scale(.94); }
+@media (hover: hover) { .franja-card li a:hover .ico { transform: translateY(-4px); } }
+
+/* Carta de tratamientos: tarjetas suaves, sin sombra dura */
+body .pd-lista .pd-item { border: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); border-radius: var(--fx-radio); box-shadow: 0 12px 30px color-mix(in srgb, var(--fx-ink) 8%, transparent); padding: 18px 20px; }
+body .pd-btn { text-transform: none; border: 0; }
+body .pd-tab { text-transform: none; border-radius: 999px; letter-spacing: normal; }
+
+/* Tarjetas: esquinas amplias y sombra suave, sin sombra dura */
+body .caja, body .chat, body .galeria figure { border-radius: var(--fx-radio); }
+body .caja { border: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); box-shadow: 0 16px 40px color-mix(in srgb, var(--fx-ink) 9%, transparent); background: var(--fx-paper); }
+body .caja-cab { border-bottom: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); }
+body .op { border: 1.5px solid color-mix(in srgb, var(--fx-ink) 16%, transparent); border-radius: 18px; box-shadow: none; background: var(--fx-bg); font-weight: 600; }
+body .op:active { transform: scale(.98); box-shadow: none; }
+body .chat { border: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); }
+body .galeria figure { border: 0; background: linear-gradient(155deg, var(--fx-mancha-1), var(--fx-mancha-2)); }
+.donde .oscuro, .arena .oscuro { border-radius: var(--fx-radio) !important; box-shadow: none !important; border: 0 !important; }
+
+@media (prefers-reduced-motion: reduce) { .btn, .franja-card .ico { transition: none; } }
+
+/* ---- Brillos plateados y toques rosas (opcional dentro de clinica; solo transform, opacity y desplazamiento de fondo) ----
+   --fx-rosa / --fx-rosa-2: rosa del aro del logo; --fx-metal-1/2/3: plata medida del logo. Máx. 3 animaciones infinitas: metal del titular, barrido del botón y brillo de estrellas. */
+:root { --fx-rosa: #F3B5CB; --fx-rosa-2: #E48DB0; --fx-metal-1: #7D7D7D; --fx-metal-2: #B8B8B8; --fx-metal-3: #E2E2E2; }
+@keyframes fx-clinica-metal { to { background-position: 200% 0; } }
+@keyframes fx-clinica-barrido { 0% { transform: translateX(-130%) skewX(-18deg); } 55%, 100% { transform: translateX(300%) skewX(-18deg); } }
+@keyframes fx-clinica-brillo { 0%, 100% { opacity: .55; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
+
+/* Titular en plata líquida (nunca una sola palabra) */
+body .hero h1 .grueso { background: linear-gradient(100deg, #17181a 0%, #5d5e64 24%, var(--fx-metal-1) 38%, #5d5e64 52%, #17181a 76%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: fx-clinica-metal 9s linear infinite; }
+
+/* Mancha de la doctora en plata brillante; mancha chica y estrellas en rosa */
+body .hero .hero-foto::before { background: linear-gradient(155deg, #F1F2F4 0%, var(--fx-metal-2) 30%, #E6E7EA 48%, var(--fx-metal-1) 100%); box-shadow: inset 0 0 0 2px color-mix(in srgb, #fff 55%, transparent), 0 18px 40px color-mix(in srgb, var(--fx-deep) 18%, transparent); }
+.hero.oscuro::before { background: linear-gradient(160deg, color-mix(in srgb, var(--fx-pop) 60%, var(--fx-bg)), color-mix(in srgb, var(--fx-rosa) 38%, var(--fx-bg))); }
+.hero .hero-media::after { background: linear-gradient(145deg, var(--fx-rosa), var(--fx-rosa-2)); box-shadow: -34px 64px 0 -2px var(--fx-metal-2); }
+.hero.oscuro::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; animation: fx-clinica-brillo 4.8s ease-in-out infinite;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.8 6.5 5.5 11.2 12 12-6.5.8-11.2 5.5-12 12-.8-6.5-5.5-11.2-12-12C6.5 11.2 11.2 6.5 12 0z' fill='%23B8B8B8'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.8 6.5 5.5 11.2 12 12-6.5.8-11.2 5.5-12 12-.8-6.5-5.5-11.2-12-12C6.5 11.2 11.2 6.5 12 0z' fill='%23F3B5CB'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.8 6.5 5.5 11.2 12 12-6.5.8-11.2 5.5-12 12-.8-6.5-5.5-11.2-12-12C6.5 11.2 11.2 6.5 12 0z' fill='%23FFFFFF'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.8 6.5 5.5 11.2 12 12-6.5.8-11.2 5.5-12 12-.8-6.5-5.5-11.2-12-12C6.5 11.2 11.2 6.5 12 0z' fill='%23E48DB0'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0c.8 6.5 5.5 11.2 12 12-6.5.8-11.2 5.5-12 12-.8-6.5-5.5-11.2-12-12C6.5 11.2 11.2 6.5 12 0z' fill='%23B8B8B8'/%3E%3C/svg%3E");
+  background-size: 38px 38px, 24px 24px, 30px 30px, 18px 18px, 22px 22px;
+  background-position: 56% 14%, 93% 24%, 47% 78%, 62% 52%, 6% 88%; }
+
+/* Botón principal con barrido de brillo */
+.hero.oscuro .btn:not(.btn-linea) { position: relative; overflow: hidden; isolation: isolate; }
+.hero.oscuro .btn:not(.btn-linea)::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 32%; pointer-events: none; z-index: -1; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .5), transparent); animation: fx-clinica-barrido 6s ease-in-out infinite; }
+
+/* Fila de servicios: línea plata-rosa y ícono activo en metal */
+.franja-card h2::after { content: ""; display: block; width: 64px; height: 3px; margin: 10px auto 0; border-radius: 3px; background: linear-gradient(90deg, var(--fx-metal-2), var(--fx-rosa)); }
+.franja-card li:first-child .ico { background: linear-gradient(145deg, #17181a, #5d5e64 50%, #17181a); box-shadow: 0 8px 18px color-mix(in srgb, var(--fx-deep) 28%, transparent), 0 0 0 4px color-mix(in srgb, var(--fx-rosa) 45%, transparent); }
+.franja-card .ico { border-color: var(--fx-metal-1); }
+@media (hover: hover) { .franja-card li a:hover .ico { border-color: var(--fx-rosa-2); box-shadow: 0 0 0 4px color-mix(in srgb, var(--fx-rosa) 40%, transparent); } }
+
+/* Detalles: hilo plateado bajo los titulares claros y botón de la carta en plata */
+body .pd-lista .pd-item { border-image: none; box-shadow: 0 12px 30px color-mix(in srgb, var(--fx-ink) 8%, transparent), inset 0 1px 0 #fff; }
+body .pd-btn { background: linear-gradient(145deg, #E9EAEC, var(--fx-metal-2) 55%, #D9DADD); color: var(--fx-deep); }
+body .pd-cuenta { background: var(--fx-deep); }
+.marca img { box-shadow: 0 0 0 2px var(--fx-metal-2), 0 0 0 4px color-mix(in srgb, var(--fx-rosa) 55%, transparent); }
+
+@media (prefers-reduced-motion: reduce) {
+  body .hero h1 .grueso, .hero.oscuro::after, .hero.oscuro .btn:not(.btn-linea)::after { animation: none; }
+  .hero.oscuro .btn:not(.btn-linea)::after { display: none; }
+}
+
+/* ---- Antes y después (img-comparison-slider v8, CDN) y mapa ----
+   Línea divisoria y manija con el acento de la marca; sombra para que se vea sobre cualquier foto.
+   Se maneja con el dedo (arrastrar) y con el teclado (flechas, el slider recibe foco). Sin JS o sin CDN queda la foto "antes" a la vista. */
+.ad-lista { display: grid; gap: clamp(22px, 3vw, 36px); grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); margin-top: 36px; }
+.ad-caso { margin: 0; }
+.ad-slider { display: block; width: 100%; border-radius: var(--fx-radio); overflow: hidden; background: var(--fx-paper); box-shadow: 0 16px 40px color-mix(in srgb, var(--fx-ink) 12%, transparent);
+  --divider-width: 3px; --divider-color: var(--fx-accent); --divider-shadow: 0 0 10px color-mix(in srgb, var(--fx-deep) 45%, transparent);
+  --default-handle-color: var(--fx-accent); --default-handle-opacity: 1; --default-handle-width: 56px; --default-handle-shadow: 0 2px 12px color-mix(in srgb, var(--fx-deep) 45%, transparent);
+  --keyboard-transition-time: .25s; }
+.ad-slider img { width: 100%; height: auto; display: block; }
+.ad-slider:focus-visible { outline: 3px solid var(--fx-deep); outline-offset: 4px; }
+img-comparison-slider:not(:defined) { visibility: visible; }  /* CDN caído: se ve la foto "antes" */
+.ad-caso figcaption { margin-top: 14px; font: 700 1.05rem/1.3 var(--fx-font-txt); }
+.ad-aviso { margin-top: 6px; font: 400 .88rem/1.4 var(--fx-font-txt); font-style: italic; color: color-mix(in srgb, var(--fx-ink) 70%, var(--fx-bg)); }
+.donde .mapa { grid-column: 1 / -1; min-width: 0; width: 100%; height: clamp(260px, 38vw, 460px); border-radius: var(--fx-radio); overflow: hidden; box-shadow: 0 14px 36px color-mix(in srgb, var(--fx-ink) 12%, transparent); }
+.donde .mapa iframe { width: 100%; height: 100%; border: 0; display: block; }
+.ad-manija { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--fx-deep); border: 3px solid var(--fx-accent); box-shadow: 0 4px 14px color-mix(in srgb, var(--fx-deep) 45%, transparent); }
+.ad-manija svg { width: 26px; height: 26px; fill: none; stroke: var(--fx-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Cifras y bloques de los paneles con el mismo acabado suave (sin borde grueso ni sombra dura) */
+body .kpi, body .bloque { border: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); border-radius: var(--fx-radio); box-shadow: 0 12px 30px color-mix(in srgb, var(--fx-ink) 8%, transparent); }
+@media (max-width: 520px) { .cabecera .volver { font-size: .78rem; line-height: 1.15; max-width: 92px; text-align: right; letter-spacing: 0; } }
+
+/* ---- Secciones de landing de clínica (opcionales): tranquilidad, equipo, proceso y preguntas. Estáticas; solo variables --fx-*. ---- */
+.tr-lista { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); margin-top: 32px; }
+.tr-punto { background: var(--fx-paper); border-radius: var(--fx-radio); padding: 24px; box-shadow: 0 12px 30px color-mix(in srgb, var(--fx-ink) 8%, transparent); display: grid; gap: 8px; align-content: start; }
+.tr-punto .ico { width: 56px; height: 56px; color: var(--fx-ink); }
+.tr-punto h3 { font: 800 1.25rem/1.15 var(--fx-font-disp); letter-spacing: -.01em; text-transform: none; }
+.eq-lista { display: grid; gap: 22px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 320px)); margin-top: 32px; }
+.eq-doc { display: grid; gap: 6px; align-content: start; }
+.eq-foto { aspect-ratio: 4 / 5; border-radius: var(--fx-radio); overflow: hidden; background: color-mix(in srgb, var(--fx-accent) 25%, var(--fx-bg)); }
+.eq-foto img { width: 100%; height: 100%; object-fit: cover; }
+.eq-doc h3 { font: 800 1.35rem/1.1 var(--fx-font-disp); letter-spacing: -.01em; text-transform: none; margin-top: 8px; }
+.eq-rol { font: 600 .95rem var(--fx-font-txt); color: color-mix(in srgb, var(--fx-ink) 70%, var(--fx-bg)); }
+.pr-pasos { list-style: none; margin: 36px 0 0; padding: 0; display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); counter-reset: n; }
+.pr-pasos li { position: relative; padding-top: 18px; border-top: 2px solid color-mix(in srgb, var(--fx-bg) 35%, transparent); }
+.pr-pasos li b { font: 300 2.6rem/1 var(--fx-font-disp); color: var(--fx-pop); }
+.pr-pasos h3 { font: 800 1.3rem/1.15 var(--fx-font-disp); letter-spacing: -.01em; text-transform: none; margin: 6px 0; }
+.pr-pasos p { color: var(--fx-soft); }
+.faq-wrap { max-width: 860px; }
+.faq { margin-top: 24px; display: grid; gap: 10px; }
+.faq details { background: var(--fx-paper); border-radius: 18px; padding: 0 20px; box-shadow: 0 6px 18px color-mix(in srgb, var(--fx-ink) 6%, transparent); }
+.faq summary { min-height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; list-style: none; font: 700 1.08rem/1.3 var(--fx-font-txt); }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 400 1.6rem/1 var(--fx-font-txt); flex: none; }
+.faq details[open] summary::after { content: "–"; }
+.faq summary:focus-visible { outline: 3px solid var(--fx-ink); outline-offset: 2px; border-radius: 12px; }
+.faq details p { padding-bottom: 18px; max-width: 62ch; }

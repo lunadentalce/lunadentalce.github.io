@@ -1,0 +1,45 @@
+/* efectos/calma.css · perfil CALMA Y CONFIANZA (spa, estética, clínicas, dentistas, psicólogos).
+   Ritmo lento (0.6–1 s), curvas suaves, sin rebote. Se carga después de base.css. Solo transform y opacity.
+   Colores solo por variables --fx-* (ni un hex aquí). Sin JS o con movimiento reducido todo se ve completo y quieto.
+   El metal, el brillo y el pulso NO están aquí: van en metal.css (opcional). */
+:root {
+  --fx-dur: .9s; --fx-ease: cubic-bezier(.2, .7, .2, 1); --fx-dist: 26px; --fx-fast: .4s;
+  /* aparición al hacer scroll (fx.js) */
+  --fx-rv-dur: 900; --fx-rv-step: 110; --fx-rv-ease: cubic-bezier(.2, .7, .2, 1); --fx-rv-dist: 28px; --fx-rv-scale: 1;
+}
+
+/* Titulares de dos pesos: línea fina + línea gruesa, sin mayúsculas forzadas */
+.doble { font: 700 clamp(2.25rem, 4.6vw, 3.75rem)/1.02 var(--fx-font-disp); letter-spacing: -.015em; }
+.doble span { font-weight: 200; font-size: .62em; line-height: 1.15; letter-spacing: -.01em; }
+.btn { font-weight: 600; letter-spacing: 0; border-width: 1.5px; border-radius: 0; min-height: 52px; }
+
+/* Tarjeta que se eleva (solo con mouse; nada importante depende del hover) */
+.fx-tarjeta { background: var(--fx-paper); border: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); box-shadow: 0 10px 28px color-mix(in srgb, var(--fx-ink) 10%, transparent); transition: transform var(--fx-fast) var(--fx-ease); }
+@media (hover: hover) { .fx-tarjeta:hover { transform: translateY(-6px); } }
+
+/* Motivo del logo girando muy lento de fondo. Se coloca dentro de una sección con position:relative y overflow:hidden.
+   No usar en un hero que tenga formulario o diagnóstico (regla pendiente de decisión). Cuenta como animación infinita. */
+.fx-motivo { position: absolute; pointer-events: none; opacity: .08; animation: fx-motivo 120s linear infinite; }
+@keyframes fx-motivo { to { transform: rotate(360deg); } }
+
+/* Check dibujado al confirmar: dos trazos que se estiran (scaleX), uno tras otro. Marcado: <span class="fx-check" aria-hidden="true"><i></i><i></i></span> */
+.fx-check { position: relative; display: inline-block; width: 1.5em; height: 1.2em; color: var(--fx-accent); }
+.fx-check i { position: absolute; height: .16em; border-radius: .1em; background: currentColor; transform-origin: left center; }
+.fx-check i:nth-child(1) { left: .12em; top: .62em; width: .48em; transform: rotate(45deg) scaleX(0); animation: fx-check-a .28s ease-out .1s forwards; }
+.fx-check i:nth-child(2) { left: .43em; top: .93em; width: .95em; transform: rotate(-50deg) scaleX(0); animation: fx-check-b .36s ease-out .38s forwards; }
+@keyframes fx-check-a { to { transform: rotate(45deg) scaleX(1); } }
+@keyframes fx-check-b { to { transform: rotate(-50deg) scaleX(1); } }
+
+/* Transición entre pasos del diagnóstico */
+.fx-paso { animation: fx-paso .7s var(--fx-ease) both; }
+@keyframes fx-paso { from { opacity: 0; transform: translateY(14px); } }
+
+/* Zoom lento de fotos (solo con mouse) */
+.fx-zoom { overflow: hidden; }
+.fx-zoom img { transition: transform 1.4s var(--fx-ease); }
+@media (hover: hover) { .fx-zoom:hover img { transform: scale(1.06); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-check i:nth-child(1) { transform: rotate(45deg); }
+  .fx-check i:nth-child(2) { transform: rotate(-50deg); }
+}

@@ -1,0 +1,5 @@
+/* efectos/transicion.css · complemento OPCIONAL: transición suave al pasar de una página a otra (landing → panel → Premium).
+   View Transitions entre documentos: donde el navegador no la soporta, se navega normal. Fundido (opacity). Sin movimiento reducido: no se activa. */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: var(--fx-dur, .4s); }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }

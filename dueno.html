@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1F1F22">
+<link rel="icon" href="assets/marcador.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&amp;display=swap">
+<link rel="stylesheet" href="estilos/base.css">
+<link rel="stylesheet" href="efectos/base.css">
+<link rel="stylesheet" href="efectos/calma.css">
+<link rel="stylesheet" href="efectos/toque.css">
+<link rel="stylesheet" href="efectos/transicion.css">
+<link rel="stylesheet" href="efectos/clinica.css">
+<style>:root { --fx-bg: #FBF8F2; --fx-paper: #FFFFFF; --fx-accent: #D9B25F; --fx-ink: #1F1F22; --fx-deep: #1F1F22; --fx-pop: #EFE8DB; --fx-mancha-1: #E5C068; --fx-mancha-2: #B8933A; --fx-mancha-3: #1F1F22; --fx-font: "Montserrat", sans-serif; --fx-font-disp: "Montserrat", sans-serif; --fx-font-txt: "Montserrat", sans-serif; --fx-rosa: #EFE8DB; --fx-rosa-2: #D9B25F; --fx-metal-1: #B8933A; --fx-metal-2: #D9B25F; --fx-metal-3: #F1DFA8; }</style>
+
+<title>Panel del dueño · Luna Dental</title>
+<meta name="description" content="Panel del dueño de Luna Dental: ingresos, citas, inasistencia, pacientes nuevos y presupuestos por periodo.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="estilos/paneles.css">
+<link rel="stylesheet" href="modulos/clinica/clinica-panel.css">
+<style>
+@media print { header.cabecera, .cab-pag, .rango, .barra-sesion, .no-print, #aviso-clin, footer { display: none !important; } .app { box-shadow: none; border: 0; display: block; } .riel { display: none; } body { background: #fff; } .kd, .panel-d { break-inside: avoid; } }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body data-pagina="Panel del dueño" data-secciones='["Periodo", "Cifras clave", "Ingresos por día", "Embudo", "Doctores", "Tratamientos", "Presupuestos por seguir"]'>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11.5a7 7 0 0 0-14 0C5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></symbol>
+  <symbol id="i-burger" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0z"/><path d="M3.5 13.5h17M4 17h16a0 0 0 0 1 0 0 3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M9 7h.01M13 6.5h.01M15.5 8h.01"/></symbol>
+  <symbol id="i-bolsa" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-moto" viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h5l2-6h-4M16 11l2 6M12 11 10 7H7"/></symbol>
+  <symbol id="i-envio" viewBox="0 0 24 24"><path d="M21 4 3 11l7 3 3 7z"/><path d="m10 14 4-4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-web" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9h17M7 6.8h.01M9.5 6.8h.01"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-pago" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M3 10h18M7 14h3"/></symbol>
+  <symbol id="i-llave" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-foto" viewBox="0 0 24 24"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-lista" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-copa" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6" height="6" rx="1"/><rect x="14.5" y="3.5" width="6" height="6" rx="1"/><rect x="3.5" y="14.5" width="6" height="6" rx="1"/><path d="M14.5 14.5h2v2h-2zM18.5 14.5h2M14.5 18.5h2M18.5 18.5v2"/></symbol>
+  <symbol id="i-estrella" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8-4.3-4.1 5.9-.9z"/></symbol>
+  <symbol id="i-tarjeta" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></symbol>
+  <symbol id="i-caja" viewBox="0 0 24 24"><path d="M6 3.5h12v5H6zM4 8.5h16l-1.5 11h-13z"/><path d="M9 13h6"/></symbol>
+  <symbol id="i-equipo" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3"/><circle cx="17" cy="9.5" r="2.3"/><path d="M3.5 19c.5-3.5 2.7-5.5 5.5-5.5s5 2 5.5 5.5M15 14.2c2.6-.4 4.7 1 5.5 4.3"/></symbol>
+  <symbol id="i-juego" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/></symbol>
+  <symbol id="i-agenda" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M13 14h3M8 17h2"/></symbol>
+  <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-diente" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/></symbol>
+  <symbol id="i-endodoncia" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/><path d="M10 9.5c0 2 .5 3.5.7 5.5M14 9.5c0 2-.5 3.5-.7 5.5"/></symbol>
+  <symbol id="i-brackets" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/><rect x="9.2" y="7.2" width="5.6" height="4" rx=".9"/><path d="M5 9.2h4.2M14.8 9.2H19"/></symbol>
+  <symbol id="i-sonrisa" viewBox="0 0 24 24"><path d="M3.5 12.5c1.2 4.6 4.7 7 8.5 7s7.3-2.4 8.5-7"/><path d="M5 12.8h14M9 13v4.6M12 13v5.3M15 13v4.6"/><path d="M12 3.5v3M10.5 5h3"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M8 17v-6c0-1 .6-1.6 1.4-1.6S10.8 10 10.8 11v6M13.2 17v-6c0-1 .6-1.6 1.4-1.6S16 10 16 11v6"/></symbol>
+</defs></svg>
+
+
+<header class="cabecera"><div class="wrap">
+  <a class="marca" href="index.html"><img src="assets/marcador.svg" alt="" width="52" height="52"><span><b>Luna Dental</b><small>Panel del dueño</small></span></a>
+  <a class="volver" href="index.html">Volver a la página</a>
+</div></header>
+<main>
+<section class="oscuro cab-pag"><div class="wrap">
+  <h1 class="doble fx-entra fx-d1"><span>El panel del dueño:</span>tu clínica en cifras</h1>
+  <p class="intro fx-entra fx-d2" style="color:var(--fx-soft)">Cuántas personas piden cita, cuántas se atienden, cuánto entra a caja y cuántos presupuestos se aceptan. Para decidir con números.</p>
+  
+</div></section>
+
+<section class="sec" style="padding-top:28px"><div class="wrap">
+  <div id="puerta" hidden></div>
+  <div id="contenido" hidden>
+    <div class="barra-sesion" style="border-radius:16px;margin-bottom:18px"><span><span class="rol-chip">Dueño</span> <span id="s-nombre"></span></span>
+      <span><a href="equipo.html">Panel del equipo</a> <button type="button" id="s-salir">Salir</button></span></div>
+
+    <div class="rango no-print" role="group" aria-label="Periodo">
+      <div class="ctrl" style="margin:0" id="r-pre"><button type="button" class="cb" data-p="mes">Este mes</button><button type="button" class="cb" data-p="ant">Mes anterior</button><button type="button" class="cb" data-p="30">Últimos 30 días</button><button type="button" class="cb" data-p="7">Últimos 7 días</button></div>
+      <div class="campo"><label for="r-desde">Desde</label><input id="r-desde" type="date"></div>
+      <div class="campo"><label for="r-hasta">Hasta</label><input id="r-hasta" type="date"></div>
+      <button type="button" class="cb" id="r-ok">Ver</button>
+      <button type="button" class="cb" id="r-print">Imprimir / PDF</button><button type="button" class="cb" id="r-csv">Descargar CSV</button>
+    </div>
+    <p class="nota-d" style="margin:-6px 0 14px"><span id="r-txt"></span> · <span id="r-act" aria-live="polite"></span></p>
+    <p class="err-f" id="d-err" role="alert"></p>
+
+    <div class="kpis-d" id="kpis"></div>
+    <div class="grid-d">
+      <section class="panel-d" style="grid-column:1/-1"><h3>Ingresos y egresos por día</h3><p class="sub">Lo registrado en caja (sin movimientos anulados).</p><div id="g-serie"></div><div class="leyenda-d"><span><i style="background:var(--fx-deep)"></i>Ingresos</span><span><i style="background:var(--fx-accent)"></i>Egresos</span></div></section>
+      <section class="panel-d"><h3>De la solicitud al paciente atendido</h3><p class="sub">Cuántas personas avanzan en cada paso.</p><div class="embudo" id="g-embudo"></div></section>
+      <section class="panel-d"><h3>Citas por doctor</h3><p class="sub">Citas del periodo (sin canceladas).</p><div class="hb" id="g-doc"></div></section>
+      <section class="panel-d"><h3>Ingresos por doctor</h3><p class="sub">Cobros registrados en caja con doctor asignado.</p><div class="hb" id="g-docing"></div></section>
+      <section class="panel-d"><h3>Tratamientos más agendados</h3><p class="sub">Los 8 con más citas.</p><div class="hb" id="g-trat"></div></section>
+      <section class="panel-d"><h3>Cuándo se llena la agenda</h3><p class="sub">Citas por día de la semana y por franja.</p><div class="hb" id="g-dias"></div><div class="hb" id="g-franja" style="margin-top:12px"></div></section>
+      <section class="panel-d"><h3>Presupuestos por seguir</h3><p class="sub">Enviados y sin respuesta, con seguimiento ya vencido.</p><ul class="seg-lista" id="g-seg"></ul></section>
+    </div>
+    <p class="nota-d">Cómo se calcula: «Ingresos» es lo que el equipo registra en caja; «Atendidas» y «No vino» son los estados que se marcan en la agenda; «Aceptación» = presupuestos aceptados ÷ presupuestos decididos. Los pacientes nuevos son los que se registran al agendar su primera cita.</p>
+  </div>
+</div></section>
+</main>
+
+<script src="config.js"></script>
+
+<script src="modulos/clinica/clinica-api.js"></script>
+<script src="modulos/clinica/clinica-ui.js"></script>
+<script>
+const { esc, $, $$, usd, hoy, suma, dif, fechaCorta, fechaLarga, pct, msgErr, aviso } = CLUI, C = CLINICA;
+let R = null, rango = { d: '', h: '' }, timer = null;
+const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+const mesIni = s => s.slice(0, 8) + '01';
+const finMes = s => { const d = new Date(s.slice(0, 8) + '01T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1, 0); return d.toISOString().slice(0, 10); };
+
+function preset(p) {
+  const h = hoy();
+  if (p === 'mes') return [mesIni(h), h];
+  if (p === 'ant') { const u = suma(mesIni(h), -1); return [mesIni(u), u]; }
+  return [suma(h, 1 - +p), h];
+}
+function delta(a, b, dinero) {
+  if (!b) return a ? '<span class="up">▲ nuevo</span> vs periodo anterior' : 'Sin datos del periodo anterior';
+  const d = Math.round((a - b) / b * 100); const cls = d > 0 ? 'up' : d < 0 ? 'down' : '';
+  return `<span class="${cls}">${d > 0 ? '▲' : d < 0 ? '▼' : '='} ${Math.abs(d)} %</span> vs periodo anterior (${dinero ? usd(b) : b})`;
+}
+function pintar(r) {
+  const c = r.citas, s = r.solicitudes, k = r.caja, p = r.presupuestos, a = r.anterior;
+  const neto = k.ingresos - k.egresos, inasist = pct(c.no_vino, c.atendidas + c.no_vino), conv = pct(s.agendadas, s.recibidas), acep = pct(p.aceptados, p.aceptados + p.rechazados);
+  const ticket = k.cobros ? k.ingresos / k.cobros : 0;
+  $('#kpis').innerHTML = [
+    ['Ingresos', usd(k.ingresos), delta(k.ingresos, a.ingresos, true)],
+    ['Neto (ingresos − egresos)', usd(neto), `Egresos ${usd(k.egresos)}${k.cobros ? ` · ticket promedio ${usd(ticket)}` : ''}`],
+    ['Citas atendidas', c.atendidas, delta(c.atendidas, a.citas_atendidas) + (c.total ? ` · ${c.total} en agenda` : '')],
+    ['Inasistencia', inasist == null ? '—' : inasist + ' %', `${c.no_vino} no vinieron · ${c.canceladas} canceladas`],
+    ['Pacientes nuevos', r.pacientes.nuevos, delta(r.pacientes.nuevos, a.nuevos) + ` · ${r.pacientes.total} en total`],
+    ['Solicitudes de la web', s.recibidas, `${conv == null ? 'Sin solicitudes' : conv + ' % ya agendadas'} · ${s.pendientes} por atender ahora`],
+    ['Presupuestos aceptados', usd(p.monto_aceptado), delta(p.monto_aceptado, a.monto_aceptado, true) + ` · ${p.aceptados} de ${p.enviados} enviados`],
+    ['Aceptación de presupuestos', acep == null ? '—' : acep + ' %', `${p.aceptados} aceptados · ${p.rechazados} rechazados`]
+  ].map(([t, v, n]) => `<div class="kd"><small>${t}</small><b>${v}</b><span>${n}</span></div>`).join('');
+  serie(k.serie);
+  const emb = (a, b, t) => `<div><span>${t}</span><b>${a}${b != null ? ` <small style="font:600 .8rem var(--fx-font-txt)">de ${b}</small>` : ''}</b></div>`;
+  $('#g-embudo').innerHTML = emb(s.recibidas, null, 'Solicitudes recibidas') + emb(s.agendadas, s.recibidas, 'Agendadas') + emb(c.atendidas, c.total, 'Citas atendidas') + emb(p.aceptados, p.enviados, 'Presupuestos aceptados') + (p.enviados ? `<div><span>Monto aceptado</span><b>${usd(p.monto_aceptado)} <small style="font:600 .8rem var(--fx-font-txt)">de ${usd(p.monto_enviado)}</small></b></div>` : '');
+  barras('#g-doc', c.por_doctor.map(d => [d.doctor, d.citas, d.color, `${d.citas} (${d.atendidas} atendidas)`]));
+  barras('#g-docing', k.por_doctor.map(d => [d.doctor, +d.ingresos, d.color, usd(d.ingresos)]));
+  barras('#g-trat', c.por_tratamiento.map(t => [t.nombre, t.n, null, t.n]));
+  barras('#g-dias', c.por_dia_semana.filter(d => d.dia < 7 || d.n).map(d => [DIAS[d.dia - 1], d.n, null, d.n]));
+  barras('#g-franja', [['Mañana', c.por_franja.manana, null, c.por_franja.manana], ['Tarde', c.por_franja.tarde, null, c.por_franja.tarde]]);
+  $('#g-seg').innerHTML = p.seguimientos.length ? p.seguimientos.map(x => `<li><span><b>${esc(x.paciente)}</b> · ${usd(x.total)}</span><span>Seguimiento: ${esc(fechaCorta(x.seguimiento))}${x.dias_vencido ? ` (hace ${x.dias_vencido} ${x.dias_vencido === 1 ? 'día' : 'días'})` : ' (hoy)'}</span></li>`).join('') : '<li style="background:#d7f0e2">Nada vencido: todos los presupuestos tienen respuesta o su seguimiento está al día.</li>';
+}
+function barras(sel, filas) {
+  const m = Math.max(1, ...filas.map(f => f[1]));
+  $(sel).innerHTML = filas.length ? filas.map(([n, v, col, txt]) => `<div class="hb-f"><span title="${esc(n)}">${esc(n)}</span><span class="p"><i style="width:${Math.max(2, v / m * 100)}%${col ? `;--c:${esc(col)}` : ''}"></i></span><b>${esc(txt)}</b></div>`).join('') : '<p class="vacio">Sin datos en este periodo.</p>';
+}
+function serie(s) {
+  let datos = s; if (s.length > 62) { datos = []; for (let i = 0; i < s.length; i += 7) { const g = s.slice(i, i + 7); datos.push({ dia: g[0].dia, ing: g.reduce((q, x) => q + +x.ing, 0), egr: g.reduce((q, x) => q + +x.egr, 0) }); } }
+  const W = 760, H = 230, pl = 46, pb = 26, pt = 10, n = datos.length, max = Math.max(1, ...datos.map(x => Math.max(+x.ing, +x.egr))), bw = (W - pl) / n, sc = v => (H - pb - pt) * (v / max);
+  const marcas = [0, .5, 1].map(f => max * f);
+  let g = marcas.map(v => `<line class="eje" x1="${pl}" x2="${W}" y1="${H - pb - sc(v)}" y2="${H - pb - sc(v)}"/><text x="${pl - 6}" y="${H - pb - sc(v) + 4}" text-anchor="end">${v >= 1000 ? Math.round(v / 100) / 10 + 'k' : Math.round(v)}</text>`).join('');
+  datos.forEach((x, i) => { const bx = pl + i * bw + bw * .12, w = Math.max(1.5, bw * .38);
+    g += `<rect x="${bx}" y="${H - pb - sc(+x.ing)}" width="${w}" height="${sc(+x.ing)}" rx="2" fill="var(--fx-deep)"><title>${esc(fechaCorta(x.dia))}: ingresos ${usd(x.ing)}</title></rect><rect x="${bx + w + 1}" y="${H - pb - sc(+x.egr)}" width="${w}" height="${sc(+x.egr)}" rx="2" fill="var(--fx-accent)"><title>${esc(fechaCorta(x.dia))}: egresos ${usd(x.egr)}</title></rect>`;
+    if (n <= 12 || i % Math.ceil(n / 8) === 0) g += `<text x="${pl + i * bw + bw / 2}" y="${H - 8}" text-anchor="middle">${esc(x.dia.slice(8))}/${esc(x.dia.slice(5, 7))}</text>`; });
+  const tot = datos.reduce((q, x) => q + +x.ing, 0);
+  $('#g-serie').innerHTML = `<svg class="serie" viewBox="0 0 ${W} ${H}" role="img" aria-label="Ingresos y egresos por día. Ingresos del periodo: ${usd(tot)}">${g}</svg>`;
+}
+
+async function cargar(silencioso) {
+  const er = $('#d-err'); er.textContent = '';
+  if (!rango.d || !rango.h || rango.h < rango.d) { er.textContent = 'Elige un periodo válido: la fecha final no puede ser anterior a la inicial.'; return; }
+  try { R = await C.rpc('dueno_resumen', { p_desde: rango.d, p_hasta: rango.h }); pintar(R);
+    $('#r-txt').textContent = `Del ${fechaLarga(rango.d)} al ${fechaLarga(rango.h)}`; $('#r-act').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit', timeZone: CLUI.TZ }) + ' · se refresca solo cada minuto';
+  } catch (e) { if (!silencioso) er.textContent = msgErr(e); }
+}
+function fijar(d, h) { rango = { d, h }; $('#r-desde').value = d; $('#r-hasta').value = h; $('#r-desde').max = $('#r-hasta').max = suma(hoy(), 30); cargar(); }
+$$('#r-pre .cb').forEach(b => b.onclick = () => { $$('#r-pre .cb').forEach(x => x.setAttribute('aria-pressed', x === b)); fijar(...preset(b.dataset.p)); });
+$('#r-ok').onclick = () => { $$('#r-pre .cb').forEach(x => x.setAttribute('aria-pressed', false)); rango = { d: $('#r-desde').value, h: $('#r-hasta').value }; cargar(); };
+$('#r-print').onclick = () => window.print();
+$('#r-csv').onclick = () => {
+  if (!R) return; const f = [['Dia', 'Ingresos', 'Egresos'], ...R.caja.serie.map(x => [x.dia, x.ing, x.egr])];
+  const resumen = [['Resumen', R.desde + ' a ' + R.hasta], ['Citas atendidas', R.citas.atendidas], ['No vinieron', R.citas.no_vino], ['Canceladas', R.citas.canceladas], ['Pacientes nuevos', R.pacientes.nuevos], ['Solicitudes recibidas', R.solicitudes.recibidas], ['Solicitudes agendadas', R.solicitudes.agendadas],
+    ['Presupuestos enviados', R.presupuestos.enviados], ['Presupuestos aceptados', R.presupuestos.aceptados], ['Monto aceptado', R.presupuestos.monto_aceptado], [], ...f];
+  const csv = resumen.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })); a.download = `reporte-${R.desde}_${R.hasta}.csv`; a.click(); URL.revokeObjectURL(a.href);
+};
+function iniciar(yo) {
+  $('#s-nombre').textContent = yo.nombre; $('#s-salir').onclick = () => { C.staff.salir(); location.reload(); };
+  const b = $('#r-pre .cb'); b.setAttribute('aria-pressed', true); fijar(...preset('mes'));
+  clearInterval(timer); timer = setInterval(() => { if (!document.hidden) cargar(true); }, 60000);
+}
+CLUI.puerta({ soloAdmin: true }).then(yo => { if (yo) iniciar(yo); });
+</script>
+<script src="fx.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.css">
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script>
+/* Scroll suave y calmado (clínica): lerp bajo, sin inercia exagerada. Sin Lenis si el usuario pidió menos movimiento o si el CDN no cargó (la página scrollea normal).
+   Los enlaces #ancla respetan scroll-padding-top de la página (cabecera fija).
+   Para frenar a Lenis dentro de un mapa, un modal o un contenedor con scroll propio: atributo data-lenis-prevent. */
+(function () {
+  if (typeof Lenis === 'undefined' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const lenis = new Lenis({ lerp: 0.08, smoothWheel: true, anchors: true });
+  if (window.gsap && window.ScrollTrigger) {   /* si la página usa GSAP ScrollTrigger, Lenis va en su ticker */
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  } else {
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+  window.lenis = lenis;
+})();
+</script>
+
+</body>
+</html>

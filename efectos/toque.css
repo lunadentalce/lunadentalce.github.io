@@ -1,0 +1,4 @@
+/* efectos/toque.css · complemento OPCIONAL pensado para celular: respuesta al toque.
+   .fx-press: la tarjeta o el botón se hunde un poco al tocarlo (scale .97). Solo transform. Sin hover: funciona con el dedo. */
+.fx-press { transition: transform .18s var(--fx-ease, ease-out); -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.fx-press:active { transform: scale(.97); }

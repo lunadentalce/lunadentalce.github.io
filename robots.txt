@@ -1,0 +1,3 @@
+# Mientras la página tenga [MARCADOR] no se indexa. Al lanzar: cambiar por  Allow: /  y  Disallow: /equipo.html  Disallow: /dueno.html
+User-agent: *
+Disallow: /

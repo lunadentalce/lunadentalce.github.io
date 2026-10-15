@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1F1F22">
+<link rel="icon" href="assets/marcador.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&amp;display=swap">
+<link rel="stylesheet" href="estilos/base.css">
+<link rel="stylesheet" href="efectos/base.css">
+<link rel="stylesheet" href="efectos/calma.css">
+<link rel="stylesheet" href="efectos/toque.css">
+<link rel="stylesheet" href="efectos/transicion.css">
+<link rel="stylesheet" href="efectos/clinica.css">
+<link rel="stylesheet" href="motor/pedido.css">
+<style>:root { --fx-bg: #FBF8F2; --fx-paper: #FFFFFF; --fx-accent: #D9B25F; --fx-ink: #1F1F22; --fx-deep: #1F1F22; --fx-pop: #EFE8DB; --fx-mancha-1: #E5C068; --fx-mancha-2: #B8933A; --fx-mancha-3: #1F1F22; --fx-font: "Montserrat", sans-serif; --fx-font-disp: "Montserrat", sans-serif; --fx-font-txt: "Montserrat", sans-serif; --fx-rosa: #EFE8DB; --fx-rosa-2: #D9B25F; --fx-metal-1: #B8933A; --fx-metal-2: #D9B25F; --fx-metal-3: #F1DFA8; }</style>
+
+<title>Luna Dental · Odontología en [MARCADOR: ciudad]</title>
+<meta name="description" content="Luna Dental, consultorio dental en [MARCADOR: ciudad]: tratamientos personalizados de odontopediatría, ortodoncia, estética e implantes. Agenda tu cita por WhatsApp.">
+<meta property="og:title" content="Luna Dental · Odontología en [MARCADOR: ciudad]">
+<meta property="og:description" content="Agenda tu cita en Luna Dental. Cuidamos tu sonrisa con tratamientos personalizados.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Dentist", "name": "Luna Dental [MARCADOR: ciudad]", "telephone": "+593983139928", "address": {"@type": "PostalAddress", "streetAddress": "[MARCADOR: dirección]", "addressLocality": "[MARCADOR: ciudad]", "addressRegion": "[MARCADOR: provincia]", "addressCountry": "EC"}, "sameAs": ["https://www.instagram.com/luna_dental_/"]}
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8.0.7/dist/styles.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8.0.7/dist/index.js"></script>
+<style>
+/* Hero */
+.hero { position: relative; overflow: hidden; }
+.hero .wrap { display: grid; gap: 28px; align-items: center; padding-block: clamp(28px, 5vw, 64px) clamp(44px, 6vw, 80px); grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); }
+.hero h1 { text-transform: uppercase; line-height: .84; }
+.hero h1 .fino { display: block; font: 300 clamp(2.4rem, 6.4vw, 4.6rem)/.9 var(--fx-font-disp); }
+.hero h1 .grueso { display: block; font: 900 clamp(4.2rem, 13vw, 9.6rem)/.84 var(--fx-font-disp); letter-spacing: .005em; }
+.hero .lead { margin-top: 20px; max-width: 40ch; font-size: 1.2rem; color: var(--fx-soft); }
+.hero-media { position: relative; justify-self: end; width: min(100%, 540px); }
+.hero-foto { aspect-ratio: 572 / 553; border-radius: 22px; overflow: hidden; box-shadow: 10px 10px 0 var(--fx-accent); }
+.hero-foto img { width: 100%; height: 100%; object-fit: cover; }
+.hero .sello { position: absolute; left: -34px; bottom: -26px; z-index: 2; }
+@media (max-width: 860px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+  .hero-media { order: -1; justify-self: stretch; width: 100%; }
+  .hero-foto { aspect-ratio: 4 / 3.6; }
+  .hero .sello { left: auto; right: 10px; bottom: -22px; width: 108px; height: 108px; font-size: .98rem; }
+}
+
+/* Diagnóstico */
+.diag .wrap { display: grid; gap: clamp(28px, 5vw, 64px); grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; }
+@media (max-width: 860px) { .diag .wrap { grid-template-columns: 1fr; } }
+.caja { background: var(--fx-paper); border: 3px solid var(--fx-deep); border-radius: 20px; box-shadow: 8px 8px 0 var(--fx-deep); padding: clamp(20px, 3vw, 30px); min-height: 440px; display: flex; flex-direction: column; gap: 16px; }
+.caja-cab { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 2px dashed color-mix(in srgb, var(--fx-deep) 30%, transparent); }
+.caja-cab img { width: 42px; height: 42px; border-radius: 50%; }
+.caja-cab b { display: block; font: 900 1.3rem/1 var(--fx-font-disp); text-transform: uppercase; }
+.caja-cab small { font-size: .95rem; }
+.prog { display: flex; align-items: center; gap: 12px; font: 700 .95rem var(--fx-font-txt); }
+.prog .pista { flex: 1; height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--fx-deep) 15%, transparent); overflow: hidden; }
+.prog .pista div { height: 100%; background: var(--fx-accent); border-radius: 99px; transition: width .35s var(--fx-ease); }
+.caja h3 { font: 900 clamp(1.8rem, 4vw, 2.4rem)/.95 var(--fx-font-disp); text-transform: uppercase; }
+.ops { display: grid; gap: 10px; }
+.op { display: flex; align-items: center; gap: 12px; min-height: 58px; padding: 10px 16px; text-align: left; background: #fff; border: 2px solid var(--fx-deep); border-radius: 12px; font: 700 1.12rem/1.2 var(--fx-font-txt); color: var(--fx-ink); cursor: pointer; transition: transform .2s var(--fx-ease), box-shadow .2s; box-shadow: 3px 3px 0 var(--fx-deep); }
+.op:active { transform: translate(3px, 3px); box-shadow: none; }
+.op small { display: block; font-weight: 400; font-size: .95rem; }
+.enlace { align-self: flex-start; min-height: 44px; border: 0; background: none; font: 700 1.05rem var(--fx-font-txt); color: var(--fx-ink); cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+.reco { background: var(--fx-deep); color: var(--fx-bg); border-radius: 14px; padding: 18px; }
+.reco small { color: var(--fx-pop); font: 700 .95rem var(--fx-font-txt); }
+.reco b { display: block; font: 900 clamp(2.1rem, 5vw, 2.8rem)/.9 var(--fx-font-disp); text-transform: uppercase; margin: 6px 0; }
+.reco p { color: var(--fx-soft); }
+.reco .precio { font: 900 1.8rem/1 var(--fx-font-disp); color: var(--fx-pop); margin-top: 10px; }
+
+/* Cómo pides */
+.pasos { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); margin-top: 44px; }
+.paso { display: flex; gap: 16px; align-items: flex-start; }
+.paso .ico { color: var(--fx-pop); }
+.paso b { font: 300 1.1rem var(--fx-font-disp); color: var(--fx-pop); }
+.paso h3 { font: 800 1.6rem/1 var(--fx-font-disp); text-transform: uppercase; margin: 2px 0 6px; }
+.paso p { color: var(--fx-soft); }
+
+/* Galería */
+.galeria { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); margin-top: 40px; }
+.galeria figure { margin: 0; border-radius: 18px; border: 3px solid var(--fx-bg); aspect-ratio: 1 / 1; }
+.galeria img { width: 100%; height: 100%; object-fit: cover; }
+.galeria figure:nth-child(2) { transform: rotate(1.5deg); } .galeria figure:nth-child(3) { transform: rotate(-1.5deg); }
+
+/* Qué cambia */
+.cambia { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); margin-top: 40px; }
+.chat { border-radius: 20px; padding: 18px; background: var(--fx-chat); border: 3px solid var(--fx-deep); }
+.chat h3 { font: 800 1.4rem/1 var(--fx-font-disp); text-transform: uppercase; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
+.burbuja { max-width: 88%; padding: 9px 12px; border-radius: 12px; margin: 8px 0; font: 400 1.02rem/1.35 var(--fx-font-txt); background: #fff; white-space: pre-line; }
+.burbuja.yo { margin-left: auto; background: #d9fdd3; }
+.chat.despues { background: var(--fx-deep); }
+.chat.despues h3 { color: var(--fx-bg); }
+
+/* Dónde */
+.donde { display: grid; gap: 30px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; }
+@media (max-width: 860px) { .donde { grid-template-columns: 1fr; } }
+.dato { display: flex; gap: 14px; align-items: center; margin-top: 16px; font-size: 1.15rem; }
+.dato .ico { width: 50px; height: 50px; }
+
+/* Cierre */
+.cierre { overflow: hidden; text-align: center; }
+.cierre .contorno { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap; }
+.cierre .wrap { position: relative; }
+.cierre .acciones { justify-content: center; }
+.demo-links { display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: center; margin-top: 22px; font-size: 1.02rem; }
+</style>
+</head>
+<body data-pagina="Landing (Pro)" data-secciones='["Inicio", "Tratamientos", "Qué necesita tu sonrisa", "Tu primera visita", "Cómo reservas", "Servicios", "Nuestro consultorio", "Antes y después", "Quién te atiende", "Así es tu tratamiento", "Preguntas", "Dónde estamos", "Cierre"]'>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11.5a7 7 0 0 0-14 0C5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+  <symbol id="i-tel" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></symbol>
+  <symbol id="i-burger" viewBox="0 0 24 24"><path d="M4 10a8 5 0 0 1 16 0z"/><path d="M3.5 13.5h17M4 17h16a0 0 0 0 1 0 0 3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M9 7h.01M13 6.5h.01M15.5 8h.01"/></symbol>
+  <symbol id="i-bolsa" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-moto" viewBox="0 0 24 24"><circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M9 17h5l2-6h-4M16 11l2 6M12 11 10 7H7"/></symbol>
+  <symbol id="i-envio" viewBox="0 0 24 24"><path d="M21 4 3 11l7 3 3 7z"/><path d="m10 14 4-4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-web" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="1.5"/><path d="M3.5 9h17M7 6.8h.01M9.5 6.8h.01"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-pago" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M3 10h18M7 14h3"/></symbol>
+  <symbol id="i-llave" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="1.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-foto" viewBox="0 0 24 24"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-lista" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-copa" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/></symbol>
+  <symbol id="i-qr" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6" height="6" rx="1"/><rect x="14.5" y="3.5" width="6" height="6" rx="1"/><rect x="3.5" y="14.5" width="6" height="6" rx="1"/><path d="M14.5 14.5h2v2h-2zM18.5 14.5h2M14.5 18.5h2M18.5 18.5v2"/></symbol>
+  <symbol id="i-estrella" viewBox="0 0 24 24"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.8 6.8 19.6l1-5.8-4.3-4.1 5.9-.9z"/></symbol>
+  <symbol id="i-tarjeta" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></symbol>
+  <symbol id="i-caja" viewBox="0 0 24 24"><path d="M6 3.5h12v5H6zM4 8.5h16l-1.5 11h-13z"/><path d="M9 13h6"/></symbol>
+  <symbol id="i-equipo" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3"/><circle cx="17" cy="9.5" r="2.3"/><path d="M3.5 19c.5-3.5 2.7-5.5 5.5-5.5s5 2 5.5 5.5M15 14.2c2.6-.4 4.7 1 5.5 4.3"/></symbol>
+  <symbol id="i-juego" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8.5 20h7"/></symbol>
+  <symbol id="i-agenda" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h2M13 14h3M8 17h2"/></symbol>
+  <symbol id="i-panel" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-diente" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/></symbol>
+  <symbol id="i-endodoncia" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/><path d="M10 9.5c0 2 .5 3.5.7 5.5M14 9.5c0 2-.5 3.5-.7 5.5"/></symbol>
+  <symbol id="i-brackets" viewBox="0 0 24 24"><path d="M8 3.8c-2.4 0-3.8 1.7-3.8 4 0 1.9 1 3.3 1.5 5 .5 2 .7 7 2.5 7 1.4 0 1.2-3.6 3.8-3.6s2.4 3.6 3.8 3.6c1.8 0 2-5 2.5-7 .5-1.7 1.5-3.1 1.5-5 0-2.3-1.4-4-3.8-4-1.6 0-2.5.9-4 .9s-2.4-.9-4-.9z"/><rect x="9.2" y="7.2" width="5.6" height="4" rx=".9"/><path d="M5 9.2h4.2M14.8 9.2H19"/></symbol>
+  <symbol id="i-sonrisa" viewBox="0 0 24 24"><path d="M3.5 12.5c1.2 4.6 4.7 7 8.5 7s7.3-2.4 8.5-7"/><path d="M5 12.8h14M9 13v4.6M12 13v5.3M15 13v4.6"/><path d="M12 3.5v3M10.5 5h3"/></symbol>
+  <symbol id="i-radio" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M8 17v-6c0-1 .6-1.6 1.4-1.6S10.8 10 10.8 11v6M13.2 17v-6c0-1 .6-1.6 1.4-1.6S16 10 16 11v6"/></symbol>
+</defs></svg>
+
+
+<div class="barra"><div class="wrap">
+  <div class="datos">
+    <span class="ocultable"><svg><use href="#i-reloj"/></svg> </span>
+    <span><svg><use href="#i-pin"/></svg><span class="pend">[MARCADOR: zona o referencia]</span></span>
+    <span class="ocultable"><svg><use href="#i-tel"/></svg><span class="pend">[MARCADOR: teléfono de la clínica]</span></span>
+  </div>
+  <a href="#carta">Reservar mi cita</a>
+</div></div>
+
+<header class="cabecera"><div class="wrap">
+  <a class="marca" href="#inicio"><img src="assets/marcador.svg" alt="" width="52" height="52"><span><b>Luna Dental</b><small>Consultorio dental</small></span></a>
+  <nav aria-label="Principal"><a href="#diagnostico">Tu sonrisa</a><a href="#carta">Servicios</a><a href="#como">Cómo reservas</a><a href="#donde">Dónde</a></nav>
+</div></header>
+
+<main>
+<section class="hero oscuro" id="inicio"><div class="wrap">
+  <div>
+    <h1><span class="fino fx-entra fx-d1">Cuidamos tu</span><span class="grueso fx-golpe">sonrisa</span></h1>
+    <p class="lead fx-entra fx-d3">Tratamientos personalizados, tecnología y calidez. Agenda tu cita por WhatsApp y te confirmamos por el mismo chat.</p>
+    <div class="acciones fx-entra fx-d4">
+      <a class="btn" href="#diagnostico">Qué necesita tu sonrisa</a>
+      <a class="btn btn-linea" href="#carta">Ver tratamientos</a>
+    </div>
+  </div>
+  <div class="hero-media fx-entra fx-d2">
+    <div class="hero-foto"><img src="assets/marcador.svg" alt="[MARCADOR: foto de la doctora o del consultorio]" width="572" height="553" fetchpriority="high"></div>
+    
+  </div>
+</div></section>
+
+<section class="franja-serv" aria-labelledby="franja-t"><div class="wrap"><div class="franja-card" data-reveal>
+  <h2 id="franja-t">Tratamientos</h2><p>Tus áreas de cuidado, en un solo lugar</p>
+  <ul><li><a href="#carta"><span class="ico"><svg><use href="#i-diente"/></svg></span><b>Odontopediatría</b></a></li>
+  <li><a href="#carta"><span class="ico"><svg><use href="#i-brackets"/></svg></span><b>Ortodoncia</b></a></li>
+  <li><a href="#carta"><span class="ico"><svg><use href="#i-sonrisa"/></svg></span><b>Estética</b></a></li>
+  <li><a href="#carta"><span class="ico"><svg><use href="#i-endodoncia"/></svg></span><b>Implantes y prótesis</b></a></li>
+  <li><a href="#carta"><span class="ico"><svg><use href="#i-agenda"/></svg></span><b>Agenda tu cita</b></a></li>
+  </ul>
+</div></div></section>
+
+
+
+<section class="sec papel diag" id="diagnostico"><div class="wrap">
+  <div data-reveal>
+    <h2 class="doble"><span>Descubre</span>Qué necesita tu sonrisa</h2>
+    <p class="intro">Cuéntanos qué te trae y te sugerimos por dónde empezar. No es un diagnóstico: lo confirma la doctora en tu cita.</p>
+  </div>
+  <div class="caja" id="caja-diag" aria-live="polite"></div>
+</div></section>
+
+<section class="sec papel tranq" id="tranquilidad"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Tu primera visita,</span>sin sorpresas</h2>
+  <p class="intro" data-reveal>Sabemos que ir al dentista a veces da nervios. Por eso queremos que sepas qué va a pasar antes de sentarte en el sillón.</p>
+  <div class="tr-lista" data-stagger><div class="tr-punto"><span class="ico"><svg><use href="#i-chat"/></svg></span><h3>Hablamos primero</h3><p>En tu valoración conversamos sobre lo que te preocupa y lo que esperas, antes de empezar cualquier tratamiento.</p></div>
+  <div class="tr-punto"><span class="ico"><svg><use href="#i-lista"/></svg></span><h3>Te explicamos las opciones</h3><p>La doctora revisa tu caso y te cuenta qué alternativas tienes, con palabras claras.</p></div>
+  <div class="tr-punto"><span class="ico"><svg><use href="#i-pago"/></svg></span><h3>Precio claro antes de empezar</h3><p>Recibes el presupuesto por escrito y decides con calma. No empezamos nada sin tu aceptación.</p></div>
+  </div>
+</div></section>
+
+<section class="sec oscuro" id="como"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Reservar es</span>así de simple</h2>
+  <div class="pasos" data-stagger>
+    <div class="paso"><span class="ico"><svg><use href="#i-lista"/></svg></span><div><b>1</b><h3>Elige tu tratamiento</h3><p>Marca lo que te interesa en la lista de tratamientos.</p></div></div>
+    <div class="paso"><span class="ico"><svg><use href="#i-reloj"/></svg></span><div><b>2</b><h3>Dinos cuándo</h3><p>Tu nombre, tu celular, el día y el horario que prefieres.</p></div></div>
+    <div class="paso"><span class="ico"><svg><use href="#i-chat"/></svg></span><div><b>3</b><h3>Confirmamos por WhatsApp</h3><p>Te escribimos para confirmar tu cita.</p></div></div>
+    
+  </div>
+</div></section>
+
+<section class="sec" id="carta"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Nuestros</span>tratamientos</h2>
+  <p class="intro" data-reveal>Elige uno o varios y envía tu reserva por WhatsApp. La doctora confirma contigo el plan, el precio y la duración en tu cita.</p>
+  <div id="carta-lista" style="margin-top:36px"></div>
+</div></section>
+
+<section class="sec oscuro" id="galeria"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Conoce nuestro</span>consultorio</h2>
+  <div class="galeria" data-stagger>
+    <figure class="fx-zoom"><img src="assets/marcador.svg" alt="[MARCADOR: foto del consultorio]" width="458" height="464" loading="lazy"></figure>
+    <figure class="fx-zoom"><img src="assets/marcador.svg" alt="[MARCADOR: foto del equipo]" width="571" height="453" loading="lazy"></figure>
+    <figure class="fx-zoom"><img src="assets/marcador.svg" alt="[MARCADOR: foto de un tratamiento]" width="563" height="694" loading="lazy"></figure>
+    
+  </div>
+</div></section>
+
+<section class="sec" id="antes-despues"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Antes</span>y después</h2>
+  <p class="intro" data-reveal>Arrastra la línea para comparar.</p>
+  <div class="ad-lista" data-stagger>
+    <figure class="ad-caso">
+      <img-comparison-slider class="ad-slider" tabindex="0" aria-label="Comparador antes y después, caso 1: arrastra o usa las flechas">
+        <img slot="first" src="assets/marcador-antes.svg" alt="[MARCADOR: foto antes del caso 1]" width="800" height="600" loading="lazy">
+        <img slot="second" src="assets/marcador-despues.svg" alt="[MARCADOR: foto después del caso 1]" width="800" height="600" loading="lazy">
+        <span slot="handle" class="ad-manija" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></svg></span>
+      </img-comparison-slider>
+      <figcaption><span class="pend">[MARCADOR: caso 1 · tratamiento]</span></figcaption>
+      <p class="ad-aviso">Casos reales de pacientes, publicados con su consentimiento. Los resultados varían en cada persona.</p>
+    </figure>
+    <figure class="ad-caso">
+      <img-comparison-slider class="ad-slider" tabindex="0" aria-label="Comparador antes y después, caso 2: arrastra o usa las flechas">
+        <img slot="first" src="assets/marcador-antes.svg" alt="[MARCADOR: foto antes del caso 2]" width="800" height="600" loading="lazy">
+        <img slot="second" src="assets/marcador-despues.svg" alt="[MARCADOR: foto después del caso 2]" width="800" height="600" loading="lazy">
+        <span slot="handle" class="ad-manija" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 6-6 6 6 6M15 6l6 6-6 6"/></svg></span>
+      </img-comparison-slider>
+      <figcaption><span class="pend">[MARCADOR: caso 2 · tratamiento]</span></figcaption>
+      <p class="ad-aviso">Casos reales de pacientes, publicados con su consentimiento. Los resultados varían en cada persona.</p>
+    </figure>
+    
+  </div>
+</div></section>
+
+<section class="sec" id="equipo"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Quién te</span>atiende</h2>
+  <p class="intro" data-reveal>Conoce a la doctora que cuida tu sonrisa.</p>
+  <div class="eq-lista" data-stagger><article class="eq-doc"><div class="eq-foto"><img src="assets/marcador.svg" alt="[MARCADOR: foto de la Dra. Micaela]" width="572" height="553" loading="lazy"></div>
+    <h3>Dra. Micaela <span class="pend">[MARCADOR: apellido]</span></h3><p class="eq-rol"><span class="pend">[MARCADOR: especialidad y universidad]</span></p><p><span class="pend">[MARCADOR: presentación corta de la doctora: formación y enfoque; la da ella]</span></p></article>
+  </div>
+</div></section>
+
+<section class="sec oscuro proceso" id="proceso"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Así es tu</span>tratamiento</h2>
+  <ol class="pr-pasos" data-stagger><li><b>1</b><h3>Valoración</h3><p>Conversamos y revisamos tu caso.</p></li>
+  <li><b>2</b><h3>Diagnóstico y plan</h3><p>La doctora te explica qué necesitas y en qué orden.</p></li>
+  <li><b>3</b><h3>Presupuesto claro</h3><p>Recibes los valores por escrito, sin compromiso.</p></li>
+  <li><b>4</b><h3>Tratamiento y seguimiento</h3><p>Empezamos cuando tú decides y te acompañamos en los controles.</p></li>
+  </ol>
+</div></section>
+
+
+
+<section class="sec papel" id="preguntas"><div class="wrap faq-wrap">
+  <h2 class="doble" data-reveal><span>Preguntas</span>frecuentes</h2>
+  <div class="faq" data-reveal><details><summary>¿Duele?</summary><p>Cuéntale a la doctora lo que te preocupa: lo conversan antes de empezar y se hace lo posible para que estés cómodo. Cada caso es distinto.</p></details>
+  <details><summary>¿Cuánto cuesta?</summary><p>Depende de cada caso. En la valoración la doctora te explica las opciones y recibes el presupuesto antes de empezar.</p></details>
+  <details><summary>¿Atienden niñas y niños?</summary><p>Sí, entre nuestras áreas está la odontopediatría. Al pedir la cita marca «La cita es para un menor de edad» y escribe el nombre de quien lo autoriza.</p></details>
+  <details><summary>¿Qué áreas atienden?</summary><p>Odontopediatría, ortodoncia, estética dental, implantes, prótesis y cirugía oral.</p></details>
+  <details><summary>¿Qué pasa en la primera cita?</summary><p>Es una valoración: conversamos, revisamos tu caso y te explicamos las opciones. No empezamos ningún tratamiento sin tu aceptación.</p></details>
+  <details><summary>¿Cómo confirmo mi cita?</summary><p>Envías tu solicitud desde esta página con tu día y horario preferidos. El equipo te escribe por WhatsApp para confirmar la hora exacta.</p></details>
+  </div>
+</div></section>
+
+<section class="sec arena" id="donde"><div class="wrap donde">
+  <div data-reveal>
+    <h2 class="doble"><span>Visítanos en</span><span class="pend">[MARCADOR: ciudad]</span></h2>
+    <div class="dato"><span class="ico"><svg><use href="#i-pin"/></svg></span><span><span class="pend">[MARCADOR: dirección]</span>, <span class="pend">[MARCADOR: ciudad]</span></span></div>
+    <div class="dato"><span class="ico"><svg><use href="#i-reloj"/></svg></span><span> </span></div>
+    <div class="acciones">
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Luna Dental Ecuador" target="_blank" rel="noopener">Cómo llegar</a>
+      <a class="btn btn-linea" id="ig" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+  <div class="oscuro" style="border-radius:20px;padding:clamp(22px,3vw,32px);box-shadow:8px 8px 0 var(--fx-deep);border:3px solid var(--fx-deep)" data-reveal>
+    <h3 style="font:900 2rem/.95 var(--fx-font-disp);text-transform:uppercase">Reserva por WhatsApp</h3>
+    <p style="font:900 clamp(2.4rem,7vw,3.4rem)/1 var(--fx-font-disp);color:var(--fx-pop);margin:10px 0 6px"><span class="pend">[MARCADOR: teléfono de la clínica]</span></p>
+    <div class="dato"><span class="ico" style="color:var(--fx-pop)"><svg><use href="#i-agenda"/></svg></span><span>Tu reserva llega lista: tratamiento, día y horario</span></div>
+    <div class="dato"><span class="ico" style="color:var(--fx-pop)"><svg><use href="#i-chat"/></svg></span><span>Confirmamos tu cita por el mismo chat </span></div>
+    <div class="acciones"><a class="btn" data-wa="Hola, quiero reservar una cita">Escribir por WhatsApp</a></div>
+  </div>
+  <div class="mapa" data-lenis-prevent><iframe title="Mapa de Luna Dental" src="https://www.google.com/maps?q=Luna Dental Ecuador&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+</div></section>
+
+<section class="sec oscuro cierre"><div class="wrap">
+  <h2 class="doble" data-reveal><span>Tu sonrisa</span>te espera</h2>
+  <div class="acciones"><a class="btn" href="#carta">Reservar mi cita</a><a class="btn btn-linea" data-wa="Hola, quiero información sobre sus tratamientos">Escribir por WhatsApp</a></div>
+  
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <img src="assets/marcador.svg" alt="Luna Dental" width="64" height="64" loading="lazy">
+  <div>Luna Dental <span class="pend">[MARCADOR: ciudad]</span> · <span class="pend">[MARCADOR: dirección corta]</span> · <span class="pend">[MARCADOR: teléfono de la clínica]</span><br>
+  <a id="ig2" target="_blank" rel="noopener">Instagram</a></div>
+</div></footer>
+
+<a class="wa-flot" data-wa="Hola, quiero reservar una cita" aria-label="Escribir a Luna Dental por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.3-.5 0-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>
+
+
+<script src="config.js"></script>
+<script src="menu.js"></script>
+<script src="modulos/clinica/clinica-api.js"></script>
+<script src="motor/pedido.js"></script>
+<script>
+const P = Pedido, esc = P.esc, plata = P.plata;
+const wa = (n, t) => `https://wa.me/${String(n).replace(/\D/g, '')}?text=${encodeURIComponent(t)}`;
+window.track = (ev, p) => { try { (window.dataLayer = window.dataLayer || []).push(Object.assign({ event: ev }, p || {})); if (window.gtag) gtag('event', ev, p || {}); } catch (e) {} };
+document.querySelectorAll('[data-wa]').forEach(a => { a.href = wa(DEMO.waCliente, a.dataset.wa); a.target = '_blank'; a.rel = 'noopener'; a.addEventListener('click', () => track('whatsapp_click', { lugar: a.classList.contains('wa-flot') ? 'flotante' : a.closest('section') ? a.closest('section').id || 'pagina' : 'pagina' })); });
+['ig', 'ig2'].forEach(i => document.getElementById(i).href = DEMO.instagram);
+{ const fb = document.getElementById('fb'); if (fb) fb.href = DEMO.facebook; }
+P.pintarCarta('#carta-lista');
+
+/* Diagnóstico: recomienda solo productos reales de la carta. Preguntas y reglas vienen de cliente.json → diag */
+const DIAG = {"titulo": "Qué necesita tu sonrisa", "sub": "Tres preguntas, una sugerencia", "fino": "Descubre", "intro": "Cuéntanos qué te trae y te sugerimos por dónde empezar. No es un diagnóstico: lo confirma la doctora en tu cita.", "hoy": "Te sugerimos empezar por", "preguntas": [{"clave": "zona", "texto": "¿Qué te trae por aquí?", "opciones": [{"valor": "a", "texto": "Quiero alinear mis dientes"}, {"valor": "b", "texto": "Quiero mejorar mi sonrisa"}, {"valor": "c", "texto": "Me falta una pieza dental"}, {"valor": "d", "texto": "Aún no lo sé"}]}, {"clave": "quien", "texto": "¿Para quién es la cita?", "opciones": [{"valor": "yo", "texto": "Para mí"}, {"valor": "hijo", "texto": "Para mi hijo o hija"}, {"valor": "otro", "texto": "Para otra persona"}]}, {"clave": "primera", "texto": "¿Es tu primera visita?", "opciones": [{"valor": "si", "texto": "Sí, es mi primera vez"}, {"valor": "no", "texto": "Ya los conozco"}]}], "reglas": [{"si": {"quien": "hijo"}, "id": "servicio-2"}, {"si": {"zona": "a"}, "id": "servicio-3"}, {"si": {"zona": "b"}, "id": "servicio-4"}, {"si": {"zona": "c"}, "id": "servicio-5"}], "defecto": "servicio-1", "compartir": {"clave": "primera", "valor": "si", "id": "servicio-1", "texto": "En tu primera visita empieza por la"}};
+const preguntas = DIAG.preguntas.map(q => ({ k: q.clave, t: q.texto, ops: q.opciones.map(o => [o.valor, o.texto, o.detalle || '']) }));
+function recomendar(r) {
+  for (const g of DIAG.reglas) if (Object.entries(g.si).every(([k, v]) => r[k] === v)) return g.id;
+  return DIAG.defecto;
+}
+const s = { paso: 0, r: {} }, caja = document.getElementById('caja-diag'), N = preguntas.length;
+const cab = `<div class="caja-cab"><img src="assets/marcador.svg" alt="" width="42" height="42"><div><b>${esc(DIAG.titulo)}</b><small>${esc(DIAG.sub)}</small></div></div>`;
+function pintar() {
+  if (s.paso < N) {
+    const q = preguntas[s.paso];
+    caja.innerHTML = `${cab}<div class="prog"><span>Paso ${s.paso + 1} de ${N}</span><div class="pista"><div style="width:${s.paso / N * 100}%"></div></div></div>
+      <div class="fx-paso" style="display:flex;flex-direction:column;gap:14px"><h3>${esc(q.t)}</h3>
+      <div class="ops">${q.ops.map(([v, t, d]) => `<button type="button" class="op" data-v="${esc(v)}"><span>${esc(t)}${d ? `<small>${esc(d)}</small>` : ''}</span></button>`).join('')}</div>
+      ${s.paso ? '<button type="button" class="enlace" id="volver">Volver</button>' : ''}</div>`;
+    requestAnimationFrame(() => requestAnimationFrame(() => { caja.querySelector('.pista div').style.width = ((s.paso + 1) / N * 100) + '%'; }));
+    caja.querySelectorAll('.op').forEach(b => b.onclick = () => { s.r[q.k] = b.dataset.v; s.paso++; pintar(); });
+    const v = document.getElementById('volver'); if (v) v.onclick = () => { s.paso--; pintar(); };
+  } else {
+    const id = recomendar(s.r), it = P.items.get(id);
+    const comp = s.r[DIAG.compartir.clave] === DIAG.compartir.valor ? P.items.get(DIAG.compartir.id) : null;
+    caja.innerHTML = `${cab}<div class="fx-paso" style="display:flex;flex-direction:column;gap:14px">
+      <div class="reco"><small>${esc(DIAG.hoy)}</small><b>${esc(it.nombre)}</b>${it.lema ? `<p><strong>${esc(it.lema)}.</strong></p>` : ''}
+        <p>${it.desc ? esc(it.desc) : '<span class="pend">[CONFIRMAR ingredientes]</span>'}</p><div class="precio">${plata(it.precio)}</div></div>
+      ${comp ? `<p>${esc(DIAG.compartir.texto)} <strong>${esc(comp.nombre)}</strong> por ${plata(comp.precio)}.</p>` : ''}
+      <button type="button" class="btn" id="add-reco">${DEMO.modo === 'reserva' ? 'Agregar a mi reserva' : 'Agregar a mi pedido'}</button>
+      ${comp ? `<button type="button" class="btn btn-linea" id="add-comp">Sumar ${esc(comp.nombre)}</button>` : ''}
+      <div style="display:flex;gap:18px;flex-wrap:wrap"><a class="enlace" href="#carta">Ver toda la carta</a><button type="button" class="enlace" id="otra">Probar otra vez</button></div></div>`;
+    document.getElementById('add-reco').onclick = () => P.abrirProducto(id);
+    const c = document.getElementById('add-comp'); if (c) c.onclick = () => { P.abrirProducto(DIAG.compartir.id); c.disabled = true; c.textContent = 'Agregadas ✓'; };
+    document.getElementById('otra').onclick = () => { s.paso = 0; s.r = {}; pintar(); };
+  }
+}
+pintar();
+</script>
+<script src="fx.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.css">
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script>
+/* Scroll suave y calmado (clínica): lerp bajo, sin inercia exagerada. Sin Lenis si el usuario pidió menos movimiento o si el CDN no cargó (la página scrollea normal).
+   Los enlaces #ancla respetan scroll-padding-top de la página (cabecera fija).
+   Para frenar a Lenis dentro de un mapa, un modal o un contenedor con scroll propio: atributo data-lenis-prevent. */
+(function () {
+  if (typeof Lenis === 'undefined' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const lenis = new Lenis({ lerp: 0.08, smoothWheel: true, anchors: true });
+  if (window.gsap && window.ScrollTrigger) {   /* si la página usa GSAP ScrollTrigger, Lenis va en su ticker */
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  } else {
+    const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+  window.lenis = lenis;
+})();
+</script>
+
+</body>
+</html>
