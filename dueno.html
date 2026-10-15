@@ -26,7 +26,7 @@
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 </head>
-<body data-pagina="Panel del dueño" data-secciones='["Periodo", "Cifras clave", "Ingresos por día", "Embudo", "Doctores", "Tratamientos", "Presupuestos por seguir"]'>
+<body data-pagina="Panel del dueño" data-secciones='["Resumen", "Solicitudes", "Agenda", "Caja", "Presupuestos", "Doctores", "Tarifario", "Tratamientos", "Horario", "Cuentas"]'>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11.5a7 7 0 0 0-14 0C5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
@@ -65,38 +65,167 @@
 </div></header>
 <main>
 <section class="oscuro cab-pag"><div class="wrap">
-  <h1 class="doble fx-entra fx-d1"><span>El panel del dueño:</span>tu clínica en cifras</h1>
-  <p class="intro fx-entra fx-d2" style="color:var(--fx-soft)">Cuántas personas piden cita, cuántas se atienden, cuánto entra a caja y cuántos presupuestos se aceptan. Para decidir con números.</p>
+  <h1 class="doble fx-entra fx-d1"><span>El panel del dueño:</span>tu clínica bajo control</h1>
+  <p class="intro fx-entra fx-d2" style="color:var(--fx-soft)">Las cifras de tu clínica y, en el mismo lugar, todo lo que puedes cambiar: citas, caja, presupuestos, doctores, tarifario, tratamientos, horario y las cuentas de tu equipo.</p>
   
 </div></section>
 
-<section class="sec" style="padding-top:28px"><div class="wrap">
+<section class="sec" style="padding-top:36px"><div class="wrap">
   <div id="puerta" hidden></div>
   <div id="contenido" hidden>
-    <div class="barra-sesion" style="border-radius:16px;margin-bottom:18px"><span><span class="rol-chip">Dueño</span> <span id="s-nombre"></span></span>
-      <span><a href="equipo.html">Panel del equipo</a> <button type="button" id="s-salir">Salir</button></span></div>
+  <div class="app">
+    <nav class="riel" role="tablist" aria-label="Secciones del panel">
+      <button type="button" role="tab" id="t-resumen" aria-selected="false" aria-controls="v-resumen"><svg viewBox="0 0 24 24"><use href="#i-panel"/></svg>Resumen</button>
+      <button type="button" role="tab" id="t-solicitudes" aria-selected="false" aria-controls="v-solicitudes"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>Solicitudes <span class="n" id="n-sol" hidden></span></button>
+      <button type="button" role="tab" id="t-agenda" aria-selected="false" aria-controls="v-agenda"><svg viewBox="0 0 24 24"><use href="#i-agenda"/></svg>Agenda</button>
+      <button type="button" role="tab" id="t-caja" aria-selected="false" aria-controls="v-caja"><svg viewBox="0 0 24 24"><use href="#i-caja"/></svg>Caja</button>
+      <button type="button" role="tab" id="t-presupuestos" aria-selected="false" aria-controls="v-presupuestos"><svg viewBox="0 0 24 24"><use href="#i-pago"/></svg>Presupuestos</button>
+      <button type="button" role="tab" id="t-doctores" aria-selected="false" aria-controls="v-doctores"><svg viewBox="0 0 24 24"><use href="#i-equipo"/></svg>Doctores</button>
+      <button type="button" role="tab" id="t-tarifario" aria-selected="false" aria-controls="v-tarifario"><svg viewBox="0 0 24 24"><use href="#i-lista"/></svg>Tarifario</button>
+      <button type="button" role="tab" id="t-tratamientos" aria-selected="false" aria-controls="v-tratamientos"><svg viewBox="0 0 24 24"><use href="#i-diente"/></svg>Tratamientos</button>
+      <button type="button" role="tab" id="t-horario" aria-selected="false" aria-controls="v-horario"><svg viewBox="0 0 24 24"><use href="#i-reloj"/></svg>Horario</button>
+      <button type="button" role="tab" id="t-cuentas" aria-selected="false" aria-controls="v-cuentas"><svg viewBox="0 0 24 24"><use href="#i-llave"/></svg>Cuentas</button>
+    </nav>
+    <div>
+      <div class="barra-sesion"><span><span class="rol-chip" id="s-rol"></span> <span id="s-nombre"></span></span>
+        <span><a href="equipo.html">Panel del equipo</a> <button type="button" id="s-salir">Salir</button></span></div>
 
-    <div class="rango no-print" role="group" aria-label="Periodo">
-      <div class="ctrl" style="margin:0" id="r-pre"><button type="button" class="cb" data-p="mes">Este mes</button><button type="button" class="cb" data-p="ant">Mes anterior</button><button type="button" class="cb" data-p="30">Últimos 30 días</button><button type="button" class="cb" data-p="7">Últimos 7 días</button></div>
-      <div class="campo"><label for="r-desde">Desde</label><input id="r-desde" type="date"></div>
-      <div class="campo"><label for="r-hasta">Hasta</label><input id="r-hasta" type="date"></div>
-      <button type="button" class="cb" id="r-ok">Ver</button>
-      <button type="button" class="cb" id="r-print">Imprimir / PDF</button><button type="button" class="cb" id="r-csv">Descargar CSV</button>
-    </div>
-    <p class="nota-d" style="margin:-6px 0 14px"><span id="r-txt"></span> · <span id="r-act" aria-live="polite"></span></p>
-    <p class="err-f" id="d-err" role="alert"></p>
+      <div class="vista" id="v-solicitudes" role="tabpanel" aria-labelledby="t-solicitudes">
+        <h2>Solicitudes de cita</h2><p class="sub">Cada solicitud llega de la página con el consentimiento del paciente. Confírmala con día y hora exactos y quedará en la agenda.</p>
+        <div class="ctrl" id="sol-filtro" aria-label="Estado"><button type="button" class="cb" data-e="nueva" aria-pressed="true">Nuevas</button><button type="button" class="cb" data-e="agendada" aria-pressed="false">Agendadas</button><button type="button" class="cb" data-e="descartada" aria-pressed="false">Descartadas</button></div>
+        <div class="tarjetas" id="sol-lista" aria-live="polite"></div>
+      </div>
 
-    <div class="kpis-d" id="kpis"></div>
-    <div class="grid-d">
-      <section class="panel-d" style="grid-column:1/-1"><h3>Ingresos y egresos por día</h3><p class="sub">Lo registrado en caja (sin movimientos anulados).</p><div id="g-serie"></div><div class="leyenda-d"><span><i style="background:var(--fx-deep)"></i>Ingresos</span><span><i style="background:var(--fx-accent)"></i>Egresos</span></div></section>
-      <section class="panel-d"><h3>De la solicitud al paciente atendido</h3><p class="sub">Cuántas personas avanzan en cada paso.</p><div class="embudo" id="g-embudo"></div></section>
-      <section class="panel-d"><h3>Citas por doctor</h3><p class="sub">Citas del periodo (sin canceladas).</p><div class="hb" id="g-doc"></div></section>
-      <section class="panel-d"><h3>Ingresos por doctor</h3><p class="sub">Cobros registrados en caja con doctor asignado.</p><div class="hb" id="g-docing"></div></section>
-      <section class="panel-d"><h3>Tratamientos más agendados</h3><p class="sub">Los 8 con más citas.</p><div class="hb" id="g-trat"></div></section>
-      <section class="panel-d"><h3>Cuándo se llena la agenda</h3><p class="sub">Citas por día de la semana y por franja.</p><div class="hb" id="g-dias"></div><div class="hb" id="g-franja" style="margin-top:12px"></div></section>
-      <section class="panel-d"><h3>Presupuestos por seguir</h3><p class="sub">Enviados y sin respuesta, con seguimiento ya vencido.</p><ul class="seg-lista" id="g-seg"></ul></section>
+      <div class="vista" id="v-agenda" role="tabpanel" aria-labelledby="t-agenda" hidden>
+        <h2>Agenda de todos tus doctores</h2><p class="sub">Mira el día o la semana, filtra por doctor y cambia el estado de cada cita. Los cambios quedan guardados.</p>
+        <div class="ctrl"><button type="button" class="cb" id="ag-ant">Anterior</button><button type="button" class="cb hoy" id="ag-hoy">Hoy</button><button type="button" class="cb" id="ag-sig">Siguiente</button>
+          <span style="width:8px"></span><button type="button" class="cb" id="vi-dia" aria-pressed="true">Por día</button><button type="button" class="cb" id="vi-sem" aria-pressed="false">Por semana</button></div>
+        <div class="ctrl" id="ag-docs" aria-label="Doctores"></div>
+        <div class="ctrl"><button type="button" class="cb" id="nc-abrir" aria-expanded="false" aria-controls="nc-form">+ Nueva cita</button></div>
+        <form class="agendar" id="nc-form" hidden autocomplete="off" style="margin-bottom:14px">
+          <div class="campo"><label for="nc-nombre">Paciente</label><input id="nc-nombre" maxlength="80" required placeholder="Nombre y apellido"></div>
+          <div class="campo"><label for="nc-tel">Celular</label><input id="nc-tel" type="tel" inputmode="tel" maxlength="14" required placeholder="09xxxxxxxx"></div>
+          <div class="campo"><label for="nc-sv">Tratamiento</label><select id="nc-sv"></select></div>
+          <div class="campo"><label for="nc-dia">Día</label><input id="nc-dia" type="date" required></div>
+          <div class="campo"><label for="nc-hora">Hora</label><input id="nc-hora" type="time" step="300" required></div>
+          <div class="campo"><label for="nc-doc">Doctor</label><select id="nc-doc"></select></div>
+          <button class="btn" type="submit">Crear cita</button><p class="err-f" id="nc-err" role="alert" style="grid-column:1/-1"></p>
+        </form>
+        <div class="agenda" data-lenis-prevent><div class="ag-grid" id="ag-grid"></div></div>
+        <div class="detalle" id="ag-det" hidden></div>
+        <div class="leyenda" id="ag-ley"></div>
+      </div>
+
+      <div class="vista" id="v-caja" role="tabpanel" aria-labelledby="t-caja" hidden>
+        <h2>Caja diaria</h2><p class="sub">Anota lo que entra y lo que sale. Cada movimiento queda con su hora, su doctor y quién lo registró; se corrige anulando con un motivo, nunca borrando.</p>
+        <div class="fila" style="max-width:260px"><div class="campo"><label for="c-dia">Día</label><input id="c-dia" type="date"></div></div>
+        <div class="kpis" id="caja-kpis" style="margin-bottom:16px"></div>
+        <form class="fila" id="caja-form" autocomplete="off">
+          <div class="campo"><label for="c-desc">Descripción</label><input id="c-desc" required maxlength="80" placeholder="ej.: 1 control"></div>
+          <div class="campo"><label for="c-imp">Importe</label><input id="c-imp" type="number" step="0.01" min="0.01" max="100000" required placeholder="ej.: 35.00"></div>
+          <div class="campo"><label for="c-tipo">Tipo</label><select id="c-tipo"><option value="ing">Ingreso</option><option value="egr">Egreso</option></select></div>
+          <div class="campo"><label for="c-doc">Doctor</label><select id="c-doc"></select></div>
+          <button class="btn" type="submit">Añadir</button>
+        </form>
+        <p class="err-f" id="c-err" role="alert"></p>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Hora</th><th>Descripción</th><th>Doctor</th><th class="n">Importe</th><th></th></tr></thead><tbody id="caja-lista"></tbody></table></div>
+      </div>
+
+      <div class="vista" id="v-presupuestos" role="tabpanel" aria-labelledby="t-presupuestos" hidden>
+        <h2>Presupuestos que se aceptan más rápido</h2><p class="sub">El precio de cada tratamiento sale del tarifario de la clínica; el total lo calcula el sistema. Guárdalo, envíalo por WhatsApp y dale seguimiento.</p>
+        <div class="dos">
+          <div>
+            <div class="campo" style="margin-bottom:10px"><label for="p-pac">Paciente</label><input id="p-pac" maxlength="80" autocomplete="off"></div>
+            <div class="fila"><div class="campo"><label for="p-item">Tratamiento</label><select id="p-item"></select></div>
+              <div class="campo"><label for="p-cant">Cantidad</label><input id="p-cant" type="number" min="1" max="20" value="1"></div>
+              <button type="button" class="btn" id="p-add">Agregar</button></div>
+            <div class="fila"><div class="campo"><label for="p-doc">Doctor</label><select id="p-doc"></select></div>
+              <div class="campo"><label for="p-desc">Descuento (%)</label><input id="p-desc" type="number" min="0" max="50" value="0"></div>
+              <div class="campo"><label for="p-seg">Seguimiento</label><input id="p-seg" type="date"></div></div>
+            <table class="tabla"><thead><tr><th>Descripción</th><th class="n">Cant.</th><th class="n">Importe</th><th></th></tr></thead><tbody id="p-lista"></tbody></table>
+            <div class="tot" style="display:flex;justify-content:space-between;font:800 1.3rem var(--fx-font-disp);padding-top:10px;margin-top:6px;border-top:2px solid var(--fx-deep)"><span>Total (aprox.)</span><span id="p-total"></span></div>
+            <p class="err-f" id="p-err" role="alert"></p>
+            <div class="acciones" style="margin-top:6px"><button type="button" class="btn" id="p-guardar">Guardar y enviar por WhatsApp</button></div>
+          </div>
+          <div><h3 style="font:800 1.15rem var(--fx-font-disp);margin-bottom:8px">Guardados</h3>
+            <div class="ctrl" id="pl-filtro"><button type="button" class="cb" data-e="" aria-pressed="true">Todos</button><button type="button" class="cb" data-e="enviado" aria-pressed="false">En espera</button><button type="button" class="cb" data-e="aceptado" aria-pressed="false">Aceptados</button><button type="button" class="cb" data-e="rechazado" aria-pressed="false">Rechazados</button></div>
+            <div class="tarjetas" id="pl-lista"></div></div>
+        </div>
+      </div>
+
+
+
+      <div class="vista" id="v-resumen" role="tabpanel" aria-labelledby="t-resumen">
+        <h2>Resumen de la clínica</h2><p class="sub">Las cifras del periodo que elijas, comparadas con el periodo anterior. Se actualiza solo cada minuto.</p>
+        <div class="rango no-print" role="group" aria-label="Periodo">
+          <div class="ctrl" style="margin:0" id="r-pre"><button type="button" class="cb" data-p="mes">Este mes</button><button type="button" class="cb" data-p="ant">Mes anterior</button><button type="button" class="cb" data-p="30">Últimos 30 días</button><button type="button" class="cb" data-p="7">Últimos 7 días</button></div>
+          <div class="campo"><label for="r-desde">Desde</label><input id="r-desde" type="date"></div>
+          <div class="campo"><label for="r-hasta">Hasta</label><input id="r-hasta" type="date"></div>
+          <button type="button" class="cb" id="r-ok">Ver</button>
+          <button type="button" class="cb" id="r-print">Imprimir / PDF</button><button type="button" class="cb" id="r-csv">Descargar CSV</button>
+        </div>
+        <p class="nota-d" style="margin:-6px 0 14px"><span id="r-txt"></span> · <span id="r-act" aria-live="polite"></span></p>
+        <p class="err-f" id="d-err" role="alert"></p>
+        <div class="kpis-d" id="kpis"></div>
+        <div class="grid-d">
+          <section class="panel-d" style="grid-column:1/-1"><h3>Ingresos y egresos por día</h3><p class="sub">Lo registrado en caja (sin movimientos anulados).</p><div id="g-serie"></div><div class="leyenda-d"><span><i style="background:var(--fx-deep)"></i>Ingresos</span><span><i style="background:var(--fx-accent)"></i>Egresos</span></div></section>
+          <section class="panel-d"><h3>De la solicitud al paciente atendido</h3><p class="sub">Cuántas personas avanzan en cada paso.</p><div class="embudo" id="g-embudo"></div></section>
+          <section class="panel-d"><h3>Citas por doctor</h3><p class="sub">Citas del periodo (sin canceladas).</p><div class="hb" id="g-doc"></div></section>
+          <section class="panel-d"><h3>Ingresos por doctor</h3><p class="sub">Cobros registrados en caja con doctor asignado.</p><div class="hb" id="g-docing"></div></section>
+          <section class="panel-d"><h3>Tratamientos más agendados</h3><p class="sub">Los 8 con más citas.</p><div class="hb" id="g-trat"></div></section>
+          <section class="panel-d"><h3>Cuándo se llena la agenda</h3><p class="sub">Citas por día de la semana y por franja.</p><div class="hb" id="g-dias"></div><div class="hb" id="g-franja" style="margin-top:12px"></div></section>
+          <section class="panel-d"><h3>Presupuestos por seguir</h3><p class="sub">Enviados y sin respuesta, con seguimiento ya vencido.</p><ul class="seg-lista" id="g-seg"></ul></section>
+        </div>
+        <p class="nota-d">Cómo se calcula: «Ingresos» es lo que el equipo registra en caja; «Atendidas» y «No vino» son los estados que se marcan en la agenda; «Aceptación» = presupuestos aceptados ÷ presupuestos decididos. Los pacientes nuevos son los que se registran al agendar su primera cita.</p>
+      </div>
+
+      <div class="vista" id="v-doctores" role="tabpanel" aria-labelledby="t-doctores" hidden>
+        <h2>Doctores</h2><p class="sub">Los doctores activos aparecen en la agenda, la caja y los presupuestos. Un doctor que ya no atiende se desactiva (no se borra) para conservar su historial.</p>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Nombre</th><th>Especialidad</th><th>Color</th><th>Activo</th><th></th></tr></thead><tbody id="aj-doc"></tbody></table></div>
+        <p class="err-f" id="doc-err" role="alert"></p>
+      </div>
+
+      <div class="vista" id="v-tarifario" role="tabpanel" aria-labelledby="t-tarifario" hidden>
+        <h2>Tarifario</h2><p class="sub">El precio de cada tratamiento en los presupuestos sale de aquí; el sistema calcula el total. Cambiar un precio no modifica los presupuestos ya guardados.</p>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Tratamiento</th><th class="n">Precio (USD)</th><th>Activo</th><th></th></tr></thead><tbody id="aj-tar"></tbody></table></div>
+        <p class="err-f" id="tar-err" role="alert"></p>
+      </div>
+
+      <div class="vista" id="v-tratamientos" role="tabpanel" aria-labelledby="t-tratamientos" hidden>
+        <h2>Tratamientos y duración</h2><p class="sub">La duración fija cuánto espacio ocupa cada cita en la agenda. <strong>Importante:</strong> el nombre debe ser igual al que aparece en la página web; si lo cambias aquí, las solicitudes de ese tratamiento dejarán de funcionar hasta cambiarlo también en la página.</p>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Nombre</th><th class="n">Duración (min)</th><th>Activo</th><th></th></tr></thead><tbody id="aj-sv"></tbody></table></div>
+        <p class="err-f" id="sv-err" role="alert"></p>
+      </div>
+
+      <div class="vista" id="v-horario" role="tabpanel" aria-labelledby="t-horario" hidden>
+        <h2>Horario de atención</h2><p class="sub">Los días y horas en que se pueden agendar citas, con una pausa (por ejemplo el almuerzo) en la que no se agenda. Un día sin marcar «Atiende» queda cerrado.</p>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Día</th><th>Atiende</th><th>Abre</th><th>Cierra</th><th>Pausa desde</th><th>Pausa hasta</th><th></th></tr></thead><tbody id="aj-hor"></tbody></table></div>
+        <div class="fila" style="max-width:320px;margin-top:14px"><div class="campo"><label for="cfg-cab">Cupos a la vez en la agenda</label><input id="cfg-cab" type="number" min="1" max="10"></div><button type="button" class="btn" id="cfg-guardar">Guardar cupos</button></div>
+        <p class="nota-d">Los cupos son cuántas citas se pueden atender al mismo tiempo (por ejemplo, 2 sillones).</p>
+        <p class="err-f" id="hor-err" role="alert"></p>
+      </div>
+
+      <div class="vista" id="v-cuentas" role="tabpanel" aria-labelledby="t-cuentas" hidden>
+        <h2>Cuentas del equipo</h2><p class="sub">Quién puede entrar a los paneles. <strong>Administración</strong> ve todo y puede cambiar la configuración; <strong>recepción</strong> trabaja con solicitudes, agenda, caja y presupuestos.</p>
+        <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th></th></tr></thead><tbody id="aj-eq"></tbody></table></div>
+        <h3 style="font:800 1.05rem var(--fx-font-disp);margin:18px 0 6px">Agregar a alguien</h3>
+        <p class="nota-d" style="margin:0 0 8px">Primero crea su usuario con correo y clave en Supabase (Authentication › Users › Add user). Luego escribe aquí el mismo correo.</p>
+        <form class="fila" id="eq-form" autocomplete="off">
+          <div class="campo"><label for="eq-mail">Correo</label><input id="eq-mail" type="email" required></div>
+          <div class="campo"><label for="eq-nombre">Nombre</label><input id="eq-nombre" maxlength="60" required></div>
+          <div class="campo"><label for="eq-rol">Rol</label><select id="eq-rol"><option value="recepcion">Recepción</option><option value="admin">Administración</option></select></div>
+          <button class="btn" type="submit">Agregar</button>
+        </form>
+        <p class="err-f" id="eq-err" role="alert"></p>
+      </div>
+
+
     </div>
-    <p class="nota-d">Cómo se calcula: «Ingresos» es lo que el equipo registra en caja; «Atendidas» y «No vino» son los estados que se marcan en la agenda; «Aceptación» = presupuestos aceptados ÷ presupuestos decididos. Los pacientes nuevos son los que se registran al agendar su primera cita.</p>
+  </div>
+  <dialog class="mini-dlg" id="dlg-motivo"><form method="dialog" id="dlg-form"><h3>Anular movimiento</h3><p id="dlg-txt"></p>
+    <div class="campo"><label for="dlg-m">Motivo (obligatorio)</label><input id="dlg-m" maxlength="120" required></div>
+    <div class="acciones"><button class="btn" type="submit" value="ok">Anular</button><button class="btn btn-linea" type="button" id="dlg-x">Cancelar</button></div></form></dialog>
+
   </div>
 </div></section>
 </main>
@@ -105,89 +234,9 @@
 
 <script src="modulos/clinica/clinica-api.js"></script>
 <script src="modulos/clinica/clinica-ui.js"></script>
-<script>
-const { esc, $, $$, usd, hoy, suma, dif, fechaCorta, fechaLarga, pct, msgErr, aviso } = CLUI, C = CLINICA;
-let R = null, rango = { d: '', h: '' }, timer = null;
-const DIAS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-const mesIni = s => s.slice(0, 8) + '01';
-const finMes = s => { const d = new Date(s.slice(0, 8) + '01T12:00:00Z'); d.setUTCMonth(d.getUTCMonth() + 1, 0); return d.toISOString().slice(0, 10); };
-
-function preset(p) {
-  const h = hoy();
-  if (p === 'mes') return [mesIni(h), h];
-  if (p === 'ant') { const u = suma(mesIni(h), -1); return [mesIni(u), u]; }
-  return [suma(h, 1 - +p), h];
-}
-function delta(a, b, dinero) {
-  if (!b) return a ? '<span class="up">▲ nuevo</span> vs periodo anterior' : 'Sin datos del periodo anterior';
-  const d = Math.round((a - b) / b * 100); const cls = d > 0 ? 'up' : d < 0 ? 'down' : '';
-  return `<span class="${cls}">${d > 0 ? '▲' : d < 0 ? '▼' : '='} ${Math.abs(d)} %</span> vs periodo anterior (${dinero ? usd(b) : b})`;
-}
-function pintar(r) {
-  const c = r.citas, s = r.solicitudes, k = r.caja, p = r.presupuestos, a = r.anterior;
-  const neto = k.ingresos - k.egresos, inasist = pct(c.no_vino, c.atendidas + c.no_vino), conv = pct(s.agendadas, s.recibidas), acep = pct(p.aceptados, p.aceptados + p.rechazados);
-  const ticket = k.cobros ? k.ingresos / k.cobros : 0;
-  $('#kpis').innerHTML = [
-    ['Ingresos', usd(k.ingresos), delta(k.ingresos, a.ingresos, true)],
-    ['Neto (ingresos − egresos)', usd(neto), `Egresos ${usd(k.egresos)}${k.cobros ? ` · ticket promedio ${usd(ticket)}` : ''}`],
-    ['Citas atendidas', c.atendidas, delta(c.atendidas, a.citas_atendidas) + (c.total ? ` · ${c.total} en agenda` : '')],
-    ['Inasistencia', inasist == null ? '—' : inasist + ' %', `${c.no_vino} no vinieron · ${c.canceladas} canceladas`],
-    ['Pacientes nuevos', r.pacientes.nuevos, delta(r.pacientes.nuevos, a.nuevos) + ` · ${r.pacientes.total} en total`],
-    ['Solicitudes de la web', s.recibidas, `${conv == null ? 'Sin solicitudes' : conv + ' % ya agendadas'} · ${s.pendientes} por atender ahora`],
-    ['Presupuestos aceptados', usd(p.monto_aceptado), delta(p.monto_aceptado, a.monto_aceptado, true) + ` · ${p.aceptados} de ${p.enviados} enviados`],
-    ['Aceptación de presupuestos', acep == null ? '—' : acep + ' %', `${p.aceptados} aceptados · ${p.rechazados} rechazados`]
-  ].map(([t, v, n]) => `<div class="kd"><small>${t}</small><b>${v}</b><span>${n}</span></div>`).join('');
-  serie(k.serie);
-  const emb = (a, b, t) => `<div><span>${t}</span><b>${a}${b != null ? ` <small style="font:600 .8rem var(--fx-font-txt)">de ${b}</small>` : ''}</b></div>`;
-  $('#g-embudo').innerHTML = emb(s.recibidas, null, 'Solicitudes recibidas') + emb(s.agendadas, s.recibidas, 'Agendadas') + emb(c.atendidas, c.total, 'Citas atendidas') + emb(p.aceptados, p.enviados, 'Presupuestos aceptados') + (p.enviados ? `<div><span>Monto aceptado</span><b>${usd(p.monto_aceptado)} <small style="font:600 .8rem var(--fx-font-txt)">de ${usd(p.monto_enviado)}</small></b></div>` : '');
-  barras('#g-doc', c.por_doctor.map(d => [d.doctor, d.citas, d.color, `${d.citas} (${d.atendidas} atendidas)`]));
-  barras('#g-docing', k.por_doctor.map(d => [d.doctor, +d.ingresos, d.color, usd(d.ingresos)]));
-  barras('#g-trat', c.por_tratamiento.map(t => [t.nombre, t.n, null, t.n]));
-  barras('#g-dias', c.por_dia_semana.filter(d => d.dia < 7 || d.n).map(d => [DIAS[d.dia - 1], d.n, null, d.n]));
-  barras('#g-franja', [['Mañana', c.por_franja.manana, null, c.por_franja.manana], ['Tarde', c.por_franja.tarde, null, c.por_franja.tarde]]);
-  $('#g-seg').innerHTML = p.seguimientos.length ? p.seguimientos.map(x => `<li><span><b>${esc(x.paciente)}</b> · ${usd(x.total)}</span><span>Seguimiento: ${esc(fechaCorta(x.seguimiento))}${x.dias_vencido ? ` (hace ${x.dias_vencido} ${x.dias_vencido === 1 ? 'día' : 'días'})` : ' (hoy)'}</span></li>`).join('') : '<li style="background:#d7f0e2">Nada vencido: todos los presupuestos tienen respuesta o su seguimiento está al día.</li>';
-}
-function barras(sel, filas) {
-  const m = Math.max(1, ...filas.map(f => f[1]));
-  $(sel).innerHTML = filas.length ? filas.map(([n, v, col, txt]) => `<div class="hb-f"><span title="${esc(n)}">${esc(n)}</span><span class="p"><i style="width:${Math.max(2, v / m * 100)}%${col ? `;--c:${esc(col)}` : ''}"></i></span><b>${esc(txt)}</b></div>`).join('') : '<p class="vacio">Sin datos en este periodo.</p>';
-}
-function serie(s) {
-  let datos = s; if (s.length > 62) { datos = []; for (let i = 0; i < s.length; i += 7) { const g = s.slice(i, i + 7); datos.push({ dia: g[0].dia, ing: g.reduce((q, x) => q + +x.ing, 0), egr: g.reduce((q, x) => q + +x.egr, 0) }); } }
-  const W = 760, H = 230, pl = 46, pb = 26, pt = 10, n = datos.length, max = Math.max(1, ...datos.map(x => Math.max(+x.ing, +x.egr))), bw = (W - pl) / n, sc = v => (H - pb - pt) * (v / max);
-  const marcas = [0, .5, 1].map(f => max * f);
-  let g = marcas.map(v => `<line class="eje" x1="${pl}" x2="${W}" y1="${H - pb - sc(v)}" y2="${H - pb - sc(v)}"/><text x="${pl - 6}" y="${H - pb - sc(v) + 4}" text-anchor="end">${v >= 1000 ? Math.round(v / 100) / 10 + 'k' : Math.round(v)}</text>`).join('');
-  datos.forEach((x, i) => { const bx = pl + i * bw + bw * .12, w = Math.max(1.5, bw * .38);
-    g += `<rect x="${bx}" y="${H - pb - sc(+x.ing)}" width="${w}" height="${sc(+x.ing)}" rx="2" fill="var(--fx-deep)"><title>${esc(fechaCorta(x.dia))}: ingresos ${usd(x.ing)}</title></rect><rect x="${bx + w + 1}" y="${H - pb - sc(+x.egr)}" width="${w}" height="${sc(+x.egr)}" rx="2" fill="var(--fx-accent)"><title>${esc(fechaCorta(x.dia))}: egresos ${usd(x.egr)}</title></rect>`;
-    if (n <= 12 || i % Math.ceil(n / 8) === 0) g += `<text x="${pl + i * bw + bw / 2}" y="${H - 8}" text-anchor="middle">${esc(x.dia.slice(8))}/${esc(x.dia.slice(5, 7))}</text>`; });
-  const tot = datos.reduce((q, x) => q + +x.ing, 0);
-  $('#g-serie').innerHTML = `<svg class="serie" viewBox="0 0 ${W} ${H}" role="img" aria-label="Ingresos y egresos por día. Ingresos del periodo: ${usd(tot)}">${g}</svg>`;
-}
-
-async function cargar(silencioso) {
-  const er = $('#d-err'); er.textContent = '';
-  if (!rango.d || !rango.h || rango.h < rango.d) { er.textContent = 'Elige un periodo válido: la fecha final no puede ser anterior a la inicial.'; return; }
-  try { R = await C.rpc('dueno_resumen', { p_desde: rango.d, p_hasta: rango.h }); pintar(R);
-    $('#r-txt').textContent = `Del ${fechaLarga(rango.d)} al ${fechaLarga(rango.h)}`; $('#r-act').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit', timeZone: CLUI.TZ }) + ' · se refresca solo cada minuto';
-  } catch (e) { if (!silencioso) er.textContent = msgErr(e); }
-}
-function fijar(d, h) { rango = { d, h }; $('#r-desde').value = d; $('#r-hasta').value = h; $('#r-desde').max = $('#r-hasta').max = suma(hoy(), 30); cargar(); }
-$$('#r-pre .cb').forEach(b => b.onclick = () => { $$('#r-pre .cb').forEach(x => x.setAttribute('aria-pressed', x === b)); fijar(...preset(b.dataset.p)); });
-$('#r-ok').onclick = () => { $$('#r-pre .cb').forEach(x => x.setAttribute('aria-pressed', false)); rango = { d: $('#r-desde').value, h: $('#r-hasta').value }; cargar(); };
-$('#r-print').onclick = () => window.print();
-$('#r-csv').onclick = () => {
-  if (!R) return; const f = [['Dia', 'Ingresos', 'Egresos'], ...R.caja.serie.map(x => [x.dia, x.ing, x.egr])];
-  const resumen = [['Resumen', R.desde + ' a ' + R.hasta], ['Citas atendidas', R.citas.atendidas], ['No vinieron', R.citas.no_vino], ['Canceladas', R.citas.canceladas], ['Pacientes nuevos', R.pacientes.nuevos], ['Solicitudes recibidas', R.solicitudes.recibidas], ['Solicitudes agendadas', R.solicitudes.agendadas],
-    ['Presupuestos enviados', R.presupuestos.enviados], ['Presupuestos aceptados', R.presupuestos.aceptados], ['Monto aceptado', R.presupuestos.monto_aceptado], [], ...f];
-  const csv = resumen.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })); a.download = `reporte-${R.desde}_${R.hasta}.csv`; a.click(); URL.revokeObjectURL(a.href);
-};
-function iniciar(yo) {
-  $('#s-nombre').textContent = yo.nombre; $('#s-salir').onclick = () => { C.staff.salir(); location.reload(); };
-  const b = $('#r-pre .cb'); b.setAttribute('aria-pressed', true); fijar(...preset('mes'));
-  clearInterval(timer); timer = setInterval(() => { if (!document.hidden) cargar(true); }, 60000);
-}
-CLUI.puerta({ soloAdmin: true }).then(yo => { if (yo) iniciar(yo); });
-</script>
+<script src="modulos/clinica/clinica-panel.js"></script>
+<script src="modulos/clinica/clinica-gestion.js"></script>
+<script src="modulos/clinica/clinica-resumen.js"></script>
 <script src="fx.js"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.css">
