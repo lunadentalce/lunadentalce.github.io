@@ -65,7 +65,7 @@
     limpiar('#eq-err');
     try { await cargarCfg(); } catch (e) { return falla('#eq-err', e); }
     const L = CFG.equipo || [];
-    $('#aj-eq').innerHTML = L.map(m => `<tr><td>${esc(m.nombre)}${m.yo ? ' <span class="pill">tú</span>' : ''}</td><td>${esc(m.email)}</td><td>${m.rol === 'admin' ? 'Administración' : 'Recepción'}</td><td>${m.yo ? '' : `<button type="button" class="mini" data-q="${esc(m.user_id)}" data-n="${esc(m.nombre)}">Quitar acceso</button>`}</td></tr>`).join('') || '<tr><td colspan="4">Sin cuentas.</td></tr>';
+    $('#aj-eq').innerHTML = L.map(m => `<tr><td>${esc(m.nombre)}${m.yo ? ' <span class="pill">tú</span>' : ''}</td><td>${esc(m.email)}</td><td>${{ admin: 'Administración', doctor: 'Doctor', recepcion: 'Recepción' }[m.rol] || esc(m.rol)}</td><td>${m.yo ? '' : `<button type="button" class="mini" data-q="${esc(m.user_id)}" data-n="${esc(m.nombre)}">Quitar acceso</button>`}</td></tr>`).join('') || '<tr><td colspan="4">Sin cuentas.</td></tr>';
     $$('[data-q]', $('#aj-eq')).forEach(b => b.onclick = async () => { if (!confirm(`¿Quitar el acceso de ${b.dataset.n}? Su usuario sigue existiendo en Supabase pero ya no podrá entrar a los paneles.`)) return;
       try { await C.rpc('equipo_quitar', { p_user: b.dataset.q }); aviso('Acceso quitado.'); pintarCuentas(); } catch (x) { falla('#eq-err', x); } });
   }

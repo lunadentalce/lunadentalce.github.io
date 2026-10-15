@@ -26,7 +26,7 @@
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 </head>
-<body data-pagina="Panel del dueño" data-secciones='["Resumen", "Solicitudes", "Agenda", "Caja", "Presupuestos", "Doctores", "Tarifario", "Tratamientos", "Horario", "Cuentas"]'>
+<body data-pagina="Panel del dueño" data-secciones='["Resumen", "Solicitudes", "Agenda", "Pacientes", "Caja", "Presupuestos", "Doctores", "Tarifario", "Tratamientos", "Horario", "Cuentas"]'>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6 7-11.5a7 7 0 0 0-14 0C5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
@@ -74,6 +74,7 @@
       <button type="button" role="tab" id="t-resumen" aria-selected="false" aria-controls="v-resumen"><svg viewBox="0 0 24 24"><use href="#i-panel"/></svg>Resumen</button>
       <button type="button" role="tab" id="t-solicitudes" aria-selected="false" aria-controls="v-solicitudes"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>Solicitudes <span class="n" id="n-sol" hidden></span></button>
       <button type="button" role="tab" id="t-agenda" aria-selected="false" aria-controls="v-agenda"><svg viewBox="0 0 24 24"><use href="#i-agenda"/></svg>Agenda</button>
+      <button type="button" role="tab" id="t-pacientes" aria-selected="false" aria-controls="v-pacientes"><svg viewBox="0 0 24 24"><use href="#i-equipo"/></svg>Pacientes</button>
       <button type="button" role="tab" id="t-caja" aria-selected="false" aria-controls="v-caja"><svg viewBox="0 0 24 24"><use href="#i-caja"/></svg>Caja</button>
       <button type="button" role="tab" id="t-presupuestos" aria-selected="false" aria-controls="v-presupuestos"><svg viewBox="0 0 24 24"><use href="#i-pago"/></svg>Presupuestos</button>
       <button type="button" role="tab" id="t-doctores" aria-selected="false" aria-controls="v-doctores"><svg viewBox="0 0 24 24"><use href="#i-equipo"/></svg>Doctores</button>
@@ -110,6 +111,16 @@
         <div class="agenda" data-lenis-prevent><div class="ag-grid" id="ag-grid"></div></div>
         <div class="detalle" id="ag-det" hidden></div>
         <div class="leyenda" id="ag-ley"></div>
+      </div>
+
+      <div class="vista" id="v-pacientes" role="tabpanel" aria-labelledby="t-pacientes" hidden>
+        <div id="pa-buscar">
+          <h2>Pacientes</h2>
+          
+          <div class="fila" style="grid-template-columns:minmax(0,1fr) auto"><div class="campo"><label for="pa-q">Buscar por nombre, celular o cédula</label><input id="pa-q" type="search" maxlength="60" autocomplete="off"></div><button type="button" class="btn" id="pa-nuevo">+ Nuevo paciente</button></div>
+          <div class="tarjetas" id="pa-lista" aria-live="polite"></div>
+        </div>
+        <div id="pa-ficha" hidden></div>
       </div>
 
       <div class="vista" id="v-caja" role="tabpanel" aria-labelledby="t-caja" hidden>
@@ -209,7 +220,7 @@
         <form class="fila" id="eq-form" autocomplete="off">
           <div class="campo"><label for="eq-mail">Correo</label><input id="eq-mail" type="email" required></div>
           <div class="campo"><label for="eq-nombre">Nombre</label><input id="eq-nombre" maxlength="60" required></div>
-          <div class="campo"><label for="eq-rol">Rol</label><select id="eq-rol"><option value="recepcion">Recepción</option><option value="admin">Administración</option></select></div>
+          <div class="campo"><label for="eq-rol">Rol</label><select id="eq-rol"><option value="recepcion">Recepción</option><option value="doctor">Doctor (ve lo clínico)</option><option value="admin">Administración</option></select></div>
           <button class="btn" type="submit">Agregar</button>
         </form>
         <p class="err-f" id="eq-err" role="alert"></p>
@@ -231,6 +242,7 @@
 <script src="modulos/clinica/clinica-api.js"></script>
 <script src="modulos/clinica/clinica-ui.js"></script>
 <script src="modulos/clinica/clinica-panel.js"></script>
+<script src="modulos/clinica/clinica-pacientes.js"></script>
 <script src="modulos/clinica/clinica-gestion.js"></script>
 <script src="modulos/clinica/clinica-resumen.js"></script>
 <script src="fx.js"></script>

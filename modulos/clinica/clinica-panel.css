@@ -123,3 +123,12 @@ dialog.mini-dlg h3 { font: 800 1.3rem var(--fx-font-disp); margin-bottom: 10px; 
 
 /* el atributo hidden debe ganarle a los display de botones y enlaces del panel */
 .riel button[hidden], .barra-sesion [hidden], .app [hidden] { display: none !important; }
+
+/* ---- Ficha del paciente ---- */
+button.sol { font: inherit; color: inherit; border: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); width: 100%; }
+button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--fx-accent) 50%, transparent); }
+.sol p { max-width: 70ch; }
+.dte[data-e] { background: linear-gradient(to bottom, var(--e, #fff) 0 55%, #fff 55%); }
+.dte[data-e="sano"] { background: #fff; }
+@media print { body.print-ficha header.cabecera, body.print-ficha .riel, body.print-ficha .barra-sesion, body.print-ficha .cab-pag, body.print-ficha .no-print, body.print-ficha footer { display: none !important; }
+  body.print-ficha .app { box-shadow: none; border: 0; display: block; } body.print-ficha .vista[hidden] { display: none !important; } body.print-ficha { background: #fff; } }

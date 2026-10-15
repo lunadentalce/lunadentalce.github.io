@@ -32,7 +32,7 @@
     const mostrar = yo => {
       if (opc.soloAdmin && yo.rol !== 'admin') {
         caja.hidden = false; contenido.hidden = true;
-        caja.innerHTML = `<div class="puerta-card"><h2>Esta pantalla es del dueño</h2><p>Tu cuenta (${esc(yo.nombre)}) es de recepción. Pide acceso de administrador o vuelve al panel del equipo.</p>
+        caja.innerHTML = `<div class="puerta-card"><h2>Esta pantalla es del dueño</h2><p>Tu cuenta (${esc(yo.nombre)}) no es de administración. Pide acceso de administrador o vuelve al panel del equipo.</p>
           <div class="acciones"><a class="btn" href="${esc(opc.volver || 'equipo.html')}">Ir al panel del equipo</a><button type="button" class="btn btn-linea" id="p-salir">Salir</button></div></div>`;
         $('#p-salir').onclick = () => { C.staff.salir(); location.reload(); }; return null;
       }
@@ -49,8 +49,8 @@
     const demo = C.modo === 'demo';
     caja.innerHTML = `<form class="puerta-card" id="p-form" novalidate>
         <h2>${demo ? 'Entra a la demo' : 'Entrar al panel'}</h2>
-        ${demo ? `<p>Elige quién eres para ver cómo cambia lo que cada persona puede hacer. Todo son datos de ejemplo guardados solo en este navegador.</p>
-          <div class="acciones"><button type="button" class="btn" data-rol="recepcion">Entrar como recepción</button><button type="button" class="btn btn-linea" data-rol="admin">Entrar como dueña</button></div>`
+        ${demo ? `<p>Elige quién eres para ver cómo cambia lo que cada persona puede hacer: la recepción no ve lo clínico; el doctor sí, pero no la configuración. Todo son datos de ejemplo guardados solo en este navegador.</p>
+          <div class="acciones"><button type="button" class="btn" data-rol="recepcion">Entrar como recepción</button><button type="button" class="btn btn-linea" data-rol="doctor">Entrar como doctor</button><button type="button" class="btn btn-linea" data-rol="admin">Entrar como dueña</button></div>`
         : `<p>Solo para el equipo de la clínica. Usa el correo y la clave que te dio la administración.</p>
           <div class="campo"><label for="p-mail">Correo</label><input id="p-mail" type="email" autocomplete="username" required></div>
           <div class="campo"><label for="p-clave">Clave</label><input id="p-clave" type="password" autocomplete="current-password" required></div>

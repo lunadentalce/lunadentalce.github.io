@@ -136,7 +136,7 @@ $('#caja-form').onsubmit = async e => { e.preventDefault(); const er = $('#c-err
     e.target.reset(); aviso('Movimiento registrado.'); cajaDia = hoy(); $('#c-dia').value = cajaDia; pintarCaja(); } catch (x) { falla(er, x); } };
 
 /* ---------- presupuestos ---------- */
-let pres = [], plEstado = '';
+let pres = [], plEstado = '', presClienta = null;
 const totalP = () => Math.round(pres.reduce((s, l) => s + l.precio * l.cant, 0) * (100 - Math.min(50, Math.max(0, +$('#p-desc').value || 0))) ) / 100;
 function pintarPres() {
   $('#p-lista').innerHTML = pres.length ? pres.map((l, i) => `<tr><td>${esc(l.nombre)}</td><td class="n">${l.cant}</td><td class="n">${usd(l.precio * l.cant)}</td><td><button type="button" class="mini" data-q="${i}" aria-label="Quitar ${esc(l.nombre)}">Quitar</button></td></tr>`).join('') : '<tr><td colspan="4">Agrega tratamientos para armar el presupuesto.</td></tr>';
@@ -145,12 +145,13 @@ function pintarPres() {
 }
 $('#p-add').onclick = () => { const t = TAR.find(x => x.id == $('#p-item').value); if (!t) return; const c = Math.min(20, Math.max(1, parseInt($('#p-cant').value) || 1)); const ex = pres.find(l => l.id === t.id); ex ? ex.cant = Math.min(20, ex.cant + c) : pres.push({ id: t.id, nombre: t.nombre, precio: +t.precio, cant: c }); pintarPres(); };
 $('#p-desc').oninput = pintarPres;
+$('#p-pac').oninput = () => { presClienta = null; };
 $('#p-guardar').onclick = async () => { const er = $('#p-err'); er.textContent = '';
   if (!pres.length) { er.textContent = 'Agrega al menos un tratamiento.'; return; }
   try {
-    const nombre = $('#p-pac').value.trim(), r = await C.rpc('presupuesto_guardar', { p_paciente: nombre, p_doctor: $('#p-doc').value ? +$('#p-doc').value : null, p_descuento: Math.round(+$('#p-desc').value || 0), p_items: pres.map(l => ({ tarifario_id: l.id, cant: l.cant })), p_seguimiento: $('#p-seg').value || null });
+    const nombre = $('#p-pac').value.trim(), r = await C.rpc('presupuesto_guardar', { p_paciente: nombre, p_doctor: $('#p-doc').value ? +$('#p-doc').value : null, p_descuento: Math.round(+$('#p-desc').value || 0), p_items: pres.map(l => ({ tarifario_id: l.id, cant: l.cant })), p_seguimiento: $('#p-seg').value || null, p_clienta: presClienta });
     window.open(wa('', `Presupuesto de ${DEMO.cliente} para ${nombre}:\n` + pres.map(l => `${l.cant} × ${l.nombre}`).join('\n') + (+$('#p-desc').value ? `\nDescuento: ${Math.round(+$('#p-desc').value)} %` : '') + `\nTotal: ${usd(r.total)}\n(Sujeto a valoración. Válido por 15 días.)`), '_blank', 'noopener');
-    aviso(`Presupuesto guardado: ${usd(r.total)}.`); pres = []; $('#p-pac').value = ''; $('#p-desc').value = 0; $('#p-seg').value = ''; pintarPres(); pintarListaPres();
+    aviso(`Presupuesto guardado: ${usd(r.total)}.`); pres = []; presClienta = null; $('#p-pac').value = ''; $('#p-desc').value = 0; $('#p-seg').value = ''; pintarPres(); pintarListaPres();
   } catch (e) { falla(er, e); } };
 async function pintarListaPres() {
   const c = $('#pl-lista');
@@ -168,7 +169,10 @@ $$('#pl-filtro .cb').forEach(b => b.onclick = () => { plEstado = b.dataset.e; $$
 
 const CARGAR = { 't-solicitudes': pintarSolicitudes, 't-agenda': () => { pintarFiltroDocs(); prepararNuevaCita(); cargarAgenda(); }, 't-caja': pintarCaja, 't-presupuestos': () => { pintarListaPres(); } };
 /* Las pantallas que solo existen en el panel del dueño (resumen, doctores, tarifario, tratamientos, horario, cuentas) se registran aquí desde sus archivos */
-window.CLPANEL = { cargar: CARGAR, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
+/* Atajos que usa la ficha del paciente: abrir la agenda o los presupuestos ya con el paciente */
+function nuevaCitaPara(p) { ir($('#t-agenda')); setTimeout(() => { $('#nc-form').hidden = false; $('#nc-abrir').setAttribute('aria-expanded', true); $('#nc-nombre').value = p.nombre; $('#nc-tel').value = tel09(p.telefono); $('#nc-nombre').focus(); }, 400); }
+function presupuestoPara(p) { ir($('#t-presupuestos')); presClienta = p.id; $('#p-pac').value = p.nombre; pintarPres(); }
+window.CLPANEL = { cargar: CARGAR, nuevaCita: nuevaCitaPara, presupuestoPara, ir: id => ir($(id)), yo: () => YO, tel09, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
 
 /* ---------- arranque ---------- */
 async function cargarBase() {
@@ -180,7 +184,7 @@ async function cargarBase() {
   ag.docs = new Set(DOCS.filter(d => d.activo).map(d => d.id));
 }
 async function iniciar(yo) {
-  YO = yo; $('#s-rol').textContent = yo.rol === 'admin' ? 'Administración' : 'Recepción'; $('#s-nombre').textContent = yo.nombre;
+  YO = yo; $('#s-rol').textContent = { admin: 'Administración', doctor: 'Doctor', recepcion: 'Recepción' }[yo.rol] || yo.rol; $('#s-nombre').textContent = yo.nombre;
   { const d = $('#s-dueno'); if (d) d.hidden = yo.rol !== 'admin'; }
   $('#s-salir').onclick = () => { C.staff.salir(); location.reload(); };
   try { await cargarBase(); } catch (e) { aviso(msgErr(e), 'mal'); }

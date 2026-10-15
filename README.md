@@ -5,7 +5,7 @@ Sitio estático (HTML/CSS/JS sin build) publicado en GitHub Pages. La base es Su
 | Página | Quién | Qué hace |
 |---|---|---|
 | `index.html` | Pacientes | Landing: tratamientos, «Qué necesita tu sonrisa», reserva (la solicitud se guarda y sale por WhatsApp) |
-| `equipo.html` | Recepción y administración | Trabajo diario: solicitudes de la web → cita con hora y doctor, agenda de todos los doctores (nueva cita, mover, cambiar estado), caja con anulaciones, presupuestos con precio del tarifario |
+| `equipo.html` | Recepción y administración | Trabajo diario: solicitudes de la web → cita con hora y doctor, agenda de todos los doctores (nueva cita, mover, cambiar estado), pacientes con su ficha, caja con anulaciones, presupuestos con precio del tarifario. Los doctores ven además la parte clínica de la ficha |
 | `dueno.html` | Solo administración | Todo lo anterior más el resumen (ingresos, citas atendidas, inasistencia, pacientes nuevos, presupuestos por periodo; imprimir y CSV) y la configuración: doctores, tarifario, tratamientos y duración, horario con pausa de almuerzo y cuentas del equipo |
 | `privacidad.html` | Pacientes | Política de privacidad (borrador que debe revisar un asesor legal) |
 
@@ -22,5 +22,5 @@ Sitio estático (HTML/CSS/JS sin build) publicado en GitHub Pages. La base es Su
 - RLS activado en todas las tablas y sin políticas: el navegador nunca lee ni escribe tablas; solo llama funciones `security definer` con `set search_path = ''`.
 - El paciente (`anon`) solo puede ejecutar `solicitar_cita` (con consentimiento obligatorio, tope por hora y por teléfono) y las funciones públicas de citas.
 - Caja, presupuestos y sellos son inmutables: se corrigen con anulación. El precio de un presupuesto sale del tarifario en SQL, no del navegador.
-- **No se guarda historia clínica ni diagnósticos.** Son datos sensibles (Ley Orgánica de Protección de Datos Personales): se activan aparte, con consentimiento y almacenamiento definidos con la clínica.
+- **La ficha clínica guarda datos de salud (sensibles, LOPDP):** solo la ven administración y doctores, exige el consentimiento del paciente, no se edita ni se borra (se corrige con una nota nueva) y cada acceso queda en la auditoría. Antes de usarla con pacientes reales: revisión legal de `privacidad.html`, política de respaldos y formato de consentimiento firmado en persona. Radiografías y fotos no están incluidas.
 - Pruebas del módulo: `PG_URI=… python3 modulos/clinica/probar.py` (en el repo de la agencia, `landing-base`).
