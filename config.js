@@ -17,8 +17,8 @@ window.DEMO = {
   "modo": "reserva",
   "clinica": {
     "modo": "supabase",
-    "url": "",
-    "anonKey": "",
+    "url": "https://jukpaqtriemqvxormrgb.supabase.co",
+    "anonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1a3BhcXRyaWVtcXZ4b3JtcmdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzODY1ODQsImV4cCI6MjEwNTk2MjU4NH0.4PPIVK2HvvgwrGEtNVn7CozqDCldvlFWnK2rpgrOmHE",
     "schema": "luna_dental",
     "consentimiento": "Acepto que Luna Dental use mis datos (nombre, celular y datos de la cita) para gestionar mi solicitud y contactarme.",
     "privacidad": "privacidad.html"
