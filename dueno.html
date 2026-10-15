@@ -64,11 +64,7 @@
   <a class="volver" href="index.html">Volver a la página</a>
 </div></header>
 <main>
-<section class="oscuro cab-pag"><div class="wrap">
-  <h1 class="doble fx-entra fx-d1"><span>El panel del dueño:</span>tu clínica bajo control</h1>
-  <p class="intro fx-entra fx-d2" style="color:var(--fx-soft)">Las cifras de tu clínica y, en el mismo lugar, todo lo que puedes cambiar: citas, caja, presupuestos, doctores, tarifario, tratamientos, horario y las cuentas de tu equipo.</p>
-  
-</div></section>
+
 
 <section class="sec" style="padding-top:36px"><div class="wrap">
   <div id="puerta" hidden></div>
@@ -91,13 +87,13 @@
         <span><a href="equipo.html">Panel del equipo</a> <button type="button" id="s-salir">Salir</button></span></div>
 
       <div class="vista" id="v-solicitudes" role="tabpanel" aria-labelledby="t-solicitudes">
-        <h2>Solicitudes de cita</h2><p class="sub">Cada solicitud llega de la página con el consentimiento del paciente. Confírmala con día y hora exactos y quedará en la agenda.</p>
+        <h2>Solicitudes de cita</h2>
         <div class="ctrl" id="sol-filtro" aria-label="Estado"><button type="button" class="cb" data-e="nueva" aria-pressed="true">Nuevas</button><button type="button" class="cb" data-e="agendada" aria-pressed="false">Agendadas</button><button type="button" class="cb" data-e="descartada" aria-pressed="false">Descartadas</button></div>
         <div class="tarjetas" id="sol-lista" aria-live="polite"></div>
       </div>
 
       <div class="vista" id="v-agenda" role="tabpanel" aria-labelledby="t-agenda" hidden>
-        <h2>Agenda de todos tus doctores</h2><p class="sub">Mira el día o la semana, filtra por doctor y cambia el estado de cada cita. Los cambios quedan guardados.</p>
+        <h2>Agenda de todos tus doctores</h2>
         <div class="ctrl"><button type="button" class="cb" id="ag-ant">Anterior</button><button type="button" class="cb hoy" id="ag-hoy">Hoy</button><button type="button" class="cb" id="ag-sig">Siguiente</button>
           <span style="width:8px"></span><button type="button" class="cb" id="vi-dia" aria-pressed="true">Por día</button><button type="button" class="cb" id="vi-sem" aria-pressed="false">Por semana</button></div>
         <div class="ctrl" id="ag-docs" aria-label="Doctores"></div>
@@ -117,7 +113,7 @@
       </div>
 
       <div class="vista" id="v-caja" role="tabpanel" aria-labelledby="t-caja" hidden>
-        <h2>Caja diaria</h2><p class="sub">Anota lo que entra y lo que sale. Cada movimiento queda con su hora, su doctor y quién lo registró; se corrige anulando con un motivo, nunca borrando.</p>
+        <h2>Caja diaria</h2>
         <div class="fila" style="max-width:260px"><div class="campo"><label for="c-dia">Día</label><input id="c-dia" type="date"></div></div>
         <div class="kpis" id="caja-kpis" style="margin-bottom:16px"></div>
         <form class="fila" id="caja-form" autocomplete="off">
@@ -132,7 +128,7 @@
       </div>
 
       <div class="vista" id="v-presupuestos" role="tabpanel" aria-labelledby="t-presupuestos" hidden>
-        <h2>Presupuestos que se aceptan más rápido</h2><p class="sub">El precio de cada tratamiento sale del tarifario de la clínica; el total lo calcula el sistema. Guárdalo, envíalo por WhatsApp y dale seguimiento.</p>
+        <h2>Presupuestos que se aceptan más rápido</h2>
         <div class="dos">
           <div>
             <div class="campo" style="margin-bottom:10px"><label for="p-pac">Paciente</label><input id="p-pac" maxlength="80" autocomplete="off"></div>
@@ -156,7 +152,7 @@
 
 
       <div class="vista" id="v-resumen" role="tabpanel" aria-labelledby="t-resumen">
-        <h2>Resumen de la clínica</h2><p class="sub">Las cifras del periodo que elijas, comparadas con el periodo anterior. Se actualiza solo cada minuto.</p>
+        <h2>Resumen de la clínica</h2>
         <div class="rango no-print" role="group" aria-label="Periodo">
           <div class="ctrl" style="margin:0" id="r-pre"><button type="button" class="cb" data-p="mes">Este mes</button><button type="button" class="cb" data-p="ant">Mes anterior</button><button type="button" class="cb" data-p="30">Últimos 30 días</button><button type="button" class="cb" data-p="7">Últimos 7 días</button></div>
           <div class="campo"><label for="r-desde">Desde</label><input id="r-desde" type="date"></div>
@@ -164,52 +160,52 @@
           <button type="button" class="cb" id="r-ok">Ver</button>
           <button type="button" class="cb" id="r-print">Imprimir / PDF</button><button type="button" class="cb" id="r-csv">Descargar CSV</button>
         </div>
-        <p class="nota-d" style="margin:-6px 0 14px"><span id="r-txt"></span> · <span id="r-act" aria-live="polite"></span></p>
+        <p class="nota-d" style="margin:-6px 0 14px"><span id="r-txt"></span></p>
         <p class="err-f" id="d-err" role="alert"></p>
         <div class="kpis-d" id="kpis"></div>
         <div class="grid-d">
-          <section class="panel-d" style="grid-column:1/-1"><h3>Ingresos y egresos por día</h3><p class="sub">Lo registrado en caja (sin movimientos anulados).</p><div id="g-serie"></div><div class="leyenda-d"><span><i style="background:var(--fx-deep)"></i>Ingresos</span><span><i style="background:var(--fx-accent)"></i>Egresos</span></div></section>
-          <section class="panel-d"><h3>De la solicitud al paciente atendido</h3><p class="sub">Cuántas personas avanzan en cada paso.</p><div class="embudo" id="g-embudo"></div></section>
-          <section class="panel-d"><h3>Citas por doctor</h3><p class="sub">Citas del periodo (sin canceladas).</p><div class="hb" id="g-doc"></div></section>
-          <section class="panel-d"><h3>Ingresos por doctor</h3><p class="sub">Cobros registrados en caja con doctor asignado.</p><div class="hb" id="g-docing"></div></section>
-          <section class="panel-d"><h3>Tratamientos más agendados</h3><p class="sub">Los 8 con más citas.</p><div class="hb" id="g-trat"></div></section>
-          <section class="panel-d"><h3>Cuándo se llena la agenda</h3><p class="sub">Citas por día de la semana y por franja.</p><div class="hb" id="g-dias"></div><div class="hb" id="g-franja" style="margin-top:12px"></div></section>
-          <section class="panel-d"><h3>Presupuestos por seguir</h3><p class="sub">Enviados y sin respuesta, con seguimiento ya vencido.</p><ul class="seg-lista" id="g-seg"></ul></section>
+          <section class="panel-d" style="grid-column:1/-1"><h3>Ingresos y egresos por día</h3><div id="g-serie"></div><div class="leyenda-d"><span><i style="background:var(--fx-deep)"></i>Ingresos</span><span><i style="background:var(--fx-accent)"></i>Egresos</span></div></section>
+          <section class="panel-d"><h3>De la solicitud al paciente atendido</h3><div class="embudo" id="g-embudo"></div></section>
+          <section class="panel-d"><h3>Citas por doctor</h3><div class="hb" id="g-doc"></div></section>
+          <section class="panel-d"><h3>Ingresos por doctor</h3><div class="hb" id="g-docing"></div></section>
+          <section class="panel-d"><h3>Tratamientos más agendados</h3><div class="hb" id="g-trat"></div></section>
+          <section class="panel-d"><h3>Cuándo se llena la agenda</h3><div class="hb" id="g-dias"></div><div class="hb" id="g-franja" style="margin-top:12px"></div></section>
+          <section class="panel-d"><h3>Presupuestos por seguir</h3><ul class="seg-lista" id="g-seg"></ul></section>
         </div>
-        <p class="nota-d">Cómo se calcula: «Ingresos» es lo que el equipo registra en caja; «Atendidas» y «No vino» son los estados que se marcan en la agenda; «Aceptación» = presupuestos aceptados ÷ presupuestos decididos. Los pacientes nuevos son los que se registran al agendar su primera cita.</p>
+        
       </div>
 
       <div class="vista" id="v-doctores" role="tabpanel" aria-labelledby="t-doctores" hidden>
-        <h2>Doctores</h2><p class="sub">Los doctores activos aparecen en la agenda, la caja y los presupuestos. Un doctor que ya no atiende se desactiva (no se borra) para conservar su historial.</p>
+        <h2>Doctores</h2>
         <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Nombre</th><th>Especialidad</th><th>Color</th><th>Activo</th><th></th></tr></thead><tbody id="aj-doc"></tbody></table></div>
         <p class="err-f" id="doc-err" role="alert"></p>
       </div>
 
       <div class="vista" id="v-tarifario" role="tabpanel" aria-labelledby="t-tarifario" hidden>
-        <h2>Tarifario</h2><p class="sub">El precio de cada tratamiento en los presupuestos sale de aquí; el sistema calcula el total. Cambiar un precio no modifica los presupuestos ya guardados.</p>
+        <h2>Tarifario</h2>
         <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Tratamiento</th><th class="n">Precio (USD)</th><th>Activo</th><th></th></tr></thead><tbody id="aj-tar"></tbody></table></div>
         <p class="err-f" id="tar-err" role="alert"></p>
       </div>
 
       <div class="vista" id="v-tratamientos" role="tabpanel" aria-labelledby="t-tratamientos" hidden>
-        <h2>Tratamientos y duración</h2><p class="sub">La duración fija cuánto espacio ocupa cada cita en la agenda. <strong>Importante:</strong> el nombre debe ser igual al que aparece en la página web; si lo cambias aquí, las solicitudes de ese tratamiento dejarán de funcionar hasta cambiarlo también en la página.</p>
+        <h2>Tratamientos y duración</h2><p class="nota-d">El nombre debe ser igual al de la página web.</p>
         <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Nombre</th><th class="n">Duración (min)</th><th>Activo</th><th></th></tr></thead><tbody id="aj-sv"></tbody></table></div>
         <p class="err-f" id="sv-err" role="alert"></p>
       </div>
 
       <div class="vista" id="v-horario" role="tabpanel" aria-labelledby="t-horario" hidden>
-        <h2>Horario de atención</h2><p class="sub">Los días y horas en que se pueden agendar citas, con una pausa (por ejemplo el almuerzo) en la que no se agenda. Un día sin marcar «Atiende» queda cerrado.</p>
+        <h2>Horario de atención</h2>
         <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Día</th><th>Atiende</th><th>Abre</th><th>Cierra</th><th>Pausa desde</th><th>Pausa hasta</th><th></th></tr></thead><tbody id="aj-hor"></tbody></table></div>
         <div class="fila" style="max-width:320px;margin-top:14px"><div class="campo"><label for="cfg-cab">Cupos a la vez en la agenda</label><input id="cfg-cab" type="number" min="1" max="10"></div><button type="button" class="btn" id="cfg-guardar">Guardar cupos</button></div>
-        <p class="nota-d">Los cupos son cuántas citas se pueden atender al mismo tiempo (por ejemplo, 2 sillones).</p>
+        
         <p class="err-f" id="hor-err" role="alert"></p>
       </div>
 
       <div class="vista" id="v-cuentas" role="tabpanel" aria-labelledby="t-cuentas" hidden>
-        <h2>Cuentas del equipo</h2><p class="sub">Quién puede entrar a los paneles. <strong>Administración</strong> ve todo y puede cambiar la configuración; <strong>recepción</strong> trabaja con solicitudes, agenda, caja y presupuestos.</p>
+        <h2>Cuentas del equipo</h2>
         <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th></th></tr></thead><tbody id="aj-eq"></tbody></table></div>
         <h3 style="font:800 1.05rem var(--fx-font-disp);margin:18px 0 6px">Agregar a alguien</h3>
-        <p class="nota-d" style="margin:0 0 8px">Primero crea su usuario con correo y clave en Supabase (Authentication › Users › Add user). Luego escribe aquí el mismo correo.</p>
+        <p class="nota-d" style="margin:0 0 8px">Su usuario debe existir antes en Supabase (Authentication › Users).</p>
         <form class="fila" id="eq-form" autocomplete="off">
           <div class="campo"><label for="eq-mail">Correo</label><input id="eq-mail" type="email" required></div>
           <div class="campo"><label for="eq-nombre">Nombre</label><input id="eq-nombre" maxlength="60" required></div>

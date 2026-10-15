@@ -27,7 +27,7 @@ async function pintarSolicitudes() {
       ${solEstado === 'nueva' ? `<div class="acciones"><button type="button" class="btn" data-agendar="${s.id}">Agendar</button>
         <a class="btn btn-linea" target="_blank" rel="noopener" href="${wa(s.telefono, `Hola ${s.nombre.split(' ')[0]}, te escribimos de ${DEMO.cliente} por tu solicitud de cita (${s.servicios.map(x => x.nombre).join(', ')}).`)}">Escribir por WhatsApp</a>
         <button type="button" class="mini" data-descartar="${s.id}">Descartar</button></div><div class="agendar" hidden></div>` : ''}
-    </article>`).join('') : `<p class="vacio">${solEstado === 'nueva' ? 'No hay solicitudes nuevas. Cuando un paciente pida cita desde la página, aparecerá aquí.' : 'Nada por aquí todavía.'}</p>`;
+    </article>`).join('') : `<p class="vacio">${solEstado === 'nueva' ? 'No hay solicitudes nuevas.' : 'Nada por aquí todavía.'}</p>`;
     $$('[data-agendar]', cont).forEach(b => b.onclick = () => abrirAgendar(b.closest('.sol'), l.find(x => x.id == b.dataset.agendar)));
     $$('[data-descartar]', cont).forEach(b => b.onclick = async () => { if (!confirm('¿Descartar esta solicitud?')) return; try { await C.rpc('solicitud_descartar', { p_id: +b.dataset.descartar }); aviso('Solicitud descartada.'); pintarSolicitudes(); } catch (e) { falla(null, e); } });
   } catch (e) { cont.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; }

@@ -60,11 +60,7 @@
   <a class="volver" href="index.html">Volver a la página</a>
 </div></header>
 <main>
-<section class="oscuro cab-pag"><div class="wrap">
-  <h1 class="doble fx-entra fx-d1"><span>El panel de tu equipo:</span>solicitudes, agenda y caja</h1>
-  <p class="intro fx-entra fx-d2" style="color:var(--fx-soft)">Aquí llegan las solicitudes de tu página. Las conviertes en citas con su hora y su doctor, y llevas la agenda, la caja y los presupuestos de toda la clínica.</p>
-  
-</div></section>
+
 
 <section class="sec" style="padding-top:36px"><div class="wrap">
   <div id="puerta" hidden></div>
@@ -87,13 +83,13 @@
         <span><a href="dueno.html" id="s-dueno" hidden>Panel del dueño</a> <button type="button" id="s-salir">Salir</button></span></div>
 
       <div class="vista" id="v-solicitudes" role="tabpanel" aria-labelledby="t-solicitudes">
-        <h2>Solicitudes de cita</h2><p class="sub">Cada solicitud llega de la página con el consentimiento del paciente. Confírmala con día y hora exactos y quedará en la agenda.</p>
+        <h2>Solicitudes de cita</h2>
         <div class="ctrl" id="sol-filtro" aria-label="Estado"><button type="button" class="cb" data-e="nueva" aria-pressed="true">Nuevas</button><button type="button" class="cb" data-e="agendada" aria-pressed="false">Agendadas</button><button type="button" class="cb" data-e="descartada" aria-pressed="false">Descartadas</button></div>
         <div class="tarjetas" id="sol-lista" aria-live="polite"></div>
       </div>
 
       <div class="vista" id="v-agenda" role="tabpanel" aria-labelledby="t-agenda" hidden>
-        <h2>Agenda de todos tus doctores</h2><p class="sub">Mira el día o la semana, filtra por doctor y cambia el estado de cada cita. Los cambios quedan guardados.</p>
+        <h2>Agenda de todos tus doctores</h2>
         <div class="ctrl"><button type="button" class="cb" id="ag-ant">Anterior</button><button type="button" class="cb hoy" id="ag-hoy">Hoy</button><button type="button" class="cb" id="ag-sig">Siguiente</button>
           <span style="width:8px"></span><button type="button" class="cb" id="vi-dia" aria-pressed="true">Por día</button><button type="button" class="cb" id="vi-sem" aria-pressed="false">Por semana</button></div>
         <div class="ctrl" id="ag-docs" aria-label="Doctores"></div>
@@ -113,7 +109,7 @@
       </div>
 
       <div class="vista" id="v-caja" role="tabpanel" aria-labelledby="t-caja" hidden>
-        <h2>Caja diaria</h2><p class="sub">Anota lo que entra y lo que sale. Cada movimiento queda con su hora, su doctor y quién lo registró; se corrige anulando con un motivo, nunca borrando.</p>
+        <h2>Caja diaria</h2>
         <div class="fila" style="max-width:260px"><div class="campo"><label for="c-dia">Día</label><input id="c-dia" type="date"></div></div>
         <div class="kpis" id="caja-kpis" style="margin-bottom:16px"></div>
         <form class="fila" id="caja-form" autocomplete="off">
@@ -128,7 +124,7 @@
       </div>
 
       <div class="vista" id="v-presupuestos" role="tabpanel" aria-labelledby="t-presupuestos" hidden>
-        <h2>Presupuestos que se aceptan más rápido</h2><p class="sub">El precio de cada tratamiento sale del tarifario de la clínica; el total lo calcula el sistema. Guárdalo, envíalo por WhatsApp y dale seguimiento.</p>
+        <h2>Presupuestos que se aceptan más rápido</h2>
         <div class="dos">
           <div>
             <div class="campo" style="margin-bottom:10px"><label for="p-pac">Paciente</label><input id="p-pac" maxlength="80" autocomplete="off"></div>

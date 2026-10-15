@@ -61,7 +61,7 @@ async function cargar(silencioso) {
   const er = $('#d-err'); er.textContent = '';
   if (!rango.d || !rango.h || rango.h < rango.d) { er.textContent = 'Elige un periodo válido: la fecha final no puede ser anterior a la inicial.'; return; }
   try { R = await C.rpc('dueno_resumen', { p_desde: rango.d, p_hasta: rango.h }); pintar(R);
-    $('#r-txt').textContent = `Del ${fechaLarga(rango.d)} al ${fechaLarga(rango.h)}`; $('#r-act').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit', timeZone: CLUI.TZ }) + ' · se refresca solo cada minuto';
+    $('#r-txt').textContent = `Del ${fechaLarga(rango.d)} al ${fechaLarga(rango.h)}`; { const act = $('#r-act'); if (act) act.textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-EC', { hour: '2-digit', minute: '2-digit', timeZone: CLUI.TZ }) + ' · se refresca solo cada minuto'; }
   } catch (e) { if (!silencioso) er.textContent = msgErr(e); }
 }
 function fijar(d, h) { rango = { d, h }; $('#r-desde').value = d; $('#r-hasta').value = h; $('#r-desde').max = $('#r-hasta').max = suma(hoy(), 30); cargar(); }
