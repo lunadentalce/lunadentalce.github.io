@@ -11,7 +11,7 @@ Sitio estático (HTML/CSS/JS sin build) publicado en GitHub Pages. La base es Su
 
 ## Puesta en marcha (una vez)
 1. **Proyecto Supabase:** si es el proyecto compartido de la agencia, antes de empezar confirma que el schema `luna_dental` no existe y no cambies ajustes globales (Authentication, extensiones, claves).
-2. **SQL Editor:** corre en orden `supabase/migrations/001…007`, luego `supabase/seed.sql` (completa lo marcado CONFIRMAR).
+2. **SQL Editor:** pega `supabase/instalar-todo.sql` completo (son las migraciones 001…007 en orden; también están sueltas en `supabase/migrations/`), luego `supabase/seed.sql` (completa lo marcado CONFIRMAR).
 3. **Settings › API › Exposed schemas:** agrega `luna_dental` **sin quitar** los que ya están.
 4. **Personal:** Authentication › Add user (correo y clave) por cada persona, y luego la fila en `luna_dental.staff` (ver el final de `seed.sql`). Nadie se da de alta como personal por su cuenta: ninguna función da acceso solo por «tener sesión», todas comprueban la tabla `staff`.
 5. **`config.js`:** pon `clinica.url` (Project URL) y `clinica.anonKey` (clave **anon**; la `service_role` nunca va en el repo).
