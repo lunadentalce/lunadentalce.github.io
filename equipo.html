@@ -159,7 +159,7 @@
 <script>
 const { esc, $, $$, usd, hoy, suma, dif, dow, lunes, fechaCorta, fechaLarga, tel09, wa, msgErr, aviso } = CLUI, C = CLINICA;
 const falla = (el, e) => { const t = msgErr(e); el ? (el.textContent = t) : null; aviso(t, 'mal'); };
-let YO = null, DOCS = [], TAR = [], HORARIO = { h0: 8, h1: 17 };
+let YO = null, DOCS = [], TAR = [], HORARIO = { h0: 8, h1: 17, paso: 30 };
 const docNombre = id => (DOCS.find(d => d.id === id) || { nombre: 'Sin asignar' }).nombre;
 const docColor = id => (DOCS.find(d => d.id === id) || { color: '#8E8F94' }).color;
 
@@ -172,7 +172,7 @@ tabs.forEach(b => { b.onclick = () => ir(b); b.onkeydown = e => { const v = visi
 /* ---------- solicitudes ---------- */
 const FR = { manana: 'Mañana', tarde: 'Tarde', cualquiera: 'Cualquier horario' };
 let solEstado = 'nueva';
-const horas = () => { const o = []; for (let m = HORARIO.h0 * 60; m < HORARIO.h1 * 60; m += 30) o.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); return o; };
+const horas = () => { const o = []; for (let m = HORARIO.h0 * 60; m < HORARIO.h1 * 60; m += HORARIO.paso) o.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); return o; };
 async function pintarSolicitudes() {
   const cont = $('#sol-lista');
   try {
@@ -338,7 +338,7 @@ async function iniciar(yo) {
   $('#s-dueno').hidden = $('#t-ajustes').hidden = yo.rol !== 'admin'; $('#t-ajustes').hidden = yo.rol !== 'admin';
   $('#s-salir').onclick = () => { C.staff.salir(); location.reload(); };
   try { await cargarBase(); } catch (e) { aviso(msgErr(e), 'mal'); }
-  try { const cfg = await C.rpc('config_admin'); const hs = (cfg.horario || []).filter(h => h.abre); if (hs.length) HORARIO = { h0: Math.min(...hs.map(h => +h.abre.slice(0, 2))), h1: Math.max(...hs.map(h => Math.ceil(+h.cierra.slice(0, 2) + (+h.cierra.slice(3, 5) ? .5 : 0)))) }; } catch (e) { /* horario por defecto 8–17 */ }
+  try { const cfg = await C.rpc('config_admin'); const hs = (cfg.horario || []).filter(h => h.abre); if (hs.length) HORARIO = { paso: +(cfg.config || {}).paso_min || 30, h0: Math.min(...hs.map(h => +h.abre.slice(0, 2))), h1: Math.max(...hs.map(h => Math.ceil(+h.cierra.slice(0, 2) + (+h.cierra.slice(3, 5) ? .5 : 0)))) }; } catch (e) { /* horario por defecto 8–17 */ }
   pintarPres(); ir(tabs[0]);
 }
 CLUI.puerta({ alEntrar: iniciar }).then(yo => { if (yo && !YO) iniciar(yo); });
