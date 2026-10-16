@@ -67,14 +67,46 @@
         <div class="tarjetas"><div class="sol"><div class="meta"><b>Tratamiento y atención</b> ${estado('tratamiento')}</div><div class="meta"><b>Uso de datos</b> ${estado('datos')}</div><div class="meta"><b>Fotos e imágenes</b> ${estado('imagenes')}</div>
           <form class="agendar" id="fi-cons" autocomplete="off"><div class="campo"><label for="c-tipo2">Consentimiento</label><select id="c-tipo2"><option value="tratamiento">Tratamiento y atención</option><option value="datos">Uso de datos</option><option value="imagenes">Fotos e imágenes</option></select></div>
             <div class="campo"><label for="c-quien">Quién lo da (paciente o representante)</label><input id="c-quien" maxlength="80" required value="${esc(d.representante || F.nombre)}"></div>
-            <button class="btn" type="submit" value="1">Registrar</button><button class="btn btn-linea" type="button" id="c-retirar">Retirar</button></form></div></div>`}`;
+            <button class="btn" type="submit" value="1">Registrar</button><button class="btn btn-linea" type="button" id="c-retirar">Retirar</button></form>
+          <div class="acciones no-print"><button type="button" class="btn btn-linea" id="c-imprimir">Imprimir consentimiento para firmar</button></div>
+          <p class="nota-d" style="margin:0">El paciente (o su representante) lo firma en el consultorio. Cuando esté firmado, regístralo aquí arriba.</p></div></div>`}`;
     $('#fi-datos').onsubmit = async e => { e.preventDefault(); $('#fi-err').textContent = '';
       try { const r = await C.rpc('paciente_guardar', { p_id: F.id, p_nombre: $('#d-nombre').value, p_telefono: $('#d-tel').value.replace(/[\s-]/g, ''), p_cedula: $('#d-ced').value, p_nacimiento: $('#d-nac').value || null, p_email: $('#d-mail').value, p_direccion: $('#d-dir').value, p_contacto_nombre: $('#d-cn').value, p_contacto_tel: $('#d-ct').value, p_representante: $('#d-rep').value });
         aviso(nuevo ? 'Paciente creado.' : 'Datos guardados.'); abrir(r.id, 'datos'); } catch (x) { falla('#fi-err', x); } };
     if (!nuevo) {
       const reg = async otorgado => { try { await C.rpc('consentimiento_registrar', { p_id: F.id, p_tipo: $('#c-tipo2').value, p_otorgado: otorgado, p_quien: $('#c-quien').value }); aviso(otorgado ? 'Consentimiento registrado.' : 'Consentimiento retirado.'); abrir(F.id, 'datos'); } catch (x) { aviso(msgErr(x), 'mal'); } };
+      $('#c-imprimir').onclick = imprimirConsentimiento;
       $('#fi-cons').onsubmit = e => { e.preventDefault(); reg(true); }; $('#c-retirar').onclick = () => { if (confirm('¿Registrar que el paciente retiró este consentimiento? No se podrá escribir en lo clínico hasta que lo dé de nuevo.')) reg(false); };
     }
+  }
+
+  /* ---- consentimiento imprimible: el texto sale de config.js (cliente.json → clinica.consentimiento_doc) y lo revisa un asesor legal ---- */
+  function imprimirConsentimiento() {
+    const K = (DEMO.clinica || {}).consentimientoDoc;
+    if (!K) { aviso('Falta el texto del consentimiento en la configuración.', 'mal'); return; }
+    const d = F.datos || {}, menor = !!d.representante, rep = d.representante ? esc(d.representante) : '';
+    const sub = t => String(t).replace(/\{clinica\}/g, esc(DEMO.cliente)).replace(/\{responsable\}/g, esc(K.responsable)).replace(/\{contacto\}/g, esc(K.contacto)).replace(/\{conservacion\}/g, esc(K.conservacion));
+    const fecha = new Date().toLocaleDateString('es-EC', { day: 'numeric', month: 'long', year: 'numeric', timeZone: CLUI.TZ });
+    const linea = (txt, nota) => `<div class="firma"><div class="raya"></div><b>${txt}</b>${nota ? `<span>${nota}</span>` : ''}</div>`;
+    const w = window.open('', '_blank'); if (!w) { aviso('Permite las ventanas emergentes para imprimir el consentimiento.', 'mal'); return; }
+    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Consentimiento · ${esc(F.nombre)}</title><style>
+      body { font: 12pt/1.45 "Helvetica Neue", Arial, sans-serif; color: #111; max-width: 760px; margin: 0 auto; padding: 28px 22px; }
+      h1 { font-size: 15pt; margin: 4px 0 2px; } .clin { font-size: 10pt; letter-spacing: .06em; text-transform: uppercase; color: #555; }
+      h2 { font-size: 11.5pt; margin: 16px 0 3px; } p { margin: 0 0 6px; text-align: justify; } .datos { border: 1px solid #999; padding: 10px 12px; margin: 12px 0; font-size: 11pt; }
+      .caja { display: inline-block; width: 11px; height: 11px; border: 1.3px solid #111; margin-right: 8px; vertical-align: -1px; }
+      .firmas { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 54px; } .raya { border-top: 1px solid #111; margin-bottom: 4px; } .firma b { display: block; font-size: 10.5pt; } .firma span { font-size: 9.5pt; color: #444; }
+      .aviso { background: #fff3c4; border: 1px solid #d9b25f; padding: 8px 12px; margin-bottom: 14px; font-size: 10pt; } button { font: inherit; padding: 8px 16px; margin: 0 8px 12px 0; }
+      @media print { .aviso, button { display: none; } body { padding: 0; } } @page { size: A4; margin: 18mm; }</style></head><body>
+      <div class="aviso">Borrador: un asesor legal debe revisar este texto antes de usarlo con pacientes. Esta franja no sale al imprimir.</div>
+      <button onclick="window.print()">Imprimir</button>
+      <div class="clin">${esc(DEMO.cliente)}</div><h1>${esc(K.titulo)}</h1>
+      <div class="datos"><b>Paciente:</b> ${esc(F.nombre)}${d.cedula ? ` · <b>Cédula:</b> ${esc(d.cedula)}` : ''}${d.nacimiento ? ` · <b>Nacimiento:</b> ${esc(d.nacimiento)}` : ''}<br><b>Celular:</b> ${esc(tel09(F.telefono))}${menor ? `<br><b>Representante legal:</b> ${rep}` : ''}</div>
+      <p>${menor ? `Yo, ${rep}, representante legal del paciente indicado,` : `Yo, ${esc(F.nombre)},`} declaro lo siguiente:</p>
+      ${K.secciones.map(x => `<h2>${esc(x.t)}</h2><p>${sub(esc(x.p))}</p>`).join('')}
+      <h2>Fotografías (marca lo que autorizas)</h2><p><span class="caja"></span>${esc(K.imagenes)}</p><p><span class="caja"></span>${esc(K.imagenes_difusion)}</p>
+      <p style="margin-top:14px">He leído este documento, lo entiendo y firmo en señal de conformidad. Fecha: ${esc(fecha)}. Lugar: ____________________</p>
+      <div class="firmas">${linea(menor ? 'Firma del representante legal' : 'Firma del paciente', `Nombre: ${menor ? rep : esc(F.nombre)} · C.I.: ______________`)}${linea('Firma del odontólogo o la odontóloga', 'Nombre y registro: ______________________')}</div></body></html>`);
+    w.document.close(); w.focus();
   }
 
   /* ---- citas ---- */
