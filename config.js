@@ -1,7 +1,7 @@
-/* Luna Dental · [MARCADOR: ciudad] — datos del cliente para la demo (generado por nuevo-cliente.py desde clientes/luna-dental/cliente.json).
+/* Luna Dental Centro de Especialidades Odontológicas · [MARCADOR: ciudad] — datos del cliente para la demo (generado por nuevo-cliente.py desde clientes/luna-dental/cliente.json).
    Todo número o dato del cliente vive SOLO aquí. Lo que falta va como [MARCADOR]. */
 window.DEMO = {
-  "cliente": "Luna Dental",
+  "cliente": "Luna Dental Centro de Especialidades Odontológicas",
   "corto": "Luna Dental",
   "ciudad": "[MARCADOR: ciudad]",
   "waCliente": "593983139928",
@@ -52,5 +52,24 @@ window.DEMO = {
       "imagenes": "Autorizo el uso de fotografías de mi caso solo para mi historia clínica.",
       "imagenes_difusion": "Autorizo el uso de fotografías de mi caso para difusión (redes y página web), cuidando mi identidad."
     }
+  },
+  "logo": "assets/logo-provisional.svg",
+  "agenda": {
+    "dias": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "abre": "09:00",
+    "cierra": "18:00",
+    "pausa": [
+      "13:00",
+      "14:00"
+    ],
+    "sub": "Pide tu cita",
+    "texto_dias": "de lunes a sábado"
   }
 };

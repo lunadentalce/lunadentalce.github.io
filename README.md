@@ -1,4 +1,4 @@
-# Luna Dental · sitio y paneles
+# Luna Dental Centro de Especialidades Odontológicas · sitio y paneles
 
 Sitio estático (HTML/CSS/JS sin build) publicado en GitHub Pages. La base es Supabase, schema **`luna_dental`** (un schema por cliente; nada en `public`).
 

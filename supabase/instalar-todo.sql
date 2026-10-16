@@ -1,4 +1,4 @@
--- Luna Dental · instalación completa del schema luna_dental (migraciones en un solo archivo, en orden).
+-- Luna Dental Centro de Especialidades Odontológicas · instalación completa del schema luna_dental (migraciones en un solo archivo, en orden).
 -- Pégalo entero en Supabase › SQL Editor y pulsa Run. Solo toca el schema luna_dental; no cambia nada de public ni de otros clientes.
 -- Antes: confirma que el schema luna_dental NO existe. Después: corre supabase/seed.sql.
 
