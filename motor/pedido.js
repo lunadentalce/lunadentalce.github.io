@@ -15,7 +15,7 @@
   M.categorias.forEach(c => c.items.forEach(i => items.set(i.id, { ...i, conExtras: c.extras })));
 
   const carrito = [];           // { id, extras: [ids], cant }
-  const datos = { tipo: R ? 'reserva' : '', dia: '', franja: 'Mañana', nombre: '', telefono: '', menor: false, representante: '', consentimiento: false, retiro: 'Lo antes posible', direccion: '', referencia: '', ubicacion: '', nota: '', sector: '', cuando: 'ahora', hora: '' };
+  const datos = { tipo: R ? 'reserva' : '', dia: '', franja: 'Mañana', nombre: '', telefono: '', celular: '', menor: false, representante: '', consentimiento: false, retiro: 'Lo antes posible', direccion: '', referencia: '', ubicacion: '', nota: '', sector: '', cuando: 'ahora', hora: '' };
   /* Nivel 3 (Premium): la página activa D.sectores (envío por sector) y D.programar (pedido para más tarde). */
   const sectores = () => Array.isArray(D.sectores) ? D.sectores : null;
   const envioActual = () => {
@@ -203,8 +203,9 @@
     const c = $('#pd-totales', h); if (!c) return;
     const e = envioActual();
     if (datos.tipo !== 'domicilio' || !sectores()) { c.innerHTML = ''; return; }
-    c.innerHTML = `<p class="pd-fila">Envío${datos.sector ? ' a ' + esc(datos.sector) : ''} <b>${e == null ? 'elige tu sector' : plata(e)}</b></p>
-      <p class="pd-subtotal pd-total">Total <b>${e == null ? '—' : plata(subtotal() + e)}</b></p>`;
+    const sinCosto = !!datos.sector && e == null;   /* envío por confirmar: el costo se acuerda por WhatsApp */
+    c.innerHTML = `<p class="pd-fila">Envío${datos.sector ? ' a ' + esc(datos.sector) : ''} <b>${sinCosto ? 'te lo confirmamos por WhatsApp' : e == null ? 'elige tu sector' : plata(e)}</b></p>
+      <p class="pd-subtotal pd-total">${sinCosto ? 'Subtotal <b>' + plata(subtotal()) + ' + envío</b>' : 'Total <b>' + (e == null ? '—' : plata(subtotal() + e)) + '</b>'}</p>`;
   }
 
   function campo(id, etiqueta, extra = '') {
@@ -237,9 +238,10 @@
       return;
     }
     c.innerHTML = campo('nombre', 'Tu nombre', 'autocomplete="given-name" required') +
+      (window.REST ? campo('celular', 'Tu celular', 'type="tel" inputmode="tel" autocomplete="tel" placeholder="09XXXXXXXX" required') : '') +
       (datos.tipo === 'llevar'
         ? `<label class="pd-campo"><span>¿Cuándo pasas?</span><select id="pd-retiro">${['Lo antes posible', 'En 30 minutos', 'En 1 hora'].map(o => `<option ${o === datos.retiro ? 'selected' : ''}>${o}</option>`).join('')}</select></label>`
-        : (sectores() ? `<label class="pd-campo"><span>Sector</span><select id="pd-sector"><option value="">Elige tu sector</option>${sectores().map(z => `<option ${z.nombre === datos.sector ? 'selected' : ''} value="${esc(z.nombre)}">${esc(z.nombre)} · envío ${plata(z.costo)}</option>`).join('')}</select></label>` : '') +
+        : (sectores() ? `<label class="pd-campo"><span>Sector</span><select id="pd-sector"><option value="">Elige tu sector</option>${sectores().map(z => `<option ${z.nombre === datos.sector ? 'selected' : ''} value="${esc(z.nombre)}">${esc(z.nombre)}${z.costo == null ? '' : ' · envío ' + plata(z.costo) + (z.ejemplo ? ' (ejemplo)' : '')}</option>`).join('')}</select></label>` : '') +
           campo('direccion', 'Dirección', 'autocomplete="street-address" required') +
           campo('referencia', 'Referencia (casa, color, junto a…)') +
           `<button type="button" class="pd-btn pd-btn-sec" id="pd-ubi">${datos.ubicacion ? 'Ubicación agregada ✓' : 'Usar mi ubicación'}</button><p class="pd-sub" id="pd-ubi-estado"></p>`) +
@@ -321,22 +323,44 @@
       hh => { $('#pd-nuevo', hh).onclick = () => { carrito.length = 0; Object.assign(datos, { nombre: '', telefono: '', dia: '', menor: false, representante: '', consentimiento: false, nota: '', ref: null }); actualizarBarra(); hh.close(); }; });
   }
 
-  function enviar(h) {
+  /* Módulo de restaurante (window.REST): el pedido queda guardado en la base ANTES de abrir WhatsApp. El total, el envío y el stock los calcula la base;
+     las extras viajan como productos aparte (misma cantidad que su burger) para que el dueño vea todo en el dashboard. */
+  const lineasBase = () => carrito.flatMap(l => [{ producto: l.id, cantidad: l.cant }, ...l.extras.map(x => ({ producto: x, cantidad: l.cant }))]);
+  const horaISO = hhmm => { const [h, m] = hhmm.split(':'); const d = new Date(); const f = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Guayaquil' }).format(d);
+    const t = new Date(`${f}T${h.padStart(2, '0')}:${m}:00-05:00`); if (t < d) t.setDate(t.getDate() + 1); return t.toISOString(); };
+  async function guardarEnBase() {
+    const dom = datos.tipo === 'domicilio';
+    return window.REST.rpc('pedido_crear', { p_nombre: datos.nombre, p_telefono: datos.celular, p_canal: datos.tipo, p_sector: dom ? datos.sector : null,
+      p_direccion: dom ? [datos.direccion, datos.referencia].filter(Boolean).join(' · ') : null, p_maps: dom && datos.ubicacion ? datos.ubicacion : null,
+      p_nota: datos.nota || null, p_programado: D.programar && datos.cuando === 'programar' && datos.hora ? horaISO(datos.hora) : null, p_lineas: lineasBase() });
+  }
+
+  async function enviar(h) {
     const err = $('#pd-error', h);
     if (CL) return enviarClinica(h, err);
     const falta = R ? (!datos.nombre ? 'Escribe tu nombre para saber de quién es la reserva.' : '') : !datos.tipo ? 'Elige si lo quieres para llevar o a domicilio.'
       : !datos.nombre ? 'Escribe tu nombre para saber de quién es el pedido.'
+      : window.REST && !datos.celular ? 'Escribe tu celular para avisarte de tu pedido.'
       : datos.tipo === 'domicilio' && sectores() && !datos.sector ? 'Elige tu sector para calcular el envío.'
       : datos.tipo === 'domicilio' && !datos.direccion ? 'Escribe la dirección de entrega.'
       : D.programar && datos.cuando === 'programar' && !datos.hora ? 'Elige la hora a la que quieres tu pedido.' : '';
     if (falta) { err.textContent = falta; return; }
     err.textContent = '';
-    window.open(wa(D.waCliente, mensaje()), '_blank', 'noopener');
+    let numero = null, urlWA = '';
+    if (window.REST && !R) {
+      const btn = $('#pd-enviar', h); btn.disabled = true; btn.textContent = 'Enviando…';
+      const w = window.open('', '_blank'); if (w) w.opener = null;     // se abre antes de esperar a la base para que el navegador no bloquee WhatsApp
+      try { numero = (await guardarEnBase()).numero; }
+      catch (e) { if (w) w.close(); err.textContent = e.message; btn.disabled = false; btn.textContent = 'Enviar pedido por WhatsApp'; return; }
+      urlWA = wa(D.waCliente, `Pedido #${numero}\n` + mensaje());
+      if (w) w.location.href = urlWA; else window.open(urlWA, '_blank', 'noopener');
+    } else { urlWA = wa(D.waCliente, mensaje()); window.open(urlWA, '_blank', 'noopener'); }
     guardarPrueba();
     abrirHoja(`
       <div class="pd-listo" aria-hidden="true">✓</div>
-      <h2 class="pd-hoja-tit">${R ? 'Tu reserva se abrió en WhatsApp' : 'Tu pedido se abrió en WhatsApp'}</h2>
-      <p class="pd-sub">${R ? `Envía el mensaje. ${D.corto || D.cliente} te confirma el día y la hora.` : `Envía el mensaje para confirmarlo. ${D.corto || D.cliente} te responde con el tiempo${datos.tipo === 'domicilio' ? (envioActual() == null ? ' y el costo de envío' : ' de entrega') : ' de retiro'}.`}</p>
+      <h2 class="pd-hoja-tit">${R ? 'Tu reserva se abrió en WhatsApp' : numero ? `Pedido #${numero} recibido` : 'Tu pedido se abrió en WhatsApp'}</h2>
+      <p class="pd-sub">${R ? `Envía el mensaje. ${D.corto || D.cliente} te confirma el día y la hora.` : `${numero ? 'Ya lo recibimos. ' : ''}Envía el mensaje de WhatsApp para confirmarlo. ${D.corto || D.cliente} te responde con el tiempo${datos.tipo === 'domicilio' ? (envioActual() == null ? ' y el costo de envío' : ' de entrega') : ' de retiro'}.`}</p>
+      <a class="pd-btn pd-btn-sec pd-btn-full" href="${esc(urlWA)}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">¿No se abrió WhatsApp? Ábrelo aquí</a>
       <button type="button" class="pd-btn pd-btn-full" id="pd-nuevo">${R ? 'Hacer otra reserva' : 'Hacer otro pedido'}</button>`,
       hh => { $('#pd-nuevo', hh).onclick = () => { carrito.length = 0; actualizarBarra(); hh.close(); }; });
   }
