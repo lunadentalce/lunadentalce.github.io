@@ -21,7 +21,7 @@
   const PARA = [['yo', 'Para mí', 'mí'], ['hijo', 'Para mi hijo o hija', 'mi hijo o hija'], ['otro', 'Para otra persona', 'otra persona']];   // [valor, texto del botón, texto corto para resúmenes y mensaje]
   const PASOS = [[1, '¿Qué necesitas?'], [2, '¿Qué día te queda bien?'], [3, '¿En qué horario?'], [4, 'Tus datos']];
 
-  const s = { paso: 1, motivo: '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', enviando: false, listo: null };
+  const s = { paso: 1, motivo: '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', salidaWa: false, enviando: false, listo: null };
   let raiz;
 
   /* ---- fechas (siempre hora de Ecuador) ---- */
@@ -87,6 +87,7 @@
       ${campo('nota', 'Nota (opcional)', 'maxlength="140" placeholder="Algo que debamos saber"')}
       <label class="ct-chk"><input type="checkbox" id="ct-consent" ${s.consent ? 'checked' : ''}><span>${esc((D.clinica && D.clinica.consentimiento) || 'Acepto que se usen mis datos para gestionar mi cita.')} <a href="${esc((D.clinica && D.clinica.privacidad) || 'privacidad.html')}" target="_blank" rel="noopener">Política de privacidad</a></span></label>
       <p class="ct-error" id="ct-error" role="alert">${esc(s.error)}</p>
+      ${s.salidaWa ? `<a class="btn btn-linea" id="ct-solo-wa" href="${esc(wa(D.waCliente, mensaje()))}" target="_blank" rel="noopener">Escribirnos por WhatsApp sin guardar</a>` : ''}
       <button type="button" class="btn ct-enviar" id="ct-enviar" ${s.enviando ? 'disabled' : ''}>${s.enviando ? 'Enviando…' : 'Enviar solicitud de cita'}</button>
     </div>`;
 
@@ -143,13 +144,13 @@
   async function enviar() {
     const falta = !s.motivo ? 'Elige qué necesitas.' : !s.dia ? 'Elige un día.' : !s.franja ? 'Elige un horario.' : datosFalta();
     if (falta) { s.error = falta; s.paso = primerPendiente(); pintar(); const e = $('#ct-error'); e && e.scrollIntoView({ block: 'center' }); return; }
-    s.error = ''; s.enviando = true; s.ref = null; pintar();
+    s.error = ''; s.salidaWa = false; s.enviando = true; s.ref = null; pintar();
     let ref = null, aviso = '';
     if (CL) {
       try {
         const r = await CL.solicitar({ nombre: s.nombre.trim(), telefono: s.telefono.replace(/[\s-]/g, ''), servicios: [items.get(s.motivo).nombre], dia: s.dia, franja: FRANJAS.find(f => f.v === s.franja).k, menor: menor(), representante: menor() ? s.representante.trim() : '', consentimiento: s.consent });
         ref = r && r.ref; window.track && window.track('solicitud_enviada');
-      } catch (e) { s.enviando = false; s.error = e.message || 'No pudimos guardar tu solicitud. Escríbenos por WhatsApp.'; s.paso = 4; pintar(); return; }
+      } catch (e) { s.enviando = false; s.error = e.message || 'No pudimos guardar tu solicitud. Escríbenos por WhatsApp.'; s.salidaWa = true; s.paso = 4; pintar(); return; }   // si el servidor rechaza, queda la salida por WhatsApp sin guardar
     } else aviso = 'sin guardar';
     s.ref = ref; s.enviando = false;
     const m = mensaje(), f = FRANJAS.find(x => x.v === s.franja);
@@ -170,7 +171,7 @@
       if (t.closest('#ct-enviar')) return enviar();
       if (t.closest('#ct-t-btn')) { if (completo(4)) return enviar(); s.paso = primerPendiente(); pintar(); const c = $(`.ct-paso[data-n="${s.paso}"]`, raiz); c && c.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
       if (t.closest('#ct-wa')) { window.track && window.track('whatsapp_click', { lugar: 'agenda' }); return; }
-      if (t.closest('#ct-otra')) { Object.assign(s, { paso: 1, motivo: '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', listo: null, ref: null }); pintar(); }
+      if (t.closest('#ct-otra')) { Object.assign(s, { paso: 1, motivo: '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', salidaWa: false, listo: null, ref: null }); pintar(); }
     });
     raiz.addEventListener('input', e => { const i = e.target; if (i.id && /^ct-(nombre|telefono|representante|nota)$/.test(i.id)) { s[i.id.slice(3)] = i.value; if (s.error) { s.error = ''; const er = $('#ct-error', raiz); if (er) er.textContent = ''; } const tb = $('#ct-t-btn', raiz); if (tb) tb.textContent = completo(4) ? 'Enviar solicitud' : 'Siguiente: paso ' + primerPendiente(); } });
     raiz.addEventListener('change', e => {

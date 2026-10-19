@@ -4,14 +4,9 @@
 (() => {
   const { esc, $, $$, usd, hoy, fechaCorta, tel09, wa, aviso, msgErr } = CLUI, C = CLINICA, P = window.CLPANEL;
   const falla = (id, e) => { const el = $(id); if (el) el.textContent = msgErr(e); aviso(msgErr(e), 'mal'); };
-  const ESTADOS = [['sano', 'Sano', '#FFFFFF'], ['caries', 'Caries', '#C9435A'], ['resina', 'Resina', '#4A78C2'], ['endodoncia', 'Endodoncia', '#2E8B6F'], ['corona', 'Corona', '#E0A030'],
-    ['brackets', 'Brackets', '#6B5BA8'], ['implante', 'Implante', '#17A2B8'], ['protesis', 'Prótesis', '#8D6E63'], ['ausente', 'Ausente', '#8E8F94']];
-  const ESTADO = Object.fromEntries(ESTADOS.map(e => [e[0], e]));
-  const SUP = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28], INF = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
-  const TSUP = [55, 54, 53, 52, 51, 61, 62, 63, 64, 65], TINF = [85, 84, 83, 82, 81, 71, 72, 73, 74, 75];
   const CITA = { pendiente: 'Por confirmar', confirmada: 'Confirmada', atendida: 'Atendida', no_vino: 'No vino', cancelada: 'Cancelada' };
   const PRES = { enviado: ['En espera', 'esp'], aceptado: ['Aceptado', 'ok'], rechazado: ['Rechazado', 'mal'] };
-  let F = null, sub = 'datos', timer = null, selD = 16, selE = 'caries', corrigiendo = null, temporal = false;
+  let F = null, sub = 'datos', timer = null, corrigiendo = null, ODO = null, ODOid = null, odoSup = true, odoUI = null;   // ODO: marcas vigentes del odontograma del paciente abierto
   const rol = () => (P.yo() || {}).rol;
   const edad = n => { if (!n) return null; const h = hoy(), a = +h.slice(0, 4) - +n.slice(0, 4); return h.slice(5) < n.slice(5) ? a - 1 : a; };
   const consiente = () => { const c = (F.consentimientos || []).find(x => x.tipo === 'tratamiento'); return !!(c && c.otorgado); };
@@ -32,7 +27,7 @@
   $('#pa-nuevo').onclick = () => { F = { id: null, nombre: '', telefono: '', datos: {}, citas: [], cobros: [], presupuestos: [], consentimientos: [], acceso_clinico: false }; sub = 'datos'; mostrar(); };
 
   async function abrir(id, seccion) {
-    try { F = await C.rpc('paciente_ficha', { p_id: id }); if (seccion) sub = seccion; else if (!F || sub === 'nuevo') sub = 'datos'; mostrar(); }
+    try { F = await C.rpc('paciente_ficha', { p_id: id }); ODO = null; if (seccion) sub = seccion; else if (!F || sub === 'nuevo') sub = 'datos'; mostrar(); }
     catch (e) { aviso(msgErr(e), 'mal'); }
   }
   function volver() { F = null; $('#pa-ficha').hidden = true; $('#pa-buscar').hidden = false; buscar(); }
@@ -142,23 +137,31 @@
       try { await C.rpc('paciente_clinico_guardar', { p_id: F.id, p_alergias: $('#h-ale').value, p_medicamentos: $('#h-med').value, p_antecedentes_medicos: $('#h-ant').value, p_antecedentes_odonto: $('#h-odo').value, p_habitos: $('#h-hab').value, p_observaciones: $('#h-obs').value }); aviso('Historia clínica guardada.'); abrir(F.id, 'clinico'); } catch (x) { falla('#fi-err', x); } };
   }
 
-  /* ---- odontograma (numeración FDI) ---- */
+  /* ---- odontograma por superficies (numeración FDI; el dibujo y las marcas viven en clinica-odo.js) ---- */
+  async function cargarOdo() {
+    try { ODO = await C.rpc('odontograma_lista', { p_id: F.id }); odoSup = true; }
+    catch (e) {   // base sin la migración 011: se sigue con el diente completo, sin marcar por superficie
+      if (!/odontograma_lista|PGRST202|Could not find/i.test(String((e && (e.message || e.code)) || e))) throw e;
+      odoSup = false; ODO = (F.odontograma || []).map(o => ({ id: 0, diente: o.diente, superficie: null, estado: o.estado, nota: o.nota, dia: o.dia }));
+    }
+    ODOid = F.id;
+  }
   function pOdo() {
-    const est = Object.fromEntries((F.odontograma || []).map(o => [o.diente, o]));
-    const fila = a => `<div class="arc">${a.map((n, i) => (i === Math.floor(a.length / 2) ? '<span class="mid"></span>' : '') + `<button type="button" class="dte" data-n="${n}" data-e="${(est[n] || {}).estado || 'sano'}" aria-pressed="${n === selD}" aria-label="Diente ${n}, ${ESTADO[(est[n] || {}).estado || 'sano'][1]}" style="--e:${ESTADO[(est[n] || {}).estado || 'sano'][2]}">${n}</button>`).join('')}</div>`;
-    if (temporal ? !TSUP.includes(selD) : !SUP.concat(INF).includes(selD)) selD = temporal ? 54 : 16;
-    const o = est[selD];
-    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div class="ctrl no-print"><button type="button" class="cb" id="o-temp" aria-pressed="${temporal}">Dientes temporales (niños)</button></div>
-      <div class="odo" id="odo" aria-label="Odontograma">${temporal ? fila(TSUP) + fila(TINF) : fila(SUP) + fila(INF)}</div>
-      <div class="estados no-print" id="o-estados" role="group" aria-label="Estado del diente">${ESTADOS.map(([k, n, c]) => `<button type="button" class="cb" data-e="${k}" aria-pressed="${k === selE}"><i style="--c:${c}"></i>${n}</button>`).join('')}</div>
-      <p style="font:600 .95rem var(--fx-font-txt);margin-bottom:8px">Diente ${selD}: ${o ? `${esc(ESTADO[o.estado][1])}${o.nota ? ' · ' + esc(o.nota) : ''} (${esc(fechaCorta(o.dia))})` : 'sin registro'}</p>
-      <form class="fila no-print" id="o-form" autocomplete="off"><div class="campo"><label for="o-nota">Nota (opcional)</label><input id="o-nota" maxlength="200" placeholder="ej.: oclusal, mesial"></div><button class="btn" type="submit" ${consiente() ? '' : 'disabled'}>Marcar diente ${selD} como ${esc(ESTADO[selE][1].toLowerCase())}</button></form><p class="err-f" id="fi-err" role="alert"></p>
-      <p class="nota-d">Cada marca queda en el historial; el odontograma muestra el último estado de cada diente.</p>`;
-    $$('.dte').forEach(b => b.onclick = () => { selD = +b.dataset.n; pOdo(); });
-    $$('#o-estados .cb').forEach(b => b.onclick = () => { selE = b.dataset.e; pOdo(); });
-    $('#o-temp').onclick = () => { temporal = !temporal; pOdo(); };
-    $('#o-form').onsubmit = async e => { e.preventDefault(); $('#fi-err').textContent = '';
-      try { await C.rpc('odontograma_marcar', { p_id: F.id, p_diente: selD, p_estado: selE, p_nota: $('#o-nota').value, p_doctor: null }); aviso(`Diente ${selD} marcado.`); abrir(F.id, 'odo'); } catch (x) { falla('#fi-err', x); } };
+    if (ODOid !== F.id || ODO === null) {
+      $('#fi-cuerpo').innerHTML = '<p class="vacio">Cargando odontograma…</p>';
+      cargarOdo().then(() => { if (sub === 'odo' && F) pOdo(); }).catch(e => { $('#fi-cuerpo').innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; });
+      return;
+    }
+    const a = edad(F.datos && F.datos.nacimiento);
+    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p>`;
+    odoUI = CLODO.montar($('#od-raiz'), { filas: ODO, escribir: consiente(), superficies: odoSup, temporales: (a != null && a < 14) || ODO.some(o => o.diente > 50), msg: msgErr,
+      aviso: odoSup ? '' : 'Marcar por superficie queda pendiente de actualizar la base de datos (migración 011). Por ahora se marca el diente completo.',
+      guardar: async (diente, cambios, nota) => {
+        try {
+          for (const c of cambios) { const arg = { p_id: F.id, p_diente: diente, p_estado: c.estado, p_nota: nota, p_doctor: null }; if (c.superficie) arg.p_superficie = c.superficie; await C.rpc('odontograma_marcar', arg); }
+          aviso(`Diente ${diente} guardado.`);
+        } finally { await cargarOdo(); odoUI.actualizar(ODO); }   // aunque falle a la mitad, se muestra lo que sí quedó guardado
+      } });
   }
 
   /* ---- evolución (notas de cada consulta; no se editan: se corrigen con una nota nueva) ---- */
