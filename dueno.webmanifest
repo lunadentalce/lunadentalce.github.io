@@ -1,0 +1,25 @@
+{
+  "name": "Luna Dental Centro de Especialidades Odontológicas · Panel del dueño",
+  "short_name": "Luna Dueño",
+  "description": "Panel del dueño de Luna Dental: ingresos, citas, inasistencia, pacientes nuevos y presupuestos por periodo.",
+  "start_url": "dueno.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111113",
+  "theme_color": "#111113",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
