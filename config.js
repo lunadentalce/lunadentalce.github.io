@@ -4,7 +4,7 @@ window.DEMO = {
   "cliente": "Luna Dental Centro de Especialidades Odontológicas",
   "corto": "Luna Dental",
   "ciudad": "[MARCADOR: ciudad]",
-  "waCliente": "593983139928",
+  "waCliente": "593969058510",
   "direccion": "[MARCADOR: dirección]",
   "horario": "[MARCADOR: horario]",
   "domicilio": false,
@@ -26,7 +26,7 @@ window.DEMO = {
       "titulo": "Consentimiento informado y autorización de tratamiento de datos personales",
       "responsable": "[MARCADOR: razón social y RUC de la clínica]",
       "conservacion": "[MARCADOR: tiempo que la clínica conserva la historia clínica]",
-      "contacto": "[MARCADOR: correo o WhatsApp para ejercer derechos sobre los datos]",
+      "contacto": "WhatsApp 096 905 8510",
       "secciones": [
         {
           "t": "1. Atención odontológica",
