@@ -153,6 +153,7 @@ $('#p-guardar').onclick = async () => { const er = $('#p-err'); er.textContent =
     window.open(wa('', `Presupuesto de ${DEMO.cliente} para ${nombre}:\n` + pres.map(l => `${l.cant} × ${l.nombre}`).join('\n') + (+$('#p-desc').value ? `\nDescuento: ${Math.round(+$('#p-desc').value)} %` : '') + `\nTotal: ${usd(r.total)}\n(Sujeto a valoración. Válido por 15 días.)`), '_blank', 'noopener');
     aviso(`Presupuesto guardado: ${usd(r.total)}.`); pres = []; presClienta = null; $('#p-pac').value = ''; $('#p-desc').value = 0; $('#p-seg').value = ''; pintarPres(); pintarListaPres();
   } catch (e) { falla(er, e); } };
+const puedePres = () => ['admin', 'doctor'].includes((YO || {}).rol);   // recepción ve los presupuestos pero no los crea ni los decide (la base lo exige también, migración 012)
 async function pintarListaPres() {
   const c = $('#pl-lista');
   try {
@@ -160,19 +161,19 @@ async function pintarListaPres() {
     c.innerHTML = l.length ? l.map(p => `<article class="sol"><h3>${esc(p.paciente)} · ${usd(p.total)}</h3>
       <div class="meta"><span>${esc(fechaCorta(p.creado))}</span><span>${esc(docNombre(p.doctor_id))}</span>${p.seguimiento ? `<span>Seguimiento: ${esc(fechaCorta(p.seguimiento))}</span>` : ''}<span class="pill ${E[p.estado][1]}">${E[p.estado][0]}</span></div>
       <div class="meta">${(p.items || []).map(i => `${i.cant} × ${esc(i.descripcion)}`).join(' · ')}${p.descuento ? ` · desc. ${p.descuento} %` : ''}</div>
-      ${p.estado === 'enviado' ? `<div class="acciones"><button type="button" class="btn" data-ok="${p.id}">Lo aceptó</button><button type="button" class="btn btn-linea" data-no="${p.id}">Lo rechazó</button></div>` : ''}</article>`).join('') : '<p class="vacio">Todavía no hay presupuestos.</p>';
+      ${p.estado === 'enviado' && puedePres() ? `<div class="acciones"><button type="button" class="btn" data-ok="${p.id}">Lo aceptó</button><button type="button" class="btn btn-linea" data-no="${p.id}">Lo rechazó</button></div>` : ''}</article>`).join('') : '<p class="vacio">Todavía no hay presupuestos.</p>';
     const marcar = async (id, est) => { try { await C.rpc('presupuesto_estado', { p_id: id, p_estado: est }); aviso('Presupuesto actualizado.'); pintarListaPres(); } catch (e) { falla(null, e); } };
     $$('[data-ok]', c).forEach(b => b.onclick = () => marcar(+b.dataset.ok, 'aceptado')); $$('[data-no]', c).forEach(b => b.onclick = () => marcar(+b.dataset.no, 'rechazado'));
   } catch (e) { c.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; }
 }
 $$('#pl-filtro .cb').forEach(b => b.onclick = () => { plEstado = b.dataset.e; $$('#pl-filtro .cb').forEach(x => x.setAttribute('aria-pressed', x === b)); pintarListaPres(); });
 
-const CARGAR = { 't-solicitudes': pintarSolicitudes, 't-agenda': () => { pintarFiltroDocs(); prepararNuevaCita(); cargarAgenda(); }, 't-caja': pintarCaja, 't-presupuestos': () => { pintarListaPres(); } };
+const CARGAR = { 't-solicitudes': pintarSolicitudes, 't-agenda': () => { pintarFiltroDocs(); prepararNuevaCita(); cargarAgenda(); }, 't-caja': pintarCaja, 't-presupuestos': () => { const pp = puedePres(), d = $('#v-presupuestos .dos'); d.firstElementChild.hidden = !pp; d.style.gridTemplateColumns = pp ? '' : '1fr'; $('#p-solover').hidden = pp; pintarListaPres(); } };
 /* Las pantallas que solo existen en el panel del dueño (resumen, doctores, tarifario, tratamientos, horario, cuentas) se registran aquí desde sus archivos */
 /* Atajos que usa la ficha del paciente: abrir la agenda o los presupuestos ya con el paciente */
 function nuevaCitaPara(p) { ir($('#t-agenda')); setTimeout(() => { $('#nc-form').hidden = false; $('#nc-abrir').setAttribute('aria-expanded', true); $('#nc-nombre').value = p.nombre; $('#nc-tel').value = tel09(p.telefono); $('#nc-nombre').focus(); }, 400); }
 function presupuestoPara(p) { ir($('#t-presupuestos')); presClienta = p.id; $('#p-pac').value = p.nombre; pintarPres(); }
-window.CLPANEL = { cargar: CARGAR, nuevaCita: nuevaCitaPara, presupuestoPara, ir: id => ir($(id)), yo: () => YO, tel09, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
+window.CLPANEL = { cargar: CARGAR, nuevaCita: nuevaCitaPara, presupuestoPara, ir: id => ir($(id)), yo: () => YO, puedePres, tel09, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
 
 /* ---------- arranque ---------- */
 async function cargarBase() {

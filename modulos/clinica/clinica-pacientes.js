@@ -118,11 +118,11 @@
       <form class="fila no-print" id="fi-cobro" autocomplete="off"><div class="campo"><label for="k-desc">Descripción</label><input id="k-desc" maxlength="80" required placeholder="ej.: Resina pieza 16"></div><div class="campo"><label for="k-imp">Importe</label><input id="k-imp" type="number" step="0.01" min="0.01" required></div>
         <div class="campo"><label for="k-doc">Doctor</label><select id="k-doc"><option value="">Sin doctor</option>${P.docs().filter(d => d.activo).map(d => `<option value="${d.id}">${esc(d.nombre)}</option>`).join('')}</select></div><button class="btn" type="submit">Registrar cobro</button></form><p class="err-f" id="fi-err" role="alert"></p>
       <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Fecha</th><th>Descripción</th><th class="n">Importe</th></tr></thead><tbody>${F.cobros.map(m => `<tr class="${m.anulado ? 'anulado' : ''}"><td>${esc(fechaCorta(m.dia))}</td><td>${esc(m.descripcion)}${m.anulado ? ' (anulado)' : ''}</td><td class="n ${m.tipo}">${m.tipo === 'egr' ? '−' : '+'}${usd(m.importe)}</td></tr>`).join('') || '<tr><td colspan="3">Sin cobros todavía.</td></tr>'}</tbody></table></div>
-      <h3 style="font:800 1.05rem var(--fx-font-disp);margin:20px 0 8px">Presupuestos</h3><div class="acciones no-print" style="margin-bottom:8px"><button type="button" class="btn" id="fi-np">+ Nuevo presupuesto para este paciente</button></div>
+      <h3 style="font:800 1.05rem var(--fx-font-disp);margin:20px 0 8px">Presupuestos</h3>${P.puedePres() ? '<div class="acciones no-print" style="margin-bottom:8px"><button type="button" class="btn" id="fi-np">+ Nuevo presupuesto para este paciente</button></div>' : ''}
       <div class="tarjetas">${F.presupuestos.map(p => `<article class="sol"><h3>${usd(p.total)} · ${esc(fechaCorta(p.dia))}</h3><div class="meta"><span class="pill ${PRES[p.estado][1]}">${PRES[p.estado][0]}</span>${p.descuento ? `<span>desc. ${p.descuento} %</span>` : ''}</div><div class="meta">${(p.items || []).map(i => `${i.cant} × ${esc(i.descripcion)}`).join(' · ')}</div></article>`).join('') || '<p class="vacio">Sin presupuestos todavía.</p>'}</div>`;
     $('#fi-cobro').onsubmit = async e => { e.preventDefault(); $('#fi-err').textContent = '';
       try { await C.rpc('caja_registrar', { p_descripcion: $('#k-desc').value, p_importe: parseFloat($('#k-imp').value), p_tipo: 'ing', p_doctor: $('#k-doc').value ? +$('#k-doc').value : null, p_clienta: F.id }); aviso('Cobro registrado.'); abrir(F.id, 'cobros'); } catch (x) { falla('#fi-err', x); } };
-    $('#fi-np').onclick = () => P.presupuestoPara(F);
+    if ($('#fi-np')) $('#fi-np').onclick = () => P.presupuestoPara(F);
   }
 
   /* ---- historia clínica ---- */
