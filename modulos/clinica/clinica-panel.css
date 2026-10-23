@@ -128,3 +128,7 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
 .sol p { max-width: 70ch; }
 @media print { body.print-ficha header.cabecera, body.print-ficha .riel, body.print-ficha .barra-sesion, body.print-ficha .cab-pag, body.print-ficha .no-print, body.print-ficha footer { display: none !important; }
   body.print-ficha .app { box-shadow: none; border: 0; display: block; } body.print-ficha .vista[hidden] { display: none !important; } body.print-ficha { background: #fff; } }
+
+/* Plan de tratamiento debajo del odontograma */
+.plan-trat { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--fx-line, #E2E3E6); }
+.plan-trat h3 { font: 800 1.15rem var(--fx-font-disp); margin-bottom: 6px; }

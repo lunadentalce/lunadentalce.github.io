@@ -153,8 +153,8 @@
       return;
     }
     const a = edad(F.datos && F.datos.nacimiento);
-    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p>`;
-    odoUI = CLODO.montar($('#od-raiz'), { filas: ODO, escribir: consiente(), superficies: odoSup, temporales: (a != null && a < 14) || ODO.some(o => o.diente > 50), msg: msgErr,
+    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p><section class="plan-trat" id="pln" aria-labelledby="pln-h"></section>`;
+    odoUI = CLODO.montar($('#od-raiz'), { filas: ODO, escribir: consiente(), superficies: odoSup, temporales: (a != null && a < 14) || ODO.some(o => o.diente > 50), msg: msgErr, alElegir: n => { const s = $('#pln-d'); if (s) s.value = String(n); },
       aviso: odoSup ? '' : 'Marcar por superficie queda pendiente de actualizar la base de datos (migración 011). Por ahora se marca el diente completo.',
       guardar: async (diente, cambios, nota) => {
         try {
@@ -162,6 +162,35 @@
           aviso(`Diente ${diente} guardado.`);
         } finally { await cargarOdo(); odoUI.actualizar(ODO); }   // aunque falle a la mitad, se muestra lo que sí quedó guardado
       } });
+    pintarPlan();
+  }
+
+  /* ---- plan de tratamiento: cada tratamiento puesto en un diente suma su precio (del tarifario, calculado en la base) y de ahí se pasa a presupuesto ---- */
+  async function pintarPlan() {
+    const r = $('#pln'); if (!r) return;
+    let L;
+    try { L = await C.rpc('plan_lista', { p_id: F.id }); }
+    catch (e) {   // base sin la migración 013: el odontograma sigue igual y el plan lo avisa
+      if (!/plan_lista|PGRST202|Could not find/i.test(String((e && (e.message || e.code)) || e))) { r.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; return; }
+      r.innerHTML = '<h3 id="pln-h">Plan de tratamiento</h3><p class="nota-d">El plan de tratamiento queda pendiente de actualizar la base de datos (migración 013).</p>'; return;
+    }
+    const temp = ODO.some(o => o.diente > 50) || (edad(F.datos && F.datos.nacimiento) != null && edad(F.datos.nacimiento) < 14), sel = odoUI ? odoUI.diente() : 16;
+    const dientes = [...CLODO.SUP, ...CLODO.INF, ...(temp ? [...CLODO.TSUP, ...CLODO.TINF] : [])].sort((a, b) => a - b), tar = P.tar().filter(t => t.activo !== false);
+    r.innerHTML = `<h3 id="pln-h">Plan de tratamiento</h3><p class="nota-d">Agrega el tratamiento que se hace en cada diente: el precio sale del tarifario y se suma al total. Cuando esté listo, pásalo a presupuesto.</p>
+      <form class="fila no-print" id="pln-form" autocomplete="off"><div class="campo"><label for="pln-d">Diente</label><select id="pln-d">${dientes.map(n => `<option value="${n}"${n === sel ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
+        <div class="campo"><label for="pln-tr">Tratamiento</label><select id="pln-tr">${tar.map(t => `<option value="${t.id}">${esc(t.nombre)} · ${usd(t.precio)}</option>`).join('')}</select></div>
+        <button class="btn" type="submit" ${consiente() && tar.length ? '' : 'disabled'}>Agregar al plan</button></form><p class="err-f" id="pln-err" role="alert"></p>
+      <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Diente</th><th>Tratamiento</th><th class="n">Precio</th><th></th></tr></thead><tbody>${L.items.map(i => `<tr><td>${i.diente}</td><td>${esc(i.descripcion)}</td><td class="n">${usd(i.precio)}</td><td class="no-print"><button type="button" class="mini" data-pq="${i.id}" aria-label="Quitar ${esc(i.descripcion)} del diente ${i.diente}">Quitar</button></td></tr>`).join('') || '<tr><td colspan="4">Todavía no hay tratamientos en el plan.</td></tr>'}</tbody></table></div>
+      <div class="tot" style="display:flex;justify-content:space-between;font:800 1.2rem var(--fx-font-disp);padding-top:8px;margin-top:6px;border-top:2px solid var(--fx-deep)"><span>Total del plan</span><span id="pln-total">${usd(L.total)}</span></div>
+      ${P.puedePres() ? `<div class="fila no-print" style="margin-top:10px"><div class="campo"><label for="pln-desc">Descuento (%)</label><input id="pln-desc" type="number" min="0" max="50" value="0"></div>
+        <button type="button" class="btn" id="pln-pres" ${L.items.length ? '' : 'disabled'}>Pasar a presupuesto</button></div>` : '<p class="nota-d">Los presupuestos los crean los doctores y la administración.</p>'}`;
+    $('#pln-form').onsubmit = async e => { e.preventDefault(); $('#pln-err').textContent = '';
+      try { await C.rpc('plan_agregar', { p_id: F.id, p_diente: +$('#pln-d').value, p_tarifario: +$('#pln-tr').value }); } catch (x) { falla('#pln-err', x); return; }
+      pintarPlan(); };
+    $$('[data-pq]', r).forEach(b => b.onclick = async () => { try { await C.rpc('plan_quitar', { p_item: +b.dataset.pq }); } catch (x) { falla('#pln-err', x); } pintarPlan(); });
+    const pp = $('#pln-pres'); if (pp) pp.onclick = async () => { $('#pln-err').textContent = '';
+      try { const x = await C.rpc('plan_a_presupuesto', { p_id: F.id, p_doctor: null, p_descuento: Math.round(+$('#pln-desc').value || 0), p_seguimiento: null }); aviso(`Presupuesto creado: ${usd(x.total)}.`); abrir(F.id, 'cobros'); }
+      catch (x) { falla('#pln-err', x); } };
   }
 
   /* ---- evolución (notas de cada consulta; no se editan: se corrigen con una nota nueva) ---- */

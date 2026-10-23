@@ -119,7 +119,7 @@
             <p class="od-err" id="od-err" role="alert">${esc(err)}</p>
           </div>
         </div>`;
-      qq('.od-d').forEach(b => b.onclick = () => { sel = +b.dataset.n; err = ''; pintar(); q(`.od-d[data-n="${sel}"]`).focus(); });
+      qq('.od-d').forEach(b => b.onclick = () => { sel = +b.dataset.n; err = ''; pintar(); if (op.alElegir) op.alElegir(sel); q(`.od-d[data-n="${sel}"]`).focus(); });
       qq('#od-estados .cb').forEach(b => b.onclick = () => { selE = b.dataset.e; pintar(); });
       q('#od-temp').onclick = () => { temp = !temp; pintar(); };
       const tocar = g => marca(op.superficies && POR_CARA.includes(selE) ? g.dataset.s : '*');
@@ -141,7 +141,7 @@
       enviando = false; pintar();
     }
     pintar();
-    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); } };
+    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); }, diente: () => sel };
   }
 
   window.CLODO = { ESTADOS, ESTADO, POR_CARA, CARA, SUP, INF, TSUP, TINF, mapa, resolver, aplicar, resumen, svg, montar };
