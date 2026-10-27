@@ -135,3 +135,7 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
 .plan-trat .lista-ses { margin: 0 0 8px 18px; padding: 0; }
 .plan-trat .mini-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: .85rem; margin-right: 8px; }
 .plan-trat .od-hist { margin-top: 8px; }
+
+/* Botón de avisos en la barra de sesión */
+#s-avisos { font: 600 .85rem var(--fx-font-txt); padding: 6px 12px; border-radius: 999px; border: 1.5px solid currentColor; background: transparent; color: inherit; cursor: pointer; margin-right: 6px; }
+#s-avisos.on { background: color-mix(in srgb, var(--fx-accent) 28%, transparent); }

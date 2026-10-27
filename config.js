@@ -53,7 +53,7 @@ window.DEMO = {
       "imagenes_difusion": "Autorizo el uso de fotografías de mi caso para difusión (redes y página web), cuidando mi identidad."
     }
   },
-  "logo": "assets/logo-provisional.svg",
+  "logo": "assets/emblema.png",
   "agenda": {
     "dias": [
       1,

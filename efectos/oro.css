@@ -1,0 +1,65 @@
+/* efectos/oro.css · complemento OPCIONAL «negro y dorado» (se elige con efectos.usar = [..., "oro"], después de "clinica" y "centro").
+   Para marcas cuyo logo es negro con dorado metálico (Luna Dental). El dorado va donde hay contraste: fondos negros, líneas, botones con texto negro y
+   detalles grandes; el texto pequeño sobre fondo claro sigue siendo negro. Todo estático (sin animaciones nuevas); colores por variables con respaldo. */
+:root {
+  --oro-1: #E7CB82; --oro-2: #C39A45; --oro-3: #8F6A22;
+  --oro-degradado: linear-gradient(135deg, var(--oro-1) 0%, var(--oro-2) 52%, var(--oro-3) 100%);
+  --oro-linea: color-mix(in srgb, var(--oro-2) 55%, transparent);
+}
+
+/* Cabecera clara con el logo oficial (ancho) y una línea dorada abajo */
+.lp-centro .cabecera { background: #fff; border-bottom: 0; box-shadow: 0 1px 0 var(--oro-linea); }
+.lp-centro .cabecera nav a { color: var(--fx-ink); }
+.lp-centro .cabecera .marca-ancho img { height: clamp(30px, 4.2vw, 44px); width: auto; border-radius: 0; box-shadow: none; display: block; }
+.lp-centro .marca-ancho { min-width: 0; }
+@media (max-width: 760px) { .lp-centro .cabecera .marca-ancho img { height: 28px; width: auto; } }
+
+/* Botones: dorado con texto negro; el secundario, de línea dorada */
+.lp-centro .btn:not(.btn-linea), .lp-centro .lp-hero .btn:not(.btn-linea) { background: var(--oro-degradado); color: #111113; border-color: transparent; box-shadow: 0 8px 22px color-mix(in srgb, var(--oro-3) 35%, transparent); }
+.lp-centro .btn-linea, .lp-centro .lp-hero .btn-linea { background: transparent; color: inherit; box-shadow: inset 0 0 0 1.5px var(--oro-2); }
+
+/* Hero negro con brillo dorado */
+.lp-centro .lp-hero { background: radial-gradient(60% 70% at 50% 0, color-mix(in srgb, var(--oro-2) 30%, transparent), transparent 70%), #0E0E10; padding-bottom: clamp(44px, 7vw, 92px); }
+.lp-centro .lp-hero h1, .lp-centro .lp-hero h1 .fino { color: #fff; }
+.lp-centro .lp-hero h1 .grueso { background: var(--oro-degradado); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; padding-bottom: .06em; }
+.lp-centro .lp-hero .lead { color: color-mix(in srgb, #fff 78%, transparent); }
+.lp-centro .lp-badge { background: color-mix(in srgb, #fff 8%, transparent); color: #fff; box-shadow: inset 0 0 0 1px var(--oro-linea); }
+.lp-centro .lp-badge i { background: var(--oro-1); box-shadow: 0 0 0 4px color-mix(in srgb, var(--oro-2) 30%, transparent); }
+.lp-centro .lp-hero .btn-linea { color: #fff; }
+
+/* Titulares: una barrita dorada bajo el título de cada sección */
+.lp-centro .doble { position: relative; }
+.lp-centro .lp-esp .doble::after, .lp-centro #equipo .doble::after, .lp-centro .lp-agenda .doble::after, .lp-centro .donde .doble::after { content: ""; display: block; width: 56px; height: 3px; margin: 14px 0 0; background: var(--oro-degradado); border-radius: 2px; }
+.lp-centro .lp-esp .doble::after, .lp-centro .cierre .doble::after { margin-inline: auto; }
+
+/* Especialidades: tarjetas cálidas con ícono dorado; la destacada, negra con dorado */
+.lp-centro .lp-tiles li a { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--oro-2) 28%, transparent); }
+.lp-centro .lp-t-ico { color: var(--oro-3); }
+.lp-centro .lp-tiles li.destacada a { background: #0E0E10; box-shadow: inset 0 0 0 1px var(--oro-2); }
+.lp-centro .lp-tiles li.destacada .lp-t-ico { color: var(--oro-1); }
+.lp-centro .lp-tiles li.destacada .lp-t-flecha { background: var(--oro-degradado); }
+
+/* Agenda y demás bloques */
+.lp-centro .lp-agenda { background: color-mix(in srgb, var(--oro-1) 16%, var(--fx-bg)); }
+.lp-centro .sec.oscuro, .lp-centro .lp-wa-card, .lp-centro .cierre { background: #0E0E10; }
+.lp-centro .cierre .doble, .lp-centro .lp-wa-card h3 { color: #fff; }
+.lp-centro .cierre .doble::after { content: ""; display: block; width: 56px; height: 3px; margin: 14px auto 0; background: var(--oro-degradado); border-radius: 2px; }
+.lp-centro .lp-wa-card { box-shadow: inset 0 0 0 1px var(--oro-linea); }
+
+/* Equipo: tarjetas con iniciales en un aro dorado (sin foto todavía) */
+.lp-centro .eq-lista { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1080px; gap: 16px; margin-inline: auto; }
+.lp-centro .eq-lista .eq-doc { flex: 0 1 280px; }
+.lp-centro .eq-doc { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; padding: 22px 12px; border-radius: 22px; background: var(--fx-paper); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--oro-2) 30%, transparent); }
+.lp-centro .eq-ini { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 8px; font: 800 1.35rem var(--fx-font-disp); letter-spacing: .02em; color: var(--oro-1); background: #0E0E10; box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--oro-2); }
+.lp-centro .eq-doc h3, .lp-centro .eq-doc p { align-self: center; text-align: center; max-width: none; }
+.lp-centro .eq-doc h3 { font-size: 1.02rem; margin: 6px 0 0; }
+.lp-centro .eq-doc .eq-rol { margin: 0; font-weight: 600; color: var(--oro-3); font-size: .9rem; }
+.lp-centro .eq-doc p:empty { display: none; }
+
+/* Pie: logo claro, sin recorte redondo */
+.lp-centro footer { background: #0E0E10; }
+.lp-centro footer .pie-logo { width: auto; height: 40px; border-radius: 0; }
+
+/* Equipo con pocas tarjetas: encabezado centrado como el de las especialidades */
+.lp-centro #equipo .doble, .lp-centro #equipo .intro { text-align: center; margin-inline: auto; }
+.lp-centro #equipo .doble::after { margin-inline: auto; }

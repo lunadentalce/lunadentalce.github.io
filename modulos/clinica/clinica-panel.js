@@ -191,5 +191,6 @@ async function iniciar(yo) {
   try { await cargarBase(); } catch (e) { aviso(msgErr(e), 'mal'); }
   try { const cfg = await C.rpc('config_admin'); const hs = (cfg.horario || []).filter(h => h.abre); if (hs.length) HORARIO = { paso: +(cfg.config || {}).paso_min || 30, h0: Math.min(...hs.map(h => +h.abre.slice(0, 2))), h1: Math.max(...hs.map(h => Math.ceil(+h.cierra.slice(0, 2) + (+h.cierra.slice(3, 5) ? .5 : 0)))) }; } catch (e) { /* horario por defecto 8–17 */ }
   pintarPres(); ir(tabs[0]);
+  if (window.CLAVISOS) CLAVISOS.iniciar(C);
 }
 CLUI.puerta({ soloAdmin: !!$('#v-resumen'), alEntrar: iniciar }).then(yo => { if (yo && !YO) iniciar(yo); });
