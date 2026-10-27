@@ -179,7 +179,7 @@
     }
     const temp = ODO.some(o => o.diente > 50) || (edad(F.datos && F.datos.nacimiento) != null && edad(F.datos.nacimiento) < 14), sel = odoUI ? odoUI.diente() : 16;
     const dientes = [...CLODO.SUP, ...CLODO.INF, ...(temp ? [...CLODO.TSUP, ...CLODO.TINF] : [])].sort((a, b) => a - b), tar = P.tar().filter(t => t.activo !== false);
-    const docs = P.docs().filter(d => d.activo), citas = F.citas.filter(c => c.estado !== 'cancelada'), puede = P.puedePres(), conH = H !== null;
+    const docs = P.docs().filter(d => d.activo), citas = F.citas.filter(c => c.estado !== 'cancelada'), puede = P.puedeProforma(), conH = H !== null;
     const piezas = it => it.map(i => `<li>${i.diente} · ${esc(i.descripcion)} · ${usd(i.precio)}</li>`).join('');
     r.innerHTML = `<h3 id="pln-h">Sesión de hoy</h3><p class="nota-d">Marca el odontograma y agrega cada tratamiento realizado: el precio sale del tarifario y se suma abajo. Al terminar, guarda la sesión: queda en el historial.</p>
       <form class="fila no-print" id="pln-form" autocomplete="off"><div class="campo"><label for="pln-d">Diente</label><select id="pln-d">${dientes.map(n => `<option value="${n}"${n === sel ? ' selected' : ''}>${n}</option>`).join('')}</select></div>

@@ -173,7 +173,7 @@ const CARGAR = { 't-solicitudes': pintarSolicitudes, 't-agenda': () => { pintarF
 /* Atajos que usa la ficha del paciente: abrir la agenda o los presupuestos ya con el paciente */
 function nuevaCitaPara(p) { ir($('#t-agenda')); setTimeout(() => { $('#nc-form').hidden = false; $('#nc-abrir').setAttribute('aria-expanded', true); $('#nc-nombre').value = p.nombre; $('#nc-tel').value = tel09(p.telefono); $('#nc-nombre').focus(); }, 400); }
 function presupuestoPara(p) { ir($('#t-presupuestos')); presClienta = p.id; $('#p-pac').value = p.nombre; pintarPres(); }
-window.CLPANEL = { cargar: CARGAR, nuevaCita: nuevaCitaPara, presupuestoPara, ir: id => ir($(id)), yo: () => YO, puedePres, tel09, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
+window.CLPANEL = { cargar: CARGAR, nuevaCita: nuevaCitaPara, presupuestoPara, ir: id => ir($(id)), yo: () => YO, puedePres, puedeProforma: () => !!(YO && YO.rol), tel09, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
 
 /* ---------- arranque ---------- */
 async function cargarBase() {

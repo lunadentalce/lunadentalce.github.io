@@ -1,4 +1,4 @@
--- Semilla de Luna Dental Centro de Especialidades Odontológicas · se corre UNA vez, después de las migraciones 001–014. Lo marcado CONFIRMAR lo da la clínica.
+-- Semilla de Luna Dental Centro de Especialidades Odontológicas · se corre UNA vez, después de las migraciones 001–015. Lo marcado CONFIRMAR lo da la clínica.
 -- Los nombres de los tratamientos deben ser IGUALES a los de la carta de la página (menu.js): así se une la solicitud con su tratamiento.
 insert into luna_dental.servicios (nombre, categoria, duracion_min, fidelidad, orden) values
   ('Valoración inicial', 'Tratamientos', 40, false, 1),
