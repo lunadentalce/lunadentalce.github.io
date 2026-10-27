@@ -160,37 +160,60 @@
         try {
           for (const c of cambios) { const arg = { p_id: F.id, p_diente: diente, p_estado: c.estado, p_nota: nota, p_doctor: null }; if (c.superficie) arg.p_superficie = c.superficie; await C.rpc('odontograma_marcar', arg); }
           aviso(`Diente ${diente} guardado.`);
-        } finally { await cargarOdo(); odoUI.actualizar(ODO); }   // aunque falle a la mitad, se muestra lo que sí quedó guardado
+        } finally { await cargarOdo(); odoUI.actualizar(ODO); pintarPlan(); }   // aunque falle a la mitad, se muestra lo que sí quedó guardado
       } });
     pintarPlan();
   }
 
-  /* ---- plan de tratamiento: cada tratamiento puesto en un diente suma su precio (del tarifario, calculado en la base) y de ahí se pasa a presupuesto ---- */
+  /* ---- sesión de la visita (carrito de tratamientos + marcas del odontograma) e historial de sesiones ----
+     Cada tratamiento puesto en un diente suma su precio (del tarifario, calculado en la base); «Guardar sesión» deja todo en un solo registro que no se edita,
+     y de cada sesión se pasa a proforma (solo administración y doctor). */
+  const ETQ = e => (CLODO.ESTADO[e] || [])[1] || e;
   async function pintarPlan() {
     const r = $('#pln'); if (!r) return;
-    let L;
-    try { L = await C.rpc('plan_lista', { p_id: F.id }); }
-    catch (e) {   // base sin la migración 013: el odontograma sigue igual y el plan lo avisa
+    let L, H;
+    try { [L, H] = await Promise.all([C.rpc('plan_lista', { p_id: F.id }), C.rpc('sesiones_lista', { p_id: F.id }).catch(e => { if (/sesiones_lista|PGRST202|Could not find/i.test(String((e && (e.message || e.code)) || e))) return null; throw e; })]); }
+    catch (e) {   // base sin la migración 013: el odontograma sigue igual y la sesión lo avisa
       if (!/plan_lista|PGRST202|Could not find/i.test(String((e && (e.message || e.code)) || e))) { r.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; return; }
-      r.innerHTML = '<h3 id="pln-h">Plan de tratamiento</h3><p class="nota-d">El plan de tratamiento queda pendiente de actualizar la base de datos (migración 013).</p>'; return;
+      r.innerHTML = '<h3 id="pln-h">Sesión de hoy</h3><p class="nota-d">La sesión de tratamiento queda pendiente de actualizar la base de datos (migraciones 013 y 014).</p>'; return;
     }
     const temp = ODO.some(o => o.diente > 50) || (edad(F.datos && F.datos.nacimiento) != null && edad(F.datos.nacimiento) < 14), sel = odoUI ? odoUI.diente() : 16;
     const dientes = [...CLODO.SUP, ...CLODO.INF, ...(temp ? [...CLODO.TSUP, ...CLODO.TINF] : [])].sort((a, b) => a - b), tar = P.tar().filter(t => t.activo !== false);
-    r.innerHTML = `<h3 id="pln-h">Plan de tratamiento</h3><p class="nota-d">Agrega el tratamiento que se hace en cada diente: el precio sale del tarifario y se suma al total. Cuando esté listo, pásalo a presupuesto.</p>
+    const docs = P.docs().filter(d => d.activo), citas = F.citas.filter(c => c.estado !== 'cancelada'), puede = P.puedePres(), conH = H !== null;
+    const piezas = it => it.map(i => `<li>${i.diente} · ${esc(i.descripcion)} · ${usd(i.precio)}</li>`).join('');
+    r.innerHTML = `<h3 id="pln-h">Sesión de hoy</h3><p class="nota-d">Marca el odontograma y agrega cada tratamiento realizado: el precio sale del tarifario y se suma abajo. Al terminar, guarda la sesión: queda en el historial.</p>
       <form class="fila no-print" id="pln-form" autocomplete="off"><div class="campo"><label for="pln-d">Diente</label><select id="pln-d">${dientes.map(n => `<option value="${n}"${n === sel ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
         <div class="campo"><label for="pln-tr">Tratamiento</label><select id="pln-tr">${tar.map(t => `<option value="${t.id}">${esc(t.nombre)} · ${usd(t.precio)}</option>`).join('')}</select></div>
-        <button class="btn" type="submit" ${consiente() && tar.length ? '' : 'disabled'}>Agregar al plan</button></form><p class="err-f" id="pln-err" role="alert"></p>
-      <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Diente</th><th>Tratamiento</th><th class="n">Precio</th><th></th></tr></thead><tbody>${L.items.map(i => `<tr><td>${i.diente}</td><td>${esc(i.descripcion)}</td><td class="n">${usd(i.precio)}</td><td class="no-print"><button type="button" class="mini" data-pq="${i.id}" aria-label="Quitar ${esc(i.descripcion)} del diente ${i.diente}">Quitar</button></td></tr>`).join('') || '<tr><td colspan="4">Todavía no hay tratamientos en el plan.</td></tr>'}</tbody></table></div>
-      <div class="tot" style="display:flex;justify-content:space-between;font:800 1.2rem var(--fx-font-disp);padding-top:8px;margin-top:6px;border-top:2px solid var(--fx-deep)"><span>Total del plan</span><span id="pln-total">${usd(L.total)}</span></div>
-      ${P.puedePres() ? `<div class="fila no-print" style="margin-top:10px"><div class="campo"><label for="pln-desc">Descuento (%)</label><input id="pln-desc" type="number" min="0" max="50" value="0"></div>
-        <button type="button" class="btn" id="pln-pres" ${L.items.length ? '' : 'disabled'}>Pasar a presupuesto</button></div>` : '<p class="nota-d">Los presupuestos los crean los doctores y la administración.</p>'}`;
+        <button class="btn" type="submit" ${consiente() && tar.length ? '' : 'disabled'}>Agregar a la sesión</button></form><p class="err-f" id="pln-err" role="alert"></p>
+      <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Diente</th><th>Tratamiento</th><th class="n">Precio</th><th></th></tr></thead><tbody>${L.items.map(i => `<tr><td>${i.diente}</td><td>${esc(i.descripcion)}</td><td class="n">${usd(i.precio)}</td><td class="no-print"><button type="button" class="mini" data-pq="${i.id}" aria-label="Quitar ${esc(i.descripcion)} del diente ${i.diente}">Quitar</button></td></tr>`).join('') || '<tr><td colspan="4">Todavía no hay tratamientos en la sesión.</td></tr>'}</tbody></table></div>
+      <div class="tot" style="display:flex;justify-content:space-between;font:800 1.2rem var(--fx-font-disp);padding-top:8px;margin-top:6px;border-top:2px solid var(--fx-deep)"><span>Total de la sesión</span><span id="pln-total">${usd(L.total)}</span></div>
+      ${conH ? `<p class="nota-d" id="pln-marcas">Marcas nuevas en el odontograma: ${L.marcas_nuevas || 0}</p>
+      <div class="fila no-print"><div class="campo"><label for="pln-cita">Cita</label><select id="pln-cita"><option value="">Sin cita</option>${citas.map(c => `<option value="${c.id}">${esc(fechaCorta(c.dia))} ${esc(c.hora)} · ${esc(c.servicio)}</option>`).join('')}</select></div>
+        <div class="campo"><label for="pln-doc">Doctor</label><select id="pln-doc"><option value="">—</option>${docs.map(d => `<option value="${d.id}">${esc(d.nombre)}</option>`).join('')}</select></div>
+        <div class="campo" style="grid-column:1/-1"><label for="pln-nota">Nota de la sesión (opcional)</label><input id="pln-nota" maxlength="300"></div>
+        <button type="button" class="btn" id="pln-guardar" ${consiente() && (L.items.length || L.marcas_nuevas) ? '' : 'disabled'}>Guardar sesión</button></div>
+      <h3 id="ses-h" style="font:800 1.15rem var(--fx-font-disp);margin:26px 0 8px">Historial de sesiones</h3>
+      <div class="tarjetas">${H.map(x => `<article class="sol" data-ses="${x.id}"><h3>${esc(x.dia)} · ${usd(x.total)}</h3>
+        <div class="meta">${x.doctor ? `<span>${esc(x.doctor)}</span>` : ''}<span>Registró: ${esc(x.autor || '—')}</span>${x.presupuestada ? '<span class="pill ok">Proforma creada</span>' : ''}</div>
+        ${x.nota ? `<p>${esc(x.nota)}</p>` : ''}
+        ${x.items.length ? `<p><b>Tratamientos realizados</b></p><ul class="lista-ses">${piezas(x.items)}</ul>` : ''}
+        ${x.marcas.length ? `<p><b>Marcas del odontograma</b></p><p class="meta">${x.marcas.map(m => `${m.diente}${m.superficie ? '/' + m.superficie : ''} ${esc(ETQ(m.estado))}`).join(' · ')}</p>` : ''}
+        <div class="acciones no-print"><button type="button" class="mini" data-oda="${x.id}">Ver el odontograma de ese día</button>
+          ${puede && x.pendiente_proforma ? `<label class="mini-lbl">Descuento (%) <input type="number" min="0" max="50" value="0" data-dsc="${x.id}" style="width:64px"></label><button type="button" class="btn" data-pro="${x.id}">Pasar a proforma</button>` : ''}</div>
+        <div data-odb="${x.id}"></div></article>`).join('') || '<p class="vacio">Todavía no hay sesiones guardadas.</p>'}</div>` : '<p class="nota-d">El historial de sesiones queda pendiente de actualizar la base de datos (migración 014).</p>'}`;
     $('#pln-form').onsubmit = async e => { e.preventDefault(); $('#pln-err').textContent = '';
       try { await C.rpc('plan_agregar', { p_id: F.id, p_diente: +$('#pln-d').value, p_tarifario: +$('#pln-tr').value }); } catch (x) { falla('#pln-err', x); return; }
       pintarPlan(); };
     $$('[data-pq]', r).forEach(b => b.onclick = async () => { try { await C.rpc('plan_quitar', { p_item: +b.dataset.pq }); } catch (x) { falla('#pln-err', x); } pintarPlan(); });
-    const pp = $('#pln-pres'); if (pp) pp.onclick = async () => { $('#pln-err').textContent = '';
-      try { const x = await C.rpc('plan_a_presupuesto', { p_id: F.id, p_doctor: null, p_descuento: Math.round(+$('#pln-desc').value || 0), p_seguimiento: null }); aviso(`Presupuesto creado: ${usd(x.total)}.`); abrir(F.id, 'cobros'); }
-      catch (x) { falla('#pln-err', x); } };
+    const g = $('#pln-guardar'); if (g) g.onclick = async () => { $('#pln-err').textContent = ''; g.disabled = true;
+      try { const x = await C.rpc('sesion_guardar', { p_id: F.id, p_cita: $('#pln-cita').value ? +$('#pln-cita').value : null, p_doctor: $('#pln-doc').value ? +$('#pln-doc').value : null, p_nota: $('#pln-nota').value }); aviso(`Sesión guardada: ${usd(x.total)}.`); pintarPlan(); }
+      catch (x) { falla('#pln-err', x); g.disabled = false; } };
+    $$('[data-oda]', r).forEach(b => b.onclick = async () => { const cont = $(`[data-odb="${b.dataset.oda}"]`, r); if (cont.innerHTML) { cont.innerHTML = ''; return; }
+      try { const f = await C.rpc('odontograma_en', { p_sesion: +b.dataset.oda }); cont.innerHTML = '<p class="nota-d">Así estaba el odontograma al cerrar esa sesión (solo lectura).</p><div class="od-hist"></div>';
+        CLODO.montar($('.od-hist', cont), { filas: f, escribir: false, superficies: true, temporales: f.some(o => o.diente > 50), msg: msgErr, guardar: async () => {} }); } catch (x) { falla('#pln-err', x); } });
+    $$('[data-pro]', r).forEach(b => b.onclick = async () => { $('#pln-err').textContent = '';
+      try { const x = await C.rpc('sesion_a_presupuesto', { p_sesion: +b.dataset.pro, p_doctor: null, p_descuento: Math.round(+$(`[data-dsc="${b.dataset.pro}"]`).value || 0), p_seguimiento: null }); aviso(`Proforma creada: ${usd(x.total)}.`); abrir(F.id, 'cobros'); }
+      catch (x) { falla('#pln-err', x); } });
   }
 
   /* ---- evolución (notas de cada consulta; no se editan: se corrigen con una nota nueva) ---- */

@@ -132,3 +132,6 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
 /* Plan de tratamiento debajo del odontograma */
 .plan-trat { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--fx-line, #E2E3E6); }
 .plan-trat h3 { font: 800 1.15rem var(--fx-font-disp); margin-bottom: 6px; }
+.plan-trat .lista-ses { margin: 0 0 8px 18px; padding: 0; }
+.plan-trat .mini-lbl { display: inline-flex; align-items: center; gap: 6px; font-size: .85rem; margin-right: 8px; }
+.plan-trat .od-hist { margin-top: 8px; }
