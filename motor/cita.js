@@ -21,7 +21,9 @@
   const PARA = [['yo', 'Para mí', 'mí'], ['hijo', 'Para mi hijo o hija', 'mi hijo o hija'], ['otro', 'Para otra persona', 'otra persona']];   // [valor, texto del botón, texto corto para resúmenes y mensaje]
   const PASOS = [[1, '¿Qué necesitas?'], [2, '¿Qué día te queda bien?'], [3, '¿En qué horario?'], [4, 'Tus datos']];
 
-  const s = { paso: 1, motivo: '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', salidaWa: false, enviando: false, listo: null };
+  const SIMPLE = !!AG.simple;   // agenda corta: el motivo ya se eligió arriba (especialidades), así que solo piden día, horario y datos
+  const primero = () => [...items.keys()][0];
+  const s = { paso: SIMPLE ? 2 : 1, motivo: SIMPLE ? primero() : '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', salidaWa: false, enviando: false, listo: null };
   let raiz;
 
   /* ---- fechas (siempre hora de Ecuador) ---- */
@@ -79,7 +81,11 @@
     <p class="ct-pista">Es el horario que prefieres: el equipo te confirma la hora exacta por WhatsApp.</p>`;
 
   const campo = (id, et, extra = '') => `<label class="ct-campo"><span>${et}</span><input id="ct-${id}" value="${esc(s[id])}" ${extra}></label>`;
+  const paraHtml = () => `<fieldset class="ct-para"><legend>¿Para quién es la cita?</legend>${PARA.map(([v, t]) => `
+      <label><input type="radio" name="ct-para" value="${v}" ${s.para === v ? 'checked' : ''}><span>${t}</span></label>`).join('')}</fieldset>`;
+  const motivoSel = () => `<label class="ct-motivo-sel"><span>Tu cita es para</span><select id="ct-motivo">${[...items.values()].map(i => `<option value="${esc(i.id)}"${s.motivo === i.id ? ' selected' : ''}>${esc(i.nombre)}</option>`).join('')}</select></label>`;
   const cuerpo4 = () => `<div class="ct-form">
+      ${SIMPLE ? paraHtml() : ''}
       ${campo('nombre', 'Nombre y apellido del paciente', 'autocomplete="name" maxlength="80" required')}
       ${campo('telefono', 'Tu celular (para confirmar la cita)', 'type="tel" inputmode="tel" autocomplete="tel" placeholder="09xxxxxxxx" maxlength="14" required')}
       ${s.para === 'otro' ? `<label class="ct-chk"><input type="checkbox" id="ct-menor" ${s.menor ? 'checked' : ''}><span>El paciente es menor de edad</span></label>` : ''}
@@ -92,10 +98,11 @@
     </div>`;
 
   const paso = (n, t) => {
-    const on = s.paso === n, ok = completo(n) && !on, bloq = !alcanzable(n);
+    if (SIMPLE && n === 1) return '';
+    const num = SIMPLE ? n - 1 : n, on = s.paso === n, ok = completo(n) && !on, bloq = !alcanzable(n);
     return `<section class="ct-paso${on ? ' on' : ''}${ok ? ' ok' : ''}" data-n="${n}">
       <h3><button type="button" class="ct-cab" data-ir="${n}" aria-expanded="${on}" aria-controls="ct-c${n}" ${bloq ? 'disabled' : ''}>
-        <span class="ct-num">${ok ? check : n}</span><span class="ct-tit">${t}<small>${resumen(n)}</small></span><span class="ct-cambiar">Cambiar</span></button></h3>
+        <span class="ct-num">${ok ? check : num}</span><span class="ct-tit">${t}<small>${resumen(n)}</small></span><span class="ct-cambiar">Cambiar</span></button></h3>
       <div class="ct-cuerpo" id="ct-c${n}" ${on ? '' : 'hidden'}>${on ? [cuerpo1, cuerpo2, cuerpo3, cuerpo4][n - 1]() : ''}</div></section>`;
   };
 
@@ -126,7 +133,7 @@
     const tira = $('.ct-dias', raiz), x = tira ? tira.scrollLeft : 0;
     const activo = document.activeElement && document.activeElement.id;
     raiz.innerHTML = s.listo ? `<div class="ct-wrap ct-solo">${listoHtml(s.listo)}</div>`
-      : `<div class="ct-wrap"><div class="ct-pasos">${PASOS.map(([n, t]) => paso(n, t)).join('')}</div>${ticket()}</div>`;
+      : `<div class="ct-wrap${SIMPLE ? ' ct-simple' : ''}"><div class="ct-pasos">${SIMPLE ? motivoSel() : ''}${PASOS.map(([n, t]) => paso(n, t)).join('')}</div>${SIMPLE ? '' : ticket()}</div>`;
     const t2 = $('.ct-dias', raiz); if (t2) { t2.scrollLeft = x; if (!x && s.dia) { const on = $('.ct-dia.on', t2); on && t2.scrollTo({ left: on.offsetLeft - 16 }); } }
     if (activo && /^ct-(nombre|telefono|representante|nota)$/.test(activo)) { const el = document.getElementById(activo); if (el) { el.focus(); const l = el.value.length; try { el.setSelectionRange(l, l); } catch (e) { /* tipo sin selección */ } } }
   }
@@ -171,11 +178,12 @@
       if (t.closest('#ct-enviar')) return enviar();
       if (t.closest('#ct-t-btn')) { if (completo(4)) return enviar(); s.paso = primerPendiente(); pintar(); const c = $(`.ct-paso[data-n="${s.paso}"]`, raiz); c && c.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); return; }
       if (t.closest('#ct-wa')) { window.track && window.track('whatsapp_click', { lugar: 'agenda' }); return; }
-      if (t.closest('#ct-otra')) { Object.assign(s, { paso: 1, motivo: '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', salidaWa: false, listo: null, ref: null }); pintar(); }
+      if (t.closest('#ct-otra')) { Object.assign(s, { paso: SIMPLE ? 2 : 1, motivo: SIMPLE ? primero() : '', para: 'yo', dia: '', franja: '', nombre: '', telefono: '', representante: '', menor: false, nota: '', consent: false, error: '', salidaWa: false, listo: null, ref: null }); pintar(); }
     });
     raiz.addEventListener('input', e => { const i = e.target; if (i.id && /^ct-(nombre|telefono|representante|nota)$/.test(i.id)) { s[i.id.slice(3)] = i.value; if (s.error) { s.error = ''; const er = $('#ct-error', raiz); if (er) er.textContent = ''; } const tb = $('#ct-t-btn', raiz); if (tb) tb.textContent = completo(4) ? 'Enviar solicitud' : 'Siguiente: paso ' + primerPendiente(); } });
     raiz.addEventListener('change', e => {
       const i = e.target;
+      if (i.id === 'ct-motivo') { s.motivo = i.value; return; }
       if (i.name === 'ct-para') { s.para = i.value; if (s.para !== 'otro') s.menor = false; if (s.para !== 'hijo' && s.para !== 'otro') s.representante = ''; return pintar(); }
       if (i.id === 'ct-consent') { s.consent = i.checked; const tb = $('#ct-t-btn', raiz); if (tb) tb.textContent = completo(4) ? 'Enviar solicitud' : 'Siguiente: paso ' + primerPendiente(); }
       if (i.id === 'ct-menor') { s.menor = i.checked; if (!s.menor) s.representante = ''; pintar(); }

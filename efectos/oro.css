@@ -107,3 +107,11 @@
 .lp-centro .cierre .cierre-fondo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; z-index: -2; }
 .lp-centro .cierre.con-fondo::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(14, 14, 16, .66), rgba(14, 14, 16, .86)); }
 .lp-centro .lp-puntos:empty { display: none; }
+
+/* Agenda corta (agenda.simple): una sola tarjeta, sin la tarjeta oscura de resumen; el motivo es un selector pequeño arriba */
+.lp-centro .ct-wrap.ct-simple { grid-template-columns: 1fr; max-width: 760px; margin-inline: auto; }
+.lp-centro .ct-motivo-sel { display: grid; gap: 6px; margin: 0 0 14px; padding: 14px 16px; border-radius: 18px; background: var(--fx-paper); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--oro-2) 40%, transparent); }
+.lp-centro .ct-motivo-sel span { font: 700 .78rem var(--fx-font-txt); letter-spacing: .12em; text-transform: uppercase; color: var(--oro-3); }
+.lp-centro .ct-motivo-sel select { min-height: 48px; width: 100%; padding: 0 14px; border-radius: 12px; border: 1.5px solid color-mix(in srgb, var(--fx-ink) 18%, transparent); background: #fff; font: 700 1.05rem var(--fx-font-txt); color: var(--fx-ink); }
+.lp-centro .lp-agenda .doble, .lp-centro .lp-agenda .intro { text-align: center; margin-inline: auto; }
+.lp-centro .lp-agenda .doble::after { margin-inline: auto; }

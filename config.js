@@ -70,6 +70,7 @@ window.DEMO = {
       "14:00"
     ],
     "sub": "Pide tu cita",
-    "texto_dias": "de lunes a sábado"
+    "texto_dias": "de lunes a sábado",
+    "simple": true
   }
 };
