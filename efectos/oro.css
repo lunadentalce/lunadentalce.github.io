@@ -63,3 +63,32 @@
 /* Equipo con pocas tarjetas: encabezado centrado como el de las especialidades */
 .lp-centro #equipo .doble, .lp-centro #equipo .intro { text-align: center; margin-inline: auto; }
 .lp-centro #equipo .doble::after { margin-inline: auto; }
+
+/* ---- La doctora en la página: retrato en el hero, sección «Tu doctora», odontopediatría y fondo del cierre ---- */
+/* Hero con retrato: texto a la izquierda y foto con marco dorado a la derecha (en celular, la foto va debajo del texto) */
+.lp-centro .lp-hero.con-retrato .wrap { display: grid; gap: clamp(24px, 5vw, 56px); align-items: center; }
+@media (min-width: 900px) { .lp-centro .lp-hero.con-retrato .wrap { grid-template-columns: minmax(0, 1.05fr) minmax(0, .8fr); } .lp-centro .lp-hero.con-retrato .lp-hero-txt { text-align: left; } .lp-centro .lp-hero.con-retrato .acciones { justify-content: flex-start; } .lp-centro .lp-hero.con-retrato .lead { margin-inline: 0; } }
+.lp-centro .lp-retrato { margin: 0; position: relative; justify-self: center; width: min(100%, 420px); }
+.lp-centro .lp-retrato img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 18%; border-radius: 28px; box-shadow: 0 0 0 1px var(--oro-2), 0 22px 50px rgba(0, 0, 0, .45); }
+.lp-centro .lp-retrato::before { content: ""; position: absolute; inset: 14px -14px -14px 14px; border: 1.5px solid var(--oro-linea); border-radius: 30px; z-index: -1; }
+.lp-centro .lp-retrato figcaption { position: absolute; left: 14px; bottom: 14px; right: 14px; padding: 10px 16px; border-radius: 16px; background: color-mix(in srgb, #0E0E10 82%, transparent); color: #fff; font: 600 .9rem/1.25 var(--fx-font-txt); box-shadow: inset 0 0 0 1px var(--oro-linea); }
+@media (max-width: 899px) { .lp-centro .lp-hero.con-retrato { padding-bottom: clamp(36px, 8vw, 60px); } }
+
+/* Sección «Tu doctora»: foto grande y texto, alternada con la de niños */
+.lp-centro .lp-doctora .wrap, .lp-centro .lp-ninos .wrap { display: grid; gap: clamp(22px, 5vw, 64px); align-items: center; }
+@media (min-width: 860px) { .lp-centro .lp-doctora .wrap { grid-template-columns: minmax(0, .8fr) minmax(0, 1fr); } .lp-centro .lp-ninos .wrap { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); } }
+.lp-centro .dra-foto, .lp-centro .nin-foto { margin: 0; justify-self: center; width: min(100%, 440px); }
+.lp-centro .dra-foto img, .lp-centro .nin-foto img { display: block; width: 100%; height: auto; border-radius: 28px; object-fit: cover; box-shadow: 0 0 0 1px color-mix(in srgb, var(--oro-2) 55%, transparent), 0 20px 44px color-mix(in srgb, #111113 18%, transparent); }
+.lp-centro .dra-foto img { aspect-ratio: 4 / 5; object-position: 50% 30%; } .lp-centro .nin-foto img { aspect-ratio: 4 / 5; object-position: 50% 40%; }
+.lp-centro .dra-etq { margin: 0 0 6px; font: 700 .8rem var(--fx-font-txt); letter-spacing: .16em; text-transform: uppercase; color: var(--oro-3); }
+.lp-centro .dra-rol { margin: 6px 0 0; font-weight: 700; color: var(--oro-3); }
+.lp-centro .dra-txt p, .lp-centro .nin-txt p { max-width: 46ch; }
+.lp-centro .dra-txt .acciones, .lp-centro .nin-txt .acciones { margin-top: 20px; }
+.lp-centro #doctora .doble::after, .lp-centro #ninos .doble::after { content: ""; display: block; width: 56px; height: 3px; margin: 14px 0 0; background: var(--oro-degradado); border-radius: 2px; }
+.lp-centro .lp-ninos { background: color-mix(in srgb, var(--oro-1) 16%, var(--fx-bg)); }
+@media (max-width: 859px) { .lp-centro .lp-ninos .nin-foto { order: -1; } }
+
+/* Cierre con la foto de la doctora de fondo, bajo un velo oscuro para que se lea el texto */
+.lp-centro .cierre.con-fondo { position: relative; overflow: hidden; isolation: isolate; }
+.lp-centro .cierre .cierre-fondo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; z-index: -2; }
+.lp-centro .cierre.con-fondo::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(14, 14, 16, .66), rgba(14, 14, 16, .86)); }
