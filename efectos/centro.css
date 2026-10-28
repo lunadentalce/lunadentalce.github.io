@@ -111,6 +111,8 @@
 .lp-agenda { background: var(--fx-pop); }
 .lp-agenda-cab { margin-bottom: clamp(24px, 4vw, 40px); }
 .ct-wrap { display: grid; gap: 22px; align-items: start; }
+.ct-wrap > * { min-width: 0; }   /* la tira de días se desliza dentro de su tarjeta; sin esto Safari y Firefox ensanchan la página */
+.ct-dias { max-width: 100%; }
 @media (min-width: 960px) { .ct-wrap { grid-template-columns: minmax(0, 1fr) 360px; gap: 28px; } }
 .ct-pasos { background: var(--fx-paper); border-radius: var(--fx-radio); box-shadow: var(--lp-sombra); padding: clamp(6px, 1.4vw, 14px) clamp(14px, 3vw, 30px); }
 .ct-paso + .ct-paso { border-top: 1px solid var(--lp-linea); }
