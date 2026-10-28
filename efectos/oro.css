@@ -68,10 +68,24 @@
 /* Hero con retrato: texto a la izquierda y foto con marco dorado a la derecha (en celular, la foto va debajo del texto) */
 .lp-centro .lp-hero.con-retrato .wrap { display: grid; gap: clamp(24px, 5vw, 56px); align-items: center; }
 @media (min-width: 900px) { .lp-centro .lp-hero.con-retrato .wrap { grid-template-columns: minmax(0, 1.05fr) minmax(0, .8fr); } .lp-centro .lp-hero.con-retrato .lp-hero-txt { text-align: left; } .lp-centro .lp-hero.con-retrato .acciones { justify-content: flex-start; } .lp-centro .lp-hero.con-retrato .lead { margin-inline: 0; } }
-.lp-centro .lp-retrato { margin: 0; position: relative; justify-self: center; width: min(100%, 420px); }
-.lp-centro .lp-retrato img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 18%; border-radius: 28px; box-shadow: 0 0 0 1px var(--oro-2), 0 22px 50px rgba(0, 0, 0, .45); }
-.lp-centro .lp-retrato::before { content: ""; position: absolute; inset: 14px -14px -14px 14px; border: 1.5px solid var(--oro-linea); border-radius: 30px; z-index: -1; }
-.lp-centro .lp-retrato figcaption { position: absolute; left: 14px; bottom: 14px; right: 14px; padding: 10px 16px; border-radius: 16px; background: color-mix(in srgb, #0E0E10 82%, transparent); color: #fff; font: 600 .9rem/1.25 var(--fx-font-txt); box-shadow: inset 0 0 0 1px var(--oro-linea); }
+.lp-centro .lp-retrato { margin: 0; position: relative; justify-self: center; width: min(calc(100% - 28px), 400px); isolation: isolate; }
+/* Luna dorada detrás: un aro grande y otro más fino, como en el logo */
+.lp-centro .lp-retrato::before { content: ""; position: absolute; z-index: -1; width: 118%; aspect-ratio: 1; left: -26%; top: 4%; border-radius: 50%; border: 2px solid transparent; background: linear-gradient(#0E0E10, #0E0E10) padding-box, var(--oro-degradado) border-box; opacity: .85; clip-path: inset(0 38% 0 0); }
+.lp-centro .lp-retrato::after { content: ""; position: absolute; z-index: -2; inset: -8% -14% -6% -10%; background: radial-gradient(55% 50% at 55% 45%, color-mix(in srgb, var(--oro-2) 34%, transparent), transparent 72%); }
+.lp-centro .lp-retrato img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 16%; border-radius: 200px 200px 28px 28px; box-shadow: 0 0 0 1.5px var(--oro-2), 0 0 0 9px #0E0E10, 0 0 0 10px var(--oro-linea), 0 28px 60px rgba(0, 0, 0, .55); filter: contrast(1.04) saturate(1.06); }
+.lp-centro .lp-retrato figcaption { position: absolute; left: 50%; transform: translateX(-50%); bottom: -16px; width: max-content; max-width: calc(100% - 20px); padding: 11px 20px; border-radius: 999px; background: #0E0E10; color: #fff; font: 700 .86rem/1.2 var(--fx-font-txt); letter-spacing: .02em; box-shadow: inset 0 0 0 1.5px var(--oro-2), 0 12px 28px rgba(0, 0, 0, .5); text-align: center; }
+/* Etiquetas flotantes con lo que ofrece la clínica */
+.lp-centro .lp-chip { position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px 9px 10px; border-radius: 999px; background: color-mix(in srgb, #0E0E10 80%, transparent); color: #fff; font: 600 .8rem/1.15 var(--fx-font-txt); box-shadow: inset 0 0 0 1px var(--oro-linea), 0 10px 24px rgba(0, 0, 0, .4); backdrop-filter: blur(6px); }
+.lp-centro .lp-chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--oro-degradado); box-shadow: 0 0 0 3px color-mix(in srgb, var(--oro-2) 28%, transparent); flex: none; }
+.lp-centro .lp-chip-1 { left: -22px; top: 22%; }
+.lp-centro .lp-chip-2 { right: -18px; top: 52%; max-width: 62%; }
+@media (max-width: 560px) { .lp-centro .lp-chip-1 { left: -6px; } .lp-centro .lp-chip-2 { right: -6px; } .lp-centro .lp-retrato::before { left: -12%; width: 108%; } }
+/* Tres puntos de confianza bajo los botones */
+.lp-centro .lp-puntos { list-style: none; margin: clamp(22px, 3.4vw, 34px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, max-content); gap: 10px 18px; justify-content: center; }
+@media (min-width: 900px) { .lp-centro .lp-hero.con-retrato .lp-puntos { justify-content: start; } }
+@media (max-width: 640px) { .lp-centro .lp-puntos { grid-template-columns: auto; justify-content: center; gap: 8px; } }
+.lp-centro .lp-puntos li { display: inline-flex; align-items: center; gap: 8px; min-height: 0; margin: 0; padding: 0; width: auto; white-space: nowrap; font: 600 .82rem/1.2 var(--fx-font-txt); color: color-mix(in srgb, #fff 88%, transparent); }
+.lp-centro .lp-puntos svg { width: 20px; height: 20px; padding: 3px; border-radius: 50%; fill: none; stroke: #111113; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; background: var(--oro-degradado); flex: none; }
 @media (max-width: 899px) { .lp-centro .lp-hero.con-retrato { padding-bottom: clamp(36px, 8vw, 60px); } }
 
 /* Sección «Tu doctora»: foto grande y texto, alternada con la de niños */
@@ -92,3 +106,4 @@
 .lp-centro .cierre.con-fondo { position: relative; overflow: hidden; isolation: isolate; }
 .lp-centro .cierre .cierre-fondo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; z-index: -2; }
 .lp-centro .cierre.con-fondo::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(14, 14, 16, .66), rgba(14, 14, 16, .86)); }
+.lp-centro .lp-puntos:empty { display: none; }
