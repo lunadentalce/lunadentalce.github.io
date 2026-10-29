@@ -139,3 +139,16 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
 /* Botón de avisos en la barra de sesión */
 #s-avisos { font: 600 .85rem var(--fx-font-txt); padding: 6px 12px; border-radius: 999px; border: 1.5px solid currentColor; background: transparent; color: inherit; cursor: pointer; margin-right: 6px; }
 #s-avisos.on { background: color-mix(in srgb, var(--fx-accent) 28%, transparent); }
+
+/* Sesión de hoy: pasos numerados, fila nueva resaltada y barra con el resumen de la visita */
+.plan-trat .ses-paso { display: flex; align-items: center; gap: 10px; margin: 18px 0 8px; font: 800 1.02rem var(--fx-font-disp); }
+.plan-trat .ses-paso b { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--fx-deep); color: var(--fx-bg); font-size: .9rem; flex: none; }
+.plan-trat .ses-paso .pill { margin-left: auto; }
+.plan-trat tr.recien td { animation: ses-recien 2.4s ease-out 1; background: color-mix(in srgb, var(--fx-accent) 30%, transparent); }
+.plan-trat article.recien { animation: ses-recien-t 2.4s ease-out 1; box-shadow: 0 0 0 3px color-mix(in srgb, var(--fx-accent) 70%, transparent); }
+@keyframes ses-recien { from { background: color-mix(in srgb, var(--fx-accent) 55%, transparent); } to { background: color-mix(in srgb, var(--fx-accent) 10%, transparent); } }
+@keyframes ses-recien-t { from { box-shadow: 0 0 0 8px color-mix(in srgb, var(--fx-accent) 60%, transparent); } to { box-shadow: 0 0 0 3px color-mix(in srgb, var(--fx-accent) 70%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .plan-trat tr.recien td, .plan-trat article.recien { animation: none; } }
+.plan-trat .ses-barra { position: sticky; bottom: 10px; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding: 10px 12px 10px 16px; border-radius: 16px; background: var(--fx-deep); color: var(--fx-bg); box-shadow: 0 10px 28px rgba(0, 0, 0, .3); font-size: .95rem; }
+.plan-trat .ses-barra .btn { min-height: 42px; padding: 0 16px; font-size: .92rem; flex: none; }
+@media (max-width: 640px) { .plan-trat #pln-form { grid-template-columns: 1fr; } .plan-trat #pln-form .btn { width: 100%; } .plan-trat .ses-paso { font-size: .98rem; } }

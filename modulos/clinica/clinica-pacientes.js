@@ -169,7 +169,7 @@
      Cada tratamiento puesto en un diente suma su precio (del tarifario, calculado en la base); «Guardar sesión» deja todo en un solo registro que no se edita,
      y de cada sesión se pasa a proforma (solo administración y doctor). */
   const ETQ = e => (CLODO.ESTADO[e] || [])[1] || e;
-  async function pintarPlan() {
+  async function pintarPlan(foco) {
     const r = $('#pln'); if (!r) return;
     let L, H;
     try { [L, H] = await Promise.all([C.rpc('plan_lista', { p_id: F.id }), C.rpc('sesiones_lista', { p_id: F.id }).catch(e => { if (/sesiones_lista|PGRST202|Could not find/i.test(String((e && (e.message || e.code)) || e))) return null; throw e; })]); }
@@ -181,13 +181,16 @@
     const dientes = [...CLODO.SUP, ...CLODO.INF, ...(temp ? [...CLODO.TSUP, ...CLODO.TINF] : [])].sort((a, b) => a - b), tar = P.tar().filter(t => t.activo !== false);
     const docs = P.docs().filter(d => d.activo), citas = F.citas.filter(c => c.estado !== 'cancelada'), puede = P.puedeProforma(), conH = H !== null;
     const piezas = it => it.map(i => `<li>${i.diente} · ${esc(i.descripcion)} · ${usd(i.precio)}</li>`).join('');
-    r.innerHTML = `<h3 id="pln-h">Sesión de hoy</h3><p class="nota-d">Marca el odontograma y agrega cada tratamiento realizado: el precio sale del tarifario y se suma abajo. Al terminar, guarda la sesión: queda en el historial.</p>
+    r.innerHTML = `<h3 id="pln-h">Sesión de hoy</h3><p class="nota-d">En tres pasos: <b>1</b> agrega lo que hiciste, <b>2</b> revisa la lista y <b>3</b> guarda la sesión. Hasta el paso 3 nada queda guardado.</p>
+      <p class="ses-paso"><b>1</b>Agrega lo que hiciste hoy</p>
       <form class="fila no-print" id="pln-form" autocomplete="off"><div class="campo"><label for="pln-d">Diente</label><select id="pln-d">${dientes.map(n => `<option value="${n}"${n === sel ? ' selected' : ''}>${n}</option>`).join('')}</select></div>
         <div class="campo"><label for="pln-tr">Tratamiento</label><select id="pln-tr">${tar.map(t => `<option value="${t.id}">${esc(t.nombre)} · ${usd(t.precio)}</option>`).join('')}</select></div>
         <button class="btn" type="submit" ${consiente() && tar.length ? '' : 'disabled'}>Agregar a la sesión</button></form><p class="err-f" id="pln-err" role="alert"></p>
-      <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Diente</th><th>Tratamiento</th><th class="n">Precio</th><th></th></tr></thead><tbody>${L.items.map(i => `<tr><td>${i.diente}</td><td>${esc(i.descripcion)}</td><td class="n">${usd(i.precio)}</td><td class="no-print"><button type="button" class="mini" data-pq="${i.id}" aria-label="Quitar ${esc(i.descripcion)} del diente ${i.diente}">Quitar</button></td></tr>`).join('') || '<tr><td colspan="4">Todavía no hay tratamientos en la sesión.</td></tr>'}</tbody></table></div>
+      <p class="ses-paso"><b>2</b>Lo que llevas en esta visita <span class="pill esp">${L.items.length ? L.items.length + ' · sin guardar' : 'vacío'}</span></p>
+      <div style="overflow-x:auto"><table class="tabla" id="pln-tabla"><thead><tr><th>Diente</th><th>Tratamiento</th><th class="n">Precio</th><th></th></tr></thead><tbody>${L.items.map(i => `<tr data-it="${i.id}"${foco && foco.item === i.id ? ' class="recien"' : ''}><td>${i.diente}</td><td>${esc(i.descripcion)}</td><td class="n">${usd(i.precio)}</td><td class="no-print"><button type="button" class="mini" data-pq="${i.id}" aria-label="Quitar ${esc(i.descripcion)} del diente ${i.diente}">Quitar</button></td></tr>`).join('') || '<tr><td colspan="4">Todavía no hay tratamientos en esta visita. Elige un diente y un tratamiento arriba y pulsa «Agregar a la sesión».</td></tr>'}</tbody></table></div>
       <div class="tot" style="display:flex;justify-content:space-between;font:800 1.2rem var(--fx-font-disp);padding-top:8px;margin-top:6px;border-top:2px solid var(--fx-deep)"><span>Total de la sesión</span><span id="pln-total">${usd(L.total)}</span></div>
-      ${conH ? `<p class="nota-d" id="pln-marcas">Marcas nuevas en el odontograma: ${L.marcas_nuevas || 0}</p>
+      ${L.items.length ? `<div class="ses-barra no-print" id="pln-barra"><span><b>${L.items.length}</b> en esta visita · <b>${usd(L.total)}</b> · sin guardar</span><button type="button" class="btn" id="pln-ir">Ir a guardar ↓</button></div>` : ''}
+      ${conH ? `<p class="ses-paso"><b>3</b>Guarda la sesión</p><p class="nota-d" id="pln-marcas">Se guardarán con esta sesión: ${L.items.length} tratamiento(s) y ${L.marcas_nuevas || 0} marca(s) nueva(s) del odontograma.</p>
       <div class="fila no-print"><div class="campo"><label for="pln-cita">Cita</label><select id="pln-cita"><option value="">Sin cita</option>${citas.map(c => `<option value="${c.id}">${esc(fechaCorta(c.dia))} ${esc(c.hora)} · ${esc(c.servicio)}</option>`).join('')}</select></div>
         <div class="campo"><label for="pln-doc">Doctor</label><select id="pln-doc"><option value="">—</option>${docs.map(d => `<option value="${d.id}">${esc(d.nombre)}</option>`).join('')}</select></div>
         <div class="campo" style="grid-column:1/-1"><label for="pln-nota">Nota de la sesión (opcional)</label><input id="pln-nota" maxlength="300"></div>
@@ -202,15 +205,18 @@
           ${puede && x.pendiente_proforma ? `<label class="mini-lbl">Descuento (%) <input type="number" min="0" max="50" value="0" data-dsc="${x.id}" style="width:64px"></label><button type="button" class="btn" data-pro="${x.id}">Pasar a proforma</button>` : ''}</div>
         <div data-odb="${x.id}"></div></article>`).join('') || '<p class="vacio">Todavía no hay sesiones guardadas.</p>'}</div>` : '<p class="nota-d">El historial de sesiones queda pendiente de actualizar la base de datos (migración 014).</p>'}`;
     $('#pln-form').onsubmit = async e => { e.preventDefault(); $('#pln-err').textContent = '';
-      try { await C.rpc('plan_agregar', { p_id: F.id, p_diente: +$('#pln-d').value, p_tarifario: +$('#pln-tr').value }); } catch (x) { falla('#pln-err', x); return; }
-      pintarPlan(); };
-    $$('[data-pq]', r).forEach(b => b.onclick = async () => { try { await C.rpc('plan_quitar', { p_item: +b.dataset.pq }); } catch (x) { falla('#pln-err', x); } pintarPlan(); });
+      let idn; const nom = $('#pln-tr').selectedOptions[0].textContent.split(' · ')[0], dn = $('#pln-d').value;
+      try { idn = await C.rpc('plan_agregar', { p_id: F.id, p_diente: +dn, p_tarifario: +$('#pln-tr').value }); } catch (x) { falla('#pln-err', x); return; }
+      aviso(`Agregado a la lista de esta visita: ${nom} · diente ${dn}.`); pintarPlan({ item: idn }); };
+    $$('[data-pq]', r).forEach(b => b.onclick = async () => { try { await C.rpc('plan_quitar', { p_item: +b.dataset.pq }); aviso('Quitado de la visita.'); } catch (x) { falla('#pln-err', x); } pintarPlan(); });
     const g = $('#pln-guardar'); if (g) g.onclick = async () => { $('#pln-err').textContent = ''; g.disabled = true;
-      try { const x = await C.rpc('sesion_guardar', { p_id: F.id, p_cita: $('#pln-cita').value ? +$('#pln-cita').value : null, p_doctor: $('#pln-doc').value ? +$('#pln-doc').value : null, p_nota: $('#pln-nota').value }); aviso(`Sesión guardada: ${usd(x.total)}.`); pintarPlan(); }
+      try { const x = await C.rpc('sesion_guardar', { p_id: F.id, p_cita: $('#pln-cita').value ? +$('#pln-cita').value : null, p_doctor: $('#pln-doc').value ? +$('#pln-doc').value : null, p_nota: $('#pln-nota').value }); aviso(`Sesión guardada: ${usd(x.total)}. Quedó en el «Historial de sesiones» de abajo.`); pintarPlan({ sesion: true }); }
       catch (x) { falla('#pln-err', x); g.disabled = false; } };
     $$('[data-oda]', r).forEach(b => b.onclick = async () => { const cont = $(`[data-odb="${b.dataset.oda}"]`, r); if (cont.innerHTML) { cont.innerHTML = ''; return; }
       try { const f = await C.rpc('odontograma_en', { p_sesion: +b.dataset.oda }); cont.innerHTML = '<p class="nota-d">Así estaba el odontograma al cerrar esa sesión (solo lectura).</p><div class="od-hist"></div>';
         CLODO.montar($('.od-hist', cont), { filas: f, escribir: false, superficies: true, temporales: f.some(o => o.diente > 50), msg: msgErr, guardar: async () => {} }); } catch (x) { falla('#pln-err', x); } });
+    const ir = $('#pln-ir'); if (ir) ir.onclick = () => { const g2 = $('#pln-guardar'); if (g2) g2.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); };
+    if (foco) { const quiere = foco.item ? $(`[data-it="${foco.item}"]`, r) : foco.sesion ? $('[data-ses]', r) : null; if (quiere) { if (foco.sesion) quiere.classList.add('recien'); quiere.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } }
     $$('[data-pro]', r).forEach(b => b.onclick = async () => { $('#pln-err').textContent = '';
       try { const x = await C.rpc('sesion_a_presupuesto', { p_sesion: +b.dataset.pro, p_doctor: null, p_descuento: Math.round(+$(`[data-dsc="${b.dataset.pro}"]`).value || 0), p_seguimiento: null }); aviso(`Proforma creada: ${usd(x.total)}.`); abrir(F.id, 'cobros'); }
       catch (x) { falla('#pln-err', x); } });
