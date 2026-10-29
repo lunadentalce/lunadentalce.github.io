@@ -1,12 +1,12 @@
-/* Luna Dental Centro de Especialidades Odontológicas · [MARCADOR: ciudad] — datos del cliente para la demo (generado por nuevo-cliente.py desde clientes/luna-dental/cliente.json).
+/* Luna Dental Centro de Especialidades Odontológicas · Baños de Agua Santa — datos del cliente para la demo (generado por nuevo-cliente.py desde clientes/luna-dental/cliente.json).
    Todo número o dato del cliente vive SOLO aquí. Lo que falta va como [MARCADOR]. */
 window.DEMO = {
   "cliente": "Luna Dental Centro de Especialidades Odontológicas",
   "corto": "Luna Dental",
-  "ciudad": "[MARCADOR: ciudad]",
+  "ciudad": "Baños de Agua Santa",
   "waCliente": "593969058510",
-  "direccion": "[MARCADOR: dirección]",
-  "horario": "[MARCADOR: horario]",
+  "direccion": "",
+  "horario": "",
   "domicilio": false,
   "envio": null,
   "claveDemo": "luna_dental_demo_reservas",
