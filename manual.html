@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#111113">
+<link rel="icon" href="assets/emblema.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&amp;display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&amp;display=swap"></noscript>
+<link rel="stylesheet" href="estilos/base.css">
+<link rel="stylesheet" href="efectos/base.css">
+<link rel="stylesheet" href="efectos/calma.css">
+<link rel="stylesheet" href="efectos/toque.css">
+<link rel="stylesheet" href="efectos/transicion.css">
+<link rel="stylesheet" href="efectos/clinica.css">
+<link rel="stylesheet" href="efectos/centro.css">
+<link rel="stylesheet" href="efectos/oro.css">
+<style>:root { --fx-bg: #FAF8F3; --fx-paper: #FFFFFF; --fx-accent: #C39A45; --fx-ink: #111113; --fx-deep: #111113; --fx-pop: #F1E6C8; --fx-mancha-1: #E7CB82; --fx-mancha-2: #C39A45; --fx-mancha-3: #111113; --fx-font: "Montserrat", sans-serif; --fx-font-disp: "Montserrat", sans-serif; --fx-font-txt: "Montserrat", sans-serif; --fx-rosa: #F1E6C8; --fx-rosa-2: #E7CB82; --fx-metal-1: #8F6A22; --fx-metal-2: #C39A45; --fx-metal-3: #E7CB82; --fx-tinte-1: #F0DFB0; --fx-tinte-2: #F8F0DA; --fx-tinte-3: #E8D49A; --fx-tinte-4: #F3E6C4; }</style>
+
+<title>Manual de uso del panel · Luna Dental</title>
+<meta name="description" content="Enlaces y guía de uso del panel de Luna Dental para la dueña, los doctores y el equipo.">
+<style>
+.man { max-width: 860px; } .man h1 { margin-bottom: 10px; }
+.man h2 { font: 800 1.45rem/1.2 var(--fx-font-disp); margin: 38px 0 10px; text-transform: none; letter-spacing: -.01em; }
+.man h3 { font: 800 1.05rem/1.25 var(--fx-font-disp); margin: 18px 0 6px; text-transform: none; }
+.man p, .man li { max-width: 70ch; margin-bottom: 8px; line-height: 1.55; } .man ul, .man ol { padding-left: 1.3em; } .man .man-indice { padding-left: 0; }
+.man .lead { font-size: 1.1rem; color: color-mix(in srgb, var(--fx-ink) 75%, var(--fx-bg)); }
+.man-indice { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+.man-indice a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; background: var(--fx-paper); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fx-accent) 55%, transparent); color: var(--fx-ink); text-decoration: none; font: 700 .92rem var(--fx-font-txt); }
+.man-links { display: grid; gap: 12px; margin-top: 14px; }
+.man-link { padding: 16px 18px; border-radius: 18px; background: var(--fx-paper); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fx-accent) 50%, transparent); }
+.man-link b { display: block; font: 800 1.08rem var(--fx-font-disp); } .man-link small { display: block; margin: 2px 0 8px; color: color-mix(in srgb, var(--fx-ink) 70%, var(--fx-bg)); }
+.man-link code { display: block; overflow-wrap: anywhere; font: 600 .92rem var(--fx-font-txt); padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--fx-accent) 14%, var(--fx-bg)); }
+.man-link .acc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; } .man-link .btn { min-height: 44px; padding: 0 18px; font-size: .95rem; }
+.man-tabla { overflow-x: auto; margin-top: 12px; } .man-tabla table { width: 100%; border-collapse: collapse; min-width: 560px; font-size: .95rem; }
+.man-tabla th, .man-tabla td { padding: 10px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); }
+.man-tabla thead th { font: 800 .85rem var(--fx-font-txt); letter-spacing: .06em; text-transform: uppercase; }
+.man-tabla td.si, .man-tabla td.no { text-align: center; font-weight: 800; white-space: nowrap; } .man-tabla td.si { color: #1d6b3a; } .man-tabla td.no { color: #8a8d93; }
+.man details { margin: 10px 0; padding: 4px 16px; border-radius: 16px; background: var(--fx-paper); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fx-ink) 12%, transparent); }
+.man summary { cursor: pointer; padding: 12px 0; min-height: 44px; font: 800 1.02rem var(--fx-font-disp); }
+.man .nota { margin-top: 14px; padding: 12px 16px; border-radius: 14px; background: color-mix(in srgb, var(--fx-accent) 16%, var(--fx-bg)); font-weight: 600; }
+.man .paso { counter-reset: p; list-style: none; padding: 0; } .man .paso li { counter-increment: p; position: relative; padding-left: 40px; margin-bottom: 12px; }
+.man .paso li::before { content: counter(p); position: absolute; left: 0; top: -1px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--fx-deep); color: var(--fx-bg); font: 800 .88rem var(--fx-font-disp); }
+@media print { .man-indice, .acc, .cabecera .volver { display: none; } .man details { box-shadow: none; } }
+</style>
+</head>
+<body data-pagina="Manual" data-secciones='["Manual de uso"]'>
+<header class="cabecera"><div class="wrap">
+  <a class="marca" href="index.html"><img src="assets/emblema.png" alt="" width="52" height="52"><span><b>Luna Dental</b><small>Manual de uso</small></span></a>
+  <a class="volver" href="index.html">Volver a la página</a>
+</div></header>
+<main><section class="sec"><div class="wrap man">
+  <h1 class="doble"><span>Manual de uso de</span>tu panel</h1>
+  <p class="lead">Aquí están tus enlaces y, en pocas palabras, lo que puede hacer cada persona de Luna Dental: la dueña, los doctores y el equipo.</p>
+  <ul class="man-indice" aria-label="Contenido"><li><a href="#enlaces">Tus enlaces</a></li><li><a href="#app">Instalar y avisos</a></li><li><a href="#quien">Quién puede qué</a></li><li><a href="#pantallas">Qué hace cada pantalla</a></li><li><a href="#dia">Un día de trabajo</a></li><li><a href="#casos">Casos frecuentes</a></li><li><a href="#ayuda">Ayuda</a></li></ul>
+
+  <h2 id="enlaces">1. Tus enlaces</h2>
+  <p>Guárdalos en los favoritos de cada tablet o celular. Los paneles piden correo y clave.</p>
+  <div class="man-links">
+    <div class="man-link"><b>Página para tus pacientes</b><small>Donde ven los tratamientos y piden su cita.</small><code data-url="index.html"></code><div class="acc"><a class="btn" href="index.html">Abrir</a><button type="button" class="btn btn-linea" data-copiar="index.html">Copiar enlace</button></div></div>
+    <div class="man-link"><b>Panel del equipo</b><small>El de todos los días: solicitudes, agenda, pacientes, caja y presupuestos. Lo usan la doctora, los doctores y recepción.</small><code data-url="equipo.html"></code><div class="acc"><a class="btn" href="equipo.html">Abrir</a><button type="button" class="btn btn-linea" data-copiar="equipo.html">Copiar enlace</button></div></div>
+    <div class="man-link"><b>Panel de la dueña</b><small>Todo lo del panel del equipo, más las cifras de la clínica y la configuración (doctores, precios, horario y cuentas).</small><code data-url="dueno.html"></code><div class="acc"><a class="btn" href="dueno.html">Abrir</a><button type="button" class="btn btn-linea" data-copiar="dueno.html">Copiar enlace</button></div></div>
+    <div class="man-link"><b>Este manual</b><small>Para volver a leerlo cuando haga falta.</small><code data-url="manual.html"></code><div class="acc"><button type="button" class="btn btn-linea" data-copiar="manual.html">Copiar enlace</button></div></div>
+  </div>
+
+  <h2 id="app">2. Ponerlo como app y activar los avisos</h2>
+  <p>Cada panel se puede instalar como una app, con su propio ícono en la pantalla de inicio.</p>
+  <ol class="paso">
+    <li><b>Android (Chrome):</b> abre el panel, toca el menú ⋮ y elige <em>Instalar aplicación</em> o <em>Agregar a la pantalla de inicio</em>.</li>
+    <li><b>iPhone o iPad (Safari):</b> abre el panel, toca el botón <em>Compartir</em> y elige <em>Agregar a pantalla de inicio</em>.</li>
+    <li><b>Activar avisos:</b> entra con tu cuenta y toca <em>Activar avisos</em>, arriba, junto a <em>Salir</em>. Acepta el permiso del navegador. Hazlo una vez en cada tablet o celular.</li>
+  </ol>
+  <p class="nota">Los avisos suenan mientras el panel está abierto: cuando llega una solicitud de cita nueva sale un mensaje en pantalla, suena un tono corto y la pestaña muestra el número. Con el panel cerrado o la tablet bloqueada no llegan: deja el panel abierto en el consultorio.</p>
+
+  <h2 id="quien">3. Quién puede qué</h2>
+  <p>Cada persona entra con su propia cuenta y ve lo que le toca.</p>
+  <div class="man-tabla"><table>
+    <thead><tr><th>Qué se puede hacer</th><th>Dueña</th><th>Doctores</th><th>Equipo</th></tr></thead>
+    <tbody>
+      <tr><td>Ver y agendar solicitudes de cita, usar la agenda</td><td class="si">Sí</td><td class="si">Sí</td><td class="si">Sí</td></tr>
+      <tr><td>Crear y editar datos de pacientes, registrar el consentimiento</td><td class="si">Sí</td><td class="si">Sí</td><td class="si">Sí</td></tr>
+      <tr><td>Ver y escribir en la ficha clínica: historia, odontograma y evolución</td><td class="si">Sí</td><td class="si">Sí</td><td class="si">Sí</td></tr>
+      <tr><td>Guardar la sesión de la visita y pasarla a proforma</td><td class="si">Sí</td><td class="si">Sí</td><td class="si">Sí</td></tr>
+      <tr><td>Registrar cobros en caja y anularlos con motivo</td><td class="si">Sí</td><td class="si">Sí</td><td class="si">Sí</td></tr>
+      <tr><td>Ver los presupuestos</td><td class="si">Sí</td><td class="si">Sí</td><td class="si">Sí</td></tr>
+      <tr><td>Crear presupuestos sueltos y marcar «lo aceptó» o «lo rechazó»</td><td class="si">Sí</td><td class="si">Sí</td><td class="no">No</td></tr>
+      <tr><td>Ver las cifras de la clínica (resumen, ingresos, citas)</td><td class="si">Sí</td><td class="no">No</td><td class="no">No</td></tr>
+      <tr><td>Cambiar doctores, tarifario, tratamientos y horario</td><td class="si">Sí</td><td class="no">No</td><td class="no">No</td></tr>
+      <tr><td>Dar o quitar acceso a las cuentas, ver quién abrió cada ficha</td><td class="si">Sí</td><td class="no">No</td><td class="no">No</td></tr>
+    </tbody>
+  </table></div>
+  <p class="nota">La historia clínica son datos de salud. Por eso cada vez que alguien abre o escribe en una ficha, queda registrado con su nombre. Cada persona usa solo su cuenta y no comparte su clave.</p>
+
+  <h2 id="pantallas">4. Qué hace cada pantalla</h2>
+  <details open><summary>Solicitudes</summary>
+    <p>Aquí llegan las citas que piden los pacientes desde la página. En cada una puedes <b>Agendar</b> (eliges día y hora, y la cita queda confirmada con el doctor), <b>Escribir por WhatsApp</b> al paciente o <b>Descartar</b>. El número en la pestaña dice cuántas hay por atender.</p></details>
+  <details><summary>Agenda</summary>
+    <p>Las citas de todos los doctores, por día o por semana, con filtro por doctor. Puedes crear una cita nueva, marcarla como atendida, no vino o cancelada, y confirmarla por WhatsApp con un toque.</p></details>
+  <details><summary>Pacientes y su ficha</summary>
+    <p>Busca por nombre, cédula o celular, o crea un paciente nuevo. Cada ficha tiene estas pestañas:</p>
+    <ul><li><b>Datos:</b> contacto, representante si es menor, y el <b>consentimiento de tratamiento</b>. Sin ese consentimiento no se puede escribir en la parte clínica. Se puede imprimir para que lo firme.</li>
+      <li><b>Citas</b> y <b>Cobros y presupuestos:</b> todo lo que el paciente ha tenido y pagado.</li>
+      <li><b>Historia clínica:</b> alergias, medicamentos y antecedentes. Cada cambio guarda una versión nueva; la anterior no se pierde.</li>
+      <li><b>Odontograma:</b> el dibujo de los dientes (numeración FDI), con cinco caras por diente. Marca caries, resinas, coronas, ausentes, implantes y más. Debajo está la <b>Sesión de hoy</b> (ver el punto 5).</li>
+      <li><b>Evolución:</b> la nota de cada consulta. No se editan: si hay un error, se escribe una nota nueva que corrige la anterior.</li>
+      <li><b>Accesos</b> (solo la dueña): quién abrió o escribió en esa ficha y cuándo.</li></ul></details>
+  <details><summary>Caja</summary>
+    <p>Registra los cobros del día y mira el total. Un cobro no se borra: si hay un error se <b>anula</b> escribiendo el motivo, y queda a la vista.</p></details>
+  <details><summary>Presupuestos</summary>
+    <p>La lista de proformas de la clínica. Doctores y la dueña pueden crear una, enviarla por WhatsApp, dejar una fecha de seguimiento y marcar si el paciente la aceptó o la rechazó. El precio de cada tratamiento sale siempre del tarifario.</p></details>
+  <details><summary>Solo en el panel de la dueña</summary>
+    <ul><li><b>Resumen:</b> ingresos, citas atendidas y las que no vinieron, pacientes nuevos y presupuestos, por periodo.</li>
+      <li><b>Doctores:</b> quién aparece en la agenda y en los presupuestos. Un doctor que ya no atiende se desactiva, no se borra.</li>
+      <li><b>Tarifario:</b> el precio de cada tratamiento. Si cambias un precio, los presupuestos ya hechos no cambian.</li>
+      <li><b>Tratamientos:</b> cuánto dura cada uno en la agenda.</li>
+      <li><b>Horario:</b> los días y horas de atención y la pausa del almuerzo.</li>
+      <li><b>Cuentas:</b> quién puede entrar. Para una persona nueva, primero se crea su usuario con tu asesor y luego la agregas aquí con su rol: Administración, Doctor o Recepción.</li></ul></details>
+
+  <h2 id="dia">5. Un día de trabajo, paso a paso</h2>
+  <ol class="paso">
+    <li><b>Llega una solicitud.</b> Suena el aviso. En <em>Solicitudes</em>, toca <em>Agendar</em>, elige día y hora.</li>
+    <li><b>El paciente llega.</b> Búscalo en <em>Pacientes</em>. Si es la primera vez, completa sus datos y registra el consentimiento de tratamiento.</li>
+    <li><b>En la consulta,</b> abre <em>Odontograma</em>. Marca el estado de los dientes que ves.</li>
+    <li><b>Agrega lo que se hizo.</b> En <em>Sesión de hoy</em>, elige el diente y el tratamiento y toca <em>Agregar a la sesión</em>. Repite por cada tratamiento, aunque sean varios en el mismo diente. La lista y el total se arman solos.</li>
+    <li><b>Guarda la sesión.</b> Elige la cita y el doctor, escribe una nota si quieres y toca <em>Guardar sesión</em>. Queda en el <em>Historial de sesiones</em>, con la fecha y lo hecho.</li>
+    <li><b>Proforma.</b> En esa sesión del historial toca <em>Pasar a proforma</em>. Sale un presupuesto con cada tratamiento y los dientes. Envíalo por WhatsApp.</li>
+    <li><b>Cobro.</b> En <em>Caja</em>, registra lo que el paciente paga.</li>
+  </ol>
+
+  <h2 id="casos">6. Casos frecuentes</h2>
+  <details><summary>El paciente ya viene con una corona o le falta un diente</summary>
+    <p>Márcalo en el odontograma con su estado (Corona, Ausente, Implante…) y escribe en la nota «previo, de otra clínica». No lo agregues a la sesión, porque eso suma un precio. Al guardar la sesión sin tratamientos, queda el registro con total $0.00.</p></details>
+  <details><summary>En un mismo diente hay varios tratamientos (endodoncia, perno y corona)</summary>
+    <p>Agrega cada uno por separado en <em>Sesión de hoy</em>, con el mismo diente. La proforma los muestra en líneas distintas con el diente anotado. Ojo: el dibujo del diente muestra solo el último estado; el historial guarda todos.</p></details>
+  <details><summary>Me equivoqué al agregar un tratamiento</summary>
+    <p>Mientras no hayas guardado la sesión, toca <em>Quitar</em> en la lista. Una vez guardada, la sesión no se edita: se registra una nueva con lo que corresponde.</p></details>
+  <details><summary>Quiero ver cómo estaba el odontograma otro día</summary>
+    <p>En el <em>Historial de sesiones</em>, toca <em>Ver el odontograma de ese día</em>.</p></details>
+  <details><summary>Cambió un precio o hay un tratamiento nuevo</summary>
+    <p>La dueña lo cambia en su panel, en <em>Tarifario</em>. Aparece enseguida en el desplegable de tratamientos.</p></details>
+  <details><summary>Entra un doctor nuevo</summary>
+    <p>La dueña lo agrega en <em>Doctores</em> para que salga en la agenda. Si también va a entrar al panel, necesita una cuenta: pide a tu asesor que cree su usuario y luego agrégalo en <em>Cuentas</em> con el rol Doctor.</p></details>
+
+  <h2 id="ayuda">7. Ayuda</h2>
+  <p>Si algo no funciona o necesitas un cambio, escríbele a tu asesor por WhatsApp: <a href="https://wa.me/593983139928?text=Hola%2C%20necesito%20ayuda%20con%20el%20panel%20de%20Luna Dental">098 313 9928</a>. Cuéntale qué pantalla estabas usando y qué esperabas que pasara; una captura ayuda mucho.</p>
+  <p class="nota">Recuerda: cada persona usa solo su cuenta, y la clave no se comparte.</p>
+</div></section></main>
+<footer><div class="wrap"><div>Luna Dental Centro de Especialidades Odontológicas Baños de Agua Santa · Manual de uso</div></div></footer>
+<script>
+document.querySelectorAll('[data-url]').forEach(c => { c.textContent = new URL(c.dataset.url, location.href).href; });
+document.querySelectorAll('[data-copiar]').forEach(b => b.onclick = async () => {
+  const url = new URL(b.dataset.copiar, location.href).href, antes = b.textContent;
+  try { await navigator.clipboard.writeText(url); b.textContent = 'Copiado'; } catch (e) { b.textContent = 'Copia el texto de arriba'; }
+  setTimeout(() => { b.textContent = antes; }, 2200);
+});
+</script>
+</body>
+</html>

@@ -34,7 +34,7 @@ window.DEMO = {
         },
         {
           "t": "2. Mis datos personales y de salud",
-          "p": "Autorizo a {clinica} (responsable del tratamiento: {responsable}) a tratar mis datos de identificación y contacto y mis datos de salud (antecedentes, alergias, odontograma, evolución, cobros y presupuestos) para atenderme, gestionar mis citas, mis cobros y mis presupuestos, y cumplir las obligaciones legales de la historia clínica. Sé que los datos de salud son sensibles: solo los ve el personal autorizado (odontólogos y administración), y cada acceso queda registrado."
+          "p": "Autorizo a {clinica} (responsable del tratamiento: {responsable}) a tratar mis datos de identificación y contacto y mis datos de salud (antecedentes, alergias, odontograma, evolución, cobros y presupuestos) para atenderme, gestionar mis citas, mis cobros y mis presupuestos, y cumplir las obligaciones legales de la historia clínica. Sé que los datos de salud son sensibles: solo los ve el personal autorizado de la clínica (doctores, administración y recepción, cada uno con su propia cuenta), y cada acceso queda registrado."
         },
         {
           "t": "3. Comunicaciones",
