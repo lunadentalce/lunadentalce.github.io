@@ -153,7 +153,7 @@
       return;
     }
     const a = edad(F.datos && F.datos.nacimiento);
-    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p><section class="plan-trat" id="pln" aria-labelledby="pln-h"></section>`;
+    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p><div class="no-print" id="od-limpiar"></div><section class="plan-trat" id="pln" aria-labelledby="pln-h"></section>`;
     odoUI = CLODO.montar($('#od-raiz'), { filas: ODO, escribir: consiente(), superficies: odoSup, temporales: (a != null && a < 14) || ODO.some(o => o.diente > 50), msg: msgErr, alCambiar: () => pintarMarcasSes(), alElegir: n => { const s = $('#pln-d'); if (s) s.value = String(n); },
       aviso: odoSup ? '' : 'Marcar por superficie queda pendiente de actualizar la base de datos (migración 011). Por ahora se marca el diente completo.',
       guardar: async (diente, cambios, nota) => {
@@ -176,7 +176,7 @@
   const RESTAURA = ['resina', 'endodoncia', 'corona', 'brackets', 'implante', 'protesis'];   // estados que ya son un trabajo hecho (caries y ausente son diagnóstico)
   function marcarTrabajados(L, H) {   // visto chico sobre el número del diente: ok = ya tiene un trabajo guardado; hoy = tratamiento de esta visita todavía sin guardar
     const m = {};
-    (H || []).forEach(x => (x.items || []).forEach(i => { if (i.diente != null) m[i.diente] = 'ok'; }));
+    (H || []).filter(x => !x.previa_reinicio).forEach(x => (x.items || []).forEach(i => { if (i.diente != null) m[i.diente] = 'ok'; }));
     (ODO || []).forEach(o => { if (RESTAURA.includes(o.estado)) m[o.diente] = 'ok'; });
     (L.items || []).forEach(i => { if (i.diente != null && !m[i.diente]) m[i.diente] = 'hoy'; });
     if (odoUI) odoUI.trabajados(m);
@@ -189,6 +189,21 @@
       : '<span class="nota-d">Todavía no hay marcas. Toca un diente en el dibujo de arriba y márcalo.</span>';
     const t = $('#pln-marcas'); if (t) t.textContent = `Se guardarán con esta sesión: ${$$('#pln-tabla tbody [data-it]').length} tratamiento(s) y ${PLAN_M.length + pend.length} marca(s) del odontograma.`;
     const g = $('#pln-guardar'); if (g && !g.dataset.ocupado) g.disabled = !(consiente() && ($$('#pln-tabla tbody [data-it]').length || PLAN_M.length || pend.length));
+  }
+  /* limpiar el odontograma: el dibujo vuelve a empezar, pero las marcas, las sesiones y las proformas se conservan (solo administración y doctor) */
+  let limpiando = false;
+  function pintarLimpiar(L) {
+    const c = $('#od-limpiar'); if (!c) return;
+    if (!P.puedePres()) { c.innerHTML = ''; return; }
+    if (!limpiando) { c.innerHTML = `<button type="button" class="btn btn-linea" id="od-limpiar-btn" ${consiente() && !L.odo_limpio ? '' : 'disabled'} title="${L.odo_limpio ? 'El odontograma ya está limpio' : ''}">Limpiar el odontograma</button>${L.odo_limpio ? '<span class="nota-d" style="margin-left:10px">El odontograma está limpio.</span>' : ''}`; const b = $('#od-limpiar-btn'); if (b) b.onclick = () => { limpiando = true; pintarLimpiar(L); const i = $('#od-limpiar-motivo'); if (i) i.focus(); }; return; }
+    c.innerHTML = `<form class="od-limpiar-form" id="od-limpiar-form" autocomplete="off"><p><b>¿Dejar el odontograma limpio?</b> Todos los dientes vuelven a verse sanos. <b>No se borra nada:</b> las marcas, las sesiones, los tratamientos y las proformas siguen en el historial, y cada sesión sigue mostrando cómo estaba el odontograma ese día.</p>
+      <div class="campo"><label for="od-limpiar-motivo">Motivo</label><input id="od-limpiar-motivo" maxlength="200" value="Nuevo ciclo de tratamiento" required></div>
+      <p class="err-f" id="od-limpiar-err" role="alert"></p>
+      <div class="acciones"><button type="submit" class="btn">Sí, dejar limpio</button><button type="button" class="btn btn-linea" id="od-limpiar-no">Cancelar</button></div></form>`;
+    $('#od-limpiar-no').onclick = () => { limpiando = false; pintarLimpiar(L); };
+    $('#od-limpiar-form').onsubmit = async e => { e.preventDefault(); $('#od-limpiar-err').textContent = '';
+      try { await C.rpc('odontograma_reiniciar', { p_id: F.id, p_motivo: $('#od-limpiar-motivo').value }); } catch (x) { falla('#od-limpiar-err', x); return; }
+      limpiando = false; if (odoUI) odoUI.descartar(); await cargarOdo(); if (odoUI) odoUI.actualizar(ODO); aviso('Odontograma limpio. El historial de sesiones se conserva.'); pintarPlan(); };
   }
   async function pintarPlan(foco) {
     const r = $('#pln'); if (!r) return;
@@ -203,6 +218,7 @@
     const docs = P.docs().filter(d => d.activo), citas = F.citas.filter(c => c.estado !== 'cancelada'), puede = P.puedeProforma(), conH = H !== null;
     PLAN_M = L.marcas || [];
     marcarTrabajados(L, H);
+    pintarLimpiar(L);
     const piezas = it => it.map(i => `<li>${esc(lugar(i))} · ${esc(i.descripcion)} · ${usd(i.precio)}</li>`).join('');
     r.innerHTML = `<h3 id="pln-h">Sesión de hoy</h3><p class="nota-d">En tres pasos: <b>1</b> agrega lo que hiciste, <b>2</b> revisa la lista y <b>3</b> guarda la sesión. Hasta el paso 3 nada queda guardado.</p>
       <p class="ses-paso"><b>1</b>Agrega lo que hiciste hoy</p>
@@ -221,8 +237,9 @@
         <div class="campo" style="grid-column:1/-1"><label for="pln-nota">Nota de la sesión (opcional)</label><input id="pln-nota" maxlength="300"></div>
         <button type="button" class="btn" id="pln-guardar" ${consiente() && (L.items.length || L.marcas_nuevas) ? '' : 'disabled'}>Guardar sesión</button></div>
       <h3 id="ses-h" style="font:800 1.15rem var(--fx-font-disp);margin:26px 0 8px">Historial de sesiones</h3>
+      ${(L.reinicios || []).map(r => `<p class="nota-d" style="margin:0 0 6px">🧹 Odontograma limpiado el ${esc(r.dia)}${r.quien ? ' por ' + esc(r.quien) : ''}: ${esc(r.motivo)}. Las sesiones anteriores se conservan abajo.</p>`).join('')}
       <div class="tarjetas">${H.map(x => `<article class="sol" data-ses="${x.id}"><h3>${esc(x.dia)} · ${usd(x.total)}</h3>
-        <div class="meta">${x.doctor ? `<span>${esc(x.doctor)}</span>` : ''}<span>Registró: ${esc(x.autor || '—')}</span>${x.presupuestada ? '<span class="pill ok">Proforma creada</span>' : ''}</div>
+        <div class="meta">${x.doctor ? `<span>${esc(x.doctor)}</span>` : ''}<span>Registró: ${esc(x.autor || '—')}</span>${x.presupuestada ? '<span class="pill ok">Proforma creada</span>' : ''}${x.previa_reinicio ? '<span class="pill">Antes de limpiar el odontograma</span>' : ''}</div>
         ${x.nota ? `<p>${esc(x.nota)}</p>` : ''}
         ${x.items.length ? `<p><b>Tratamientos realizados</b></p><ul class="lista-ses">${piezas(x.items)}</ul>` : ''}
         ${x.marcas.length ? `<p><b>Marcas del odontograma</b></p><p class="meta">${x.marcas.map(m => `${m.diente}${m.superficie ? '/' + m.superficie : ''} ${esc(ETQ(m.estado))}`).join(' · ')}</p>` : ''}

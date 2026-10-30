@@ -172,7 +172,7 @@
       enviando = false; pintar(); avisa(); return ok;
     }
     pintar();
-    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); }, diente: () => sel, guardarTodo, trabajados(m) { m = m || {}; if (JSON.stringify(m) === JSON.stringify(trab)) return; trab = m; pintar(); },
+    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); }, diente: () => sel, guardarTodo, descartar() { cola = {}; err = ''; pintar(); avisa(); }, trabajados(m) { m = m || {}; if (JSON.stringify(m) === JSON.stringify(trab)) return; trab = m; pintar(); },
       pendientes: () => hayCola().flatMap(n => cola[n].map(c => ({ diente: +n, superficie: c.s === '*' ? null : c.s, estado: c.e, capa: c.capa || 1 }))) };
   }
 
