@@ -3,6 +3,7 @@
    Cada diente es un cuadrado con 5 superficies: O oclusal/incisal (centro), V vestibular, L lingual/palatina, M mesial, D distal. La vestibular queda hacia afuera del
    dibujo (arriba en la arcada superior, abajo en la inferior); mesial es el lado hacia la línea media.
    Marcas: un movimiento sin superficie (s = null) es del DIENTE COMPLETO; con superficie, solo esa cara. Una marca de diente completo posterior reemplaza las de cara anteriores.
+   Dos tratamientos por diente: el diente completo tiene dos capas. La 1.ª (la de siempre) reemplaza todo lo anterior del diente; la 2.ª (capa 2) se suma a la 1.ª sin reemplazarla (endodoncia + corona). Una marca de capa 1 posterior vuelve a empezar el diente y retira la 2.ª.
    Estilos incluidos aquí (se inyectan una vez). Solo variables --fx-* con respaldo; los colores de estado clínico son semánticos.
    Uso: const od = CLODO.montar(elemento, { filas, escribir, superficies, temporales, nota, guardar: async (diente, cambios, nota) => {...}, msg: e => texto });
         od.actualizar(filas)  ·  filas = [{ id, diente, superficie|null, estado, nota, dia }] (el último estado de cada diente y de cada cara). */
@@ -27,16 +28,18 @@
   function resolver(filas) {
     const r = {};
     (filas || []).slice().sort((a, b) => (a.id ?? 0) - (b.id ?? 0)).forEach(f => {
-      const d = r[f.diente] || (r[f.diente] = { todo: null, caras: {} });
-      if (!f.superficie) { d.todo = f; d.caras = {}; } else d.caras[f.superficie] = f;
+      const d = r[f.diente] || (r[f.diente] = { todo: null, todo2: null, caras: {} });
+      if (!f.superficie && f.capa === 2) d.todo2 = f;
+      else if (!f.superficie) { d.todo = f; d.todo2 = null; d.caras = {}; } else d.caras[f.superficie] = f;
     });
     return r;
   }
-  const aplicar = (st, cola) => { const d = { todo: st ? st.todo : null, caras: Object.assign({}, st ? st.caras : {}) };
-    (cola || []).forEach(c => { if (c.s === '*') { d.todo = { estado: c.e }; d.caras = {}; } else d.caras[c.s] = { estado: c.e }; }); return d; };
+  const aplicar = (st, cola) => { const d = { todo: st ? st.todo : null, todo2: st ? st.todo2 : null, caras: Object.assign({}, st ? st.caras : {}) };
+    (cola || []).forEach(c => { if (c.s === '*' && c.capa === 2) d.todo2 = { estado: c.e }; else if (c.s === '*') { d.todo = { estado: c.e }; d.todo2 = null; d.caras = {}; } else d.caras[c.s] = { estado: c.e }; }); return d; };
   const estadoCara = (st, s) => (st && ((st.caras[s] || {}).estado || (st.todo || {}).estado)) || 'sano';
   const resumen = st => { if (!st) return 'sin registro'; const p = [];
     if (st.todo && st.todo.estado !== 'sano') p.push(ESTADO[st.todo.estado][1] + ' (diente completo)');
+    if (st.todo2 && st.todo2.estado !== 'sano') p.push(ESTADO[st.todo2.estado][1] + ' (2.º tratamiento del diente completo)');
     const por = {}; Object.entries(st.caras).forEach(([s, f]) => (por[f.estado] = por[f.estado] || []).push(CARA[s].split(' ')[0].toLowerCase()));
     Object.entries(por).forEach(([e, l]) => p.push(`${ESTADO[e][1].toLowerCase()} en ${l.join(', ')}`));
     return p.length ? p.join('; ') : 'sano'; };
@@ -49,7 +52,8 @@
       if (!o.editor) return base;
       return `<g role="button" tabindex="0" class="od-fg" data-s="${s}" aria-label="${esc(CARA[s])}: ${esc(ESTADO[e][1])}${pend ? ' (cambio pendiente)' : ''}">${base}<text x="${TXT[pos][0]}" y="${TXT[pos][1]}" text-anchor="middle" dominant-baseline="central" class="od-l" fill="${['caries', 'brackets', 'protesis', 'implante', 'ausente', 'endodoncia'].includes(e) ? '#fff' : '#111'}">${s}</text></g>`; }).join('');
     const x = ausente ? '<path d="M3 3 37 37M37 3 3 37" stroke="#555" stroke-width="2" fill="none"/>' : '';
-    return `<svg viewBox="-1 -1 42 42" class="od-svg${o.editor ? ' od-grande' : ''}" aria-hidden="${o.editor ? 'false' : 'true'}" focusable="false">${polis}${x}</svg>`;
+    const seg = st && st.todo2 && st.todo2.estado !== 'sano' && !ausente ? `<rect x="-.2" y="-.2" width="40.4" height="40.4" rx="3" fill="none" stroke="${color(st.todo2.estado)}" stroke-width="3.4"/>` : '';
+    return `<svg viewBox="-1 -1 42 42" class="od-svg${o.editor ? ' od-grande' : ''}" aria-hidden="${o.editor ? 'false' : 'true'}" focusable="false">${polis}${x}${seg}</svg>`;
   }
 
   const CSS = `.od{--t:clamp(24px,calc((100vw - 64px)/17.5),50px);display:grid;gap:18px}
@@ -79,6 +83,11 @@
 .od-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:end}
 .od-acc .campo{flex:1 1 200px;margin:0}
 .od-err{min-height:1.2em;margin:8px 0 0;color:#B3261E;font:600 .9rem var(--fx-font-txt,sans-serif)}
+.od-seg{display:flex;align-items:center;gap:8px;margin:0;font:600 .9rem/1.3 var(--fx-font-txt,sans-serif)}.od-seg input{width:20px;height:20px}
+.od-pend{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--fx-accent,#c4c7cc) 22%,#fff);border:1px dashed color-mix(in srgb,var(--fx-ink,#111) 35%,transparent)}
+.od-pend[hidden]{display:none}.od-pend>b{font:800 .92rem var(--fx-font-txt,sans-serif);margin-right:4px}
+.od-pend .od-chip{min-height:36px;padding:0 12px;border-radius:999px;border:1.5px solid var(--fx-ink,#111);background:#fff;color:var(--fx-ink,#111);font:700 .84rem var(--fx-font-txt,sans-serif);cursor:pointer}
+.od-pend .btn{min-height:40px;padding:0 16px;font-size:.9rem;margin-left:auto}
 .od-aviso{padding:10px 14px;border-radius:12px;background:var(--fx-marca-bg,#fff3c4);color:var(--fx-marca-ink,#5a3b00);font:600 .88rem/1.4 var(--fx-font-txt,sans-serif)}
 @media (prefers-reduced-motion:reduce){.od-grande polygon{transition:none}}`;
   const inyectar = () => { if (!document.getElementById('od-css')) { const s = document.createElement('style'); s.id = 'od-css'; s.textContent = CSS; document.head.append(s); } };
@@ -86,7 +95,9 @@
   function montar(raiz, op) {
     inyectar();
     op = Object.assign({ filas: [], escribir: true, superficies: true, temporales: false, nota: true, aviso: '', msg: e => (e && e.message) || String(e) }, op);
-    let filas = op.filas, sel = 16, selE = 'caries', temp = op.temporales, nota = '', err = '', cola = {}, enviando = false;
+    let filas = op.filas, sel = 16, selE = 'caries', temp = op.temporales, nota = '', err = '', cola = {}, enviando = false, seg = false;
+    const avisa = () => { if (op.alCambiar) op.alCambiar(); };
+    const hayCola = () => Object.keys(cola).filter(n => (cola[n] || []).length);
     const q = (s, r) => (r || raiz).querySelector(s), qq = (s, r) => [...(r || raiz).querySelectorAll(s)];
 
     const diente = (n, st, arriba) => { const c = cola[n] || [], v = aplicar(st, c);
@@ -103,6 +114,8 @@
           ${temp ? `<div class="od-bloque"><p class="od-tit">Dientes temporales</p>${arco(TSUP, R, true)}${arco(TINF, R, false)}</div>` : ''}
         </div>
         <div class="estados no-print" id="od-estados" role="group" aria-label="Estado que vas a marcar">${ESTADOS.map(([k, n, c]) => `<button type="button" class="cb" data-e="${k}" aria-pressed="${k === selE}"><i style="--c:${c}"></i>${n}</button>`).join('')}</div>
+        <label class="od-seg no-print"><input type="checkbox" id="od-seg" ${seg ? 'checked' : ''}><span>Es el <b>2.º tratamiento</b> de este diente (se suma al primero, no lo reemplaza)</span></label>
+        <div class="od-pend no-print" id="od-pend" role="status" ${hayCola().length ? '' : 'hidden'}><b>Por guardar:</b>${hayCola().map(n => `<button type="button" class="od-chip" data-pn="${n}">${n} · ${cola[n].length} ${cola[n].length === 1 ? 'cambio' : 'cambios'}</button>`).join('')}<button type="button" class="btn" id="od-guardar-todo" ${op.escribir && !enviando ? '' : 'disabled'}>${enviando ? 'Guardando…' : `Guardar todo (${hayCola().reduce((t, n) => t + cola[n].length, 0)})`}</button></div>
         <div class="od-ed">
           <div>${svg(sel, v, { editor: true, cola: cl })}</div>
           <div>
@@ -125,23 +138,38 @@
       const tocar = g => marca(op.superficies && POR_CARA.includes(selE) ? g.dataset.s : '*');
       qq('.od-fg').forEach(g => { g.onclick = () => tocar(g); g.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tocar(g); } }; });
       const t = q('#od-todo'); if (t) t.onclick = () => marca('*');
-      q('#od-deshacer').onclick = () => { cola[sel] = []; err = ''; pintar(); };
+      q('#od-seg').onchange = e => { seg = e.target.checked; };
+      qq('[data-pn]').forEach(b => b.onclick = () => { sel = +b.dataset.pn; pintar(); if (op.alElegir) op.alElegir(sel); });
+      const gt = q('#od-guardar-todo'); if (gt) gt.onclick = () => guardarTodo();
+      q('#od-deshacer').onclick = () => { cola[sel] = []; err = ''; pintar(); avisa(); };
       const i = q('#od-nota'); if (i) i.oninput = () => { nota = i.value; };
       q('#od-guardar').onclick = guardar;
     }
     function marca(s) {   // una cara se marca una vez (la nueva reemplaza a la anterior de esa cara); el diente completo reemplaza todo lo pendiente
-      const c = s === '*' ? [] : (cola[sel] || []).filter(x => x.s !== s);
-      c.push({ s, e: selE }); cola[sel] = c; err = ''; pintar(); const g = s === '*' ? null : q(`.od-fg[data-s="${s}"]`); if (g) g.focus();
+      const c = s === '*' ? (seg ? (cola[sel] || []).filter(x => !(x.s === '*' && x.capa === 2)) : []) : (cola[sel] || []).filter(x => x.s !== s);
+      c.push({ s, e: selE, capa: s === '*' && seg ? 2 : 1 }); cola[sel] = c; err = ''; pintar(); avisa(); const g = s === '*' ? null : q(`.od-fg[data-s="${s}"]`); if (g) g.focus();
     }
     async function guardar() {
       const cl = cola[sel] || []; if (!cl.length || enviando) return;
       enviando = true; err = ''; pintar();
-      try { await op.guardar(sel, cl.map(c => ({ superficie: c.s === '*' ? null : c.s, estado: c.e })), nota.trim()); cola[sel] = []; nota = ''; }
+      try { await op.guardar(sel, cl.map(c => ({ superficie: c.s === '*' ? null : c.s, estado: c.e, capa: c.capa || 1 })), nota.trim()); cola[sel] = []; nota = ''; }
       catch (e) { err = op.msg(e); }
-      enviando = false; pintar();
+      enviando = false; pintar(); avisa();
+    }
+    async function guardarTodo() {   // guarda, diente por diente y en orden, todo lo que quedó por guardar; si uno falla se detiene y lo demás sigue pendiente
+      if (enviando) return true;
+      enviando = true; err = ''; pintar();
+      let ok = true;
+      for (const n of hayCola()) {
+        try { await op.guardar(+n, cola[n].map(c => ({ superficie: c.s === '*' ? null : c.s, estado: c.e, capa: c.capa || 1 })), nota.trim()); cola[n] = []; }
+        catch (e) { err = `Diente ${n}: ${op.msg(e)}`; ok = false; break; }
+      }
+      if (ok) nota = '';
+      enviando = false; pintar(); avisa(); return ok;
     }
     pintar();
-    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); }, diente: () => sel };
+    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); }, diente: () => sel, guardarTodo,
+      pendientes: () => hayCola().flatMap(n => cola[n].map(c => ({ diente: +n, superficie: c.s === '*' ? null : c.s, estado: c.e, capa: c.capa || 1 }))) };
   }
 
   window.CLODO = { ESTADOS, ESTADO, POR_CARA, CARA, SUP, INF, TSUP, TINF, mapa, resolver, aplicar, resumen, svg, montar };
