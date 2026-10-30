@@ -145,13 +145,21 @@ function pintarPres() {
 }
 $('#p-add').onclick = () => { const t = TAR.find(x => x.id == $('#p-item').value); if (!t) return; const c = Math.min(20, Math.max(1, parseInt($('#p-cant').value) || 1)); const ex = pres.find(l => l.id === t.id); ex ? ex.cant = Math.min(20, ex.cant + c) : pres.push({ id: t.id, nombre: t.nombre, precio: +t.precio, cant: c }); pintarPres(); };
 $('#p-desc').oninput = pintarPres;
+/* PDF del presupuesto por WhatsApp: cada tratamiento con su precio, el descuento y el total. En celular abre «compartir» con el PDF adjunto; en computador lo descarga y abre el chat. */
+async function enviarPresupuesto(p) {
+  const fecha = String(p.fecha || hoy()), f = fecha.slice(0, 10).split('-').reverse().join('/'), tot = usd(p.total), nom = String(p.paciente || '').trim();
+  const blob = CLPDF.presupuesto({ corto: DEMO.corto, clinica: DEMO.cliente, ciudad: DEMO.ciudad, telefono: tel09(DEMO.waCliente), paciente: nom, doctor: p.doctor || '', fecha: f, items: p.items || [], descuento: p.descuento || 0, total: p.total, seguimiento: p.seguimiento ? p.seguimiento.slice(0, 10).split('-').reverse().join('/') : '' });
+  const r = await CLPDF.enviar({ blob, nombre: CLPDF.nombreArchivo(DEMO.corto, nom, fecha.slice(0, 10)), telefono: p.telefono || '', wa, texto: `Hola ${nom.split(' ')[0] || ''}, te enviamos tu presupuesto de ${DEMO.cliente}. Total: ${tot}. El detalle de cada tratamiento va en el PDF. (Sujeto a valoración. Válido por 15 días.)` });
+  if (r === 'compartido') aviso('Presupuesto compartido.'); else if (r === 'descargado') aviso('PDF descargado y WhatsApp abierto: adjunta el PDF en el chat con el clip.');
+  return r;
+}
 $('#p-pac').oninput = () => { presClienta = null; };
 $('#p-guardar').onclick = async () => { const er = $('#p-err'); er.textContent = '';
   if (!pres.length) { er.textContent = 'Agrega al menos un tratamiento.'; return; }
   try {
     const nombre = $('#p-pac').value.trim(), r = await C.rpc('presupuesto_guardar', { p_paciente: nombre, p_doctor: $('#p-doc').value ? +$('#p-doc').value : null, p_descuento: Math.round(+$('#p-desc').value || 0), p_items: pres.map(l => ({ tarifario_id: l.id, cant: l.cant })), p_seguimiento: $('#p-seg').value || null, p_clienta: presClienta });
-    window.open(wa('', `Presupuesto de ${DEMO.cliente} para ${nombre}:\n` + pres.map(l => `${l.cant} × ${l.nombre}`).join('\n') + (+$('#p-desc').value ? `\nDescuento: ${Math.round(+$('#p-desc').value)} %` : '') + `\nTotal: ${usd(r.total)}\n(Sujeto a valoración. Válido por 15 días.)`), '_blank', 'noopener');
-    aviso(`Presupuesto guardado: ${usd(r.total)}.`); pres = []; presClienta = null; $('#p-pac').value = ''; $('#p-desc').value = 0; $('#p-seg').value = ''; pintarPres(); pintarListaPres();
+    const datos = { paciente: nombre, doctor: $('#p-doc').value ? docNombre(+$('#p-doc').value) : '', items: pres.map(l => ({ descripcion: l.nombre, cant: l.cant, precio: l.precio })), descuento: Math.round(+$('#p-desc').value || 0), total: r.total, seguimiento: $('#p-seg').value || '', fecha: hoy() };
+    aviso(`Presupuesto guardado: ${usd(r.total)}.`); try { await enviarPresupuesto(datos); } catch (x) { aviso('El presupuesto quedó guardado, pero no se pudo preparar el PDF: ' + msgErr(x), 'mal'); } pres = []; presClienta = null; $('#p-pac').value = ''; $('#p-desc').value = 0; $('#p-seg').value = ''; pintarPres(); pintarListaPres();
   } catch (e) { falla(er, e); } };
 const puedePres = () => ['admin', 'doctor'].includes((YO || {}).rol);   // recepción ve los presupuestos pero no los crea ni los decide (la base lo exige también, migración 012)
 async function pintarListaPres() {
@@ -161,8 +169,10 @@ async function pintarListaPres() {
     c.innerHTML = l.length ? l.map(p => `<article class="sol"><h3>${esc(p.paciente)} · ${usd(p.total)}</h3>
       <div class="meta"><span>${esc(fechaCorta(p.creado))}</span><span>${esc(docNombre(p.doctor_id))}</span>${p.seguimiento ? `<span>Seguimiento: ${esc(fechaCorta(p.seguimiento))}</span>` : ''}<span class="pill ${E[p.estado][1]}">${E[p.estado][0]}</span></div>
       <div class="meta">${(p.items || []).map(i => `${i.cant} × ${esc(i.descripcion)}`).join(' · ')}${p.descuento ? ` · desc. ${p.descuento} %` : ''}</div>
-      ${p.estado === 'enviado' && puedePres() ? `<div class="acciones"><button type="button" class="btn" data-ok="${p.id}">Lo aceptó</button><button type="button" class="btn btn-linea" data-no="${p.id}">Lo rechazó</button></div>` : ''}</article>`).join('') : '<p class="vacio">Todavía no hay presupuestos.</p>';
+      <div class="acciones">${p.estado === 'enviado' && puedePres() ? `<button type="button" class="btn" data-ok="${p.id}">Lo aceptó</button><button type="button" class="btn btn-linea" data-no="${p.id}">Lo rechazó</button>` : ''}<button type="button" class="btn btn-linea" data-pdf="${p.id}">Enviar PDF por WhatsApp</button></div></article>`).join('') : '<p class="vacio">Todavía no hay presupuestos.</p>';
     const marcar = async (id, est) => { try { await C.rpc('presupuesto_estado', { p_id: id, p_estado: est }); aviso('Presupuesto actualizado.'); pintarListaPres(); } catch (e) { falla(null, e); } };
+    $$('[data-pdf]', c).forEach(b => b.onclick = async () => { const pr = l.find(x => x.id === +b.dataset.pdf); if (!pr) return; b.disabled = true;
+      try { await enviarPresupuesto({ paciente: pr.paciente, doctor: pr.doctor_id ? docNombre(pr.doctor_id) : '', items: pr.items || [], descuento: pr.descuento, total: pr.total, seguimiento: pr.seguimiento, fecha: pr.creado }); } catch (x) { falla(null, x); } b.disabled = false; });
     $$('[data-ok]', c).forEach(b => b.onclick = () => marcar(+b.dataset.ok, 'aceptado')); $$('[data-no]', c).forEach(b => b.onclick = () => marcar(+b.dataset.no, 'rechazado'));
   } catch (e) { c.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; }
 }
@@ -173,7 +183,7 @@ const CARGAR = { 't-solicitudes': pintarSolicitudes, 't-agenda': () => { pintarF
 /* Atajos que usa la ficha del paciente: abrir la agenda o los presupuestos ya con el paciente */
 function nuevaCitaPara(p) { ir($('#t-agenda')); setTimeout(() => { $('#nc-form').hidden = false; $('#nc-abrir').setAttribute('aria-expanded', true); $('#nc-nombre').value = p.nombre; $('#nc-tel').value = tel09(p.telefono); $('#nc-nombre').focus(); }, 400); }
 function presupuestoPara(p) { ir($('#t-presupuestos')); presClienta = p.id; $('#p-pac').value = p.nombre; pintarPres(); }
-window.CLPANEL = { cargar: CARGAR, nuevaCita: nuevaCitaPara, presupuestoPara, ir: id => ir($(id)), yo: () => YO, puedePres, puedeProforma: () => !!(YO && YO.rol), tel09, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
+window.CLPANEL = { cargar: CARGAR, nuevaCita: nuevaCitaPara, presupuestoPara, ir: id => ir($(id)), yo: () => YO, puedePres, enviarPresupuesto, puedeProforma: () => !!(YO && YO.rol), tel09, base: () => cargarBase(), docs: () => DOCS, tar: () => TAR, set horario(h) { HORARIO = h; }, get horario() { return HORARIO; }, falla };
 
 /* ---------- arranque ---------- */
 async function cargarBase() {
