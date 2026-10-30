@@ -173,6 +173,14 @@
   const ETQ = e => (CLODO.ESTADO[e] || [])[1] || e;
   /* marcas del odontograma de esta visita: las ya guardadas (entran solas a la sesión) y las que todavía están por guardar en el dibujo */
   let PLAN_M = [];
+  const RESTAURA = ['resina', 'endodoncia', 'corona', 'brackets', 'implante', 'protesis'];   // estados que ya son un trabajo hecho (caries y ausente son diagnóstico)
+  function marcarTrabajados(L, H) {   // visto chico sobre el número del diente: ok = ya tiene un trabajo guardado; hoy = tratamiento de esta visita todavía sin guardar
+    const m = {};
+    (H || []).forEach(x => (x.items || []).forEach(i => { if (i.diente != null) m[i.diente] = 'ok'; }));
+    (ODO || []).forEach(o => { if (RESTAURA.includes(o.estado)) m[o.diente] = 'ok'; });
+    (L.items || []).forEach(i => { if (i.diente != null && !m[i.diente]) m[i.diente] = 'hoy'; });
+    if (odoUI) odoUI.trabajados(m);
+  }
   const txtMarca = m => `${m.diente}${m.superficie ? ' ' + m.superficie : ''} · ${ETQ(m.estado)}${m.capa === 2 ? ' (2.º)' : ''}`;
   function pintarMarcasSes() {
     const c = $('#pln-marcas-lista'); if (!c) return;
@@ -194,6 +202,7 @@
     const dientes = [...CLODO.SUP, ...CLODO.INF, ...(temp ? [...CLODO.TSUP, ...CLODO.TINF] : [])].sort((a, b) => a - b), tar = P.tar().filter(t => t.activo !== false);
     const docs = P.docs().filter(d => d.activo), citas = F.citas.filter(c => c.estado !== 'cancelada'), puede = P.puedeProforma(), conH = H !== null;
     PLAN_M = L.marcas || [];
+    marcarTrabajados(L, H);
     const piezas = it => it.map(i => `<li>${esc(lugar(i))} · ${esc(i.descripcion)} · ${usd(i.precio)}</li>`).join('');
     r.innerHTML = `<h3 id="pln-h">Sesión de hoy</h3><p class="nota-d">En tres pasos: <b>1</b> agrega lo que hiciste, <b>2</b> revisa la lista y <b>3</b> guarda la sesión. Hasta el paso 3 nada queda guardado.</p>
       <p class="ses-paso"><b>1</b>Agrega lo que hiciste hoy</p>

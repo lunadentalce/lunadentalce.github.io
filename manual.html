@@ -102,7 +102,7 @@
     <ul><li><b>Datos:</b> contacto, representante si es menor, y el <b>consentimiento de tratamiento</b>. Sin ese consentimiento no se puede escribir en la parte clínica. Se puede imprimir para que lo firme.</li>
       <li><b>Citas</b> y <b>Cobros y presupuestos:</b> todo lo que el paciente ha tenido y pagado.</li>
       <li><b>Historia clínica:</b> alergias, medicamentos y antecedentes. Cada cambio guarda una versión nueva; la anterior no se pierde.</li>
-      <li><b>Odontograma:</b> el dibujo de los dientes (numeración FDI), con cinco caras por diente. Marca caries, resinas, coronas, ausentes, implantes y más. Debajo está la <b>Sesión de hoy</b> (ver el punto 5).</li>
+      <li><b>Odontograma:</b> el dibujo de los dientes (numeración FDI), con cinco caras por diente. Marca caries, resinas, coronas, ausentes, implantes y más. Un <b>visto</b> sobre el número indica los dientes ya trabajados: verde si tiene un trabajo guardado, gris si tiene un tratamiento de esta visita todavía sin guardar. Debajo está la <b>Sesión de hoy</b> (ver el punto 5).</li>
       <li><b>Evolución:</b> la nota de cada consulta. No se editan: si hay un error, se escribe una nota nueva que corrige la anterior.</li>
       <li><b>Accesos</b> (solo la dueña): quién abrió o escribió en esa ficha y cuándo.</li></ul></details>
   <details><summary>Caja</summary>
@@ -121,18 +121,32 @@
   <ol class="paso">
     <li><b>Llega una solicitud.</b> Suena el aviso. En <em>Solicitudes</em>, toca <em>Agendar</em>, elige día y hora.</li>
     <li><b>El paciente llega.</b> Búscalo en <em>Pacientes</em>. Si es la primera vez, completa sus datos y registra el consentimiento de tratamiento.</li>
-    <li><b>En la consulta,</b> abre <em>Odontograma</em>. Marca el estado de los dientes que ves.</li>
-    <li><b>Agrega lo que se hizo.</b> En <em>Sesión de hoy</em>, elige el diente y el tratamiento y toca <em>Agregar a la sesión</em>. Repite por cada tratamiento, aunque sean varios en el mismo diente. La lista y el total se arman solos.</li>
-    <li><b>Guarda la sesión.</b> Elige la cita y el doctor, escribe una nota si quieres y toca <em>Guardar sesión</em>. Queda en el <em>Historial de sesiones</em>, con la fecha y lo hecho.</li>
-    <li><b>Proforma.</b> En esa sesión del historial toca <em>Pasar a proforma</em>. Sale un presupuesto con cada tratamiento y los dientes. Envíalo por WhatsApp.</li>
+    <li><b>Marca el odontograma.</b> En <em>Odontograma</em>, elige el estado (caries, resina, endodoncia…) y toca el diente o la cara. Puedes marcar varios dientes seguidos: todo lo que no has guardado aparece en <em>Por guardar</em>, con un botón por diente. Toca <em>Guardar todo</em> cuando termines.</li>
+    <li><b>Sesión de hoy, paso 1: agrega lo que hiciste.</b> Elige el <em>diente o la zona</em> (un diente, toda la boca, arcada superior o arcada inferior) y el tratamiento, y toca <em>Agregar a la sesión</em>. Repite por cada tratamiento. Una limpieza o profilaxis se agrega a «Toda la boca».</li>
+    <li><b>Paso 2: revisa la lista.</b> En <em>Lo que llevas en esta visita</em> aparecen solas las marcas del odontograma (en verde las guardadas, en amarillo las que faltan por guardar) y los tratamientos con su precio y el total. Si algo sobra, toca <em>Quitar</em>.</li>
+    <li><b>Paso 3: guarda la sesión.</b> Elige la cita y el doctor, escribe una nota si quieres y toca <em>Guardar sesión</em>. También guarda lo que haya quedado por guardar en el dibujo. La sesión queda en el <em>Historial de sesiones</em>, con la fecha y lo hecho.</li>
+    <li><b>Proforma.</b> En esa sesión del historial toca <em>Pasar a proforma</em>. Sale un presupuesto con cada tratamiento y los dientes o la zona. Envíalo por WhatsApp.</li>
     <li><b>Cobro.</b> En <em>Caja</em>, registra lo que el paciente paga.</li>
   </ol>
 
   <h2 id="casos">6. Casos frecuentes</h2>
   <details><summary>El paciente ya viene con una corona o le falta un diente</summary>
     <p>Márcalo en el odontograma con su estado (Corona, Ausente, Implante…) y escribe en la nota «previo, de otra clínica». No lo agregues a la sesión, porque eso suma un precio. Al guardar la sesión sin tratamientos, queda el registro con total $0.00.</p></details>
-  <details><summary>En un mismo diente hay varios tratamientos (endodoncia, perno y corona)</summary>
-    <p>Agrega cada uno por separado en <em>Sesión de hoy</em>, con el mismo diente. La proforma los muestra en líneas distintas con el diente anotado. Ojo: el dibujo del diente muestra solo el último estado; el historial guarda todos.</p></details>
+  <details><summary>En un mismo diente hay dos tratamientos (endodoncia y corona, por ejemplo)</summary>
+    <p><b>En el dibujo:</b> marca el primero (endodoncia). Luego marca la casilla <em>Es el 2.º tratamiento de este diente</em>, elige el segundo (corona) y toca el diente. Se suma al primero sin reemplazarlo: el dibujo muestra la corona como un aro de color alrededor del diente.</p>
+    <p><b>En la sesión:</b> agrega cada tratamiento por separado, con el mismo diente. La proforma los muestra en líneas distintas.</p></details>
+  <details><summary>Una limpieza (profilaxis) u otro tratamiento de toda la boca</summary>
+    <p>En el paso 1 de <em>Sesión de hoy</em>, elige <em>Toda la boca</em>, <em>Arcada superior</em> o <em>Arcada inferior</em> en vez de un diente. La fila y la proforma dicen «toda la boca».</p></details>
+  <details><summary>Quiero cambiar o borrar lo que marqué en un diente</summary>
+    <p>La historia clínica no se borra: queda con la fecha y quién la hizo. Lo que sí puedes es corregir lo que se ve.</p>
+    <ul><li><b>Cambiar el estado:</b> marca el estado nuevo; el dibujo muestra el último.</li>
+      <li><b>«Borrar» una marca puesta por error:</b> elige <em>Sano</em> y toca <em>Todo el diente</em> (o la cara, si fue una cara).</li>
+      <li><b>Quitar el 2.º tratamiento:</b> marca la casilla del 2.º tratamiento, elige <em>Sano</em> y toca el diente.</li>
+      <li><b>Un tratamiento de la lista de la sesión:</b> mientras no guardes la sesión, <em>Quitar</em>. Ya guardada, no se edita: se registra una sesión nueva con lo que corresponde.</li></ul></details>
+  <details><summary>Se me olvidó guardar una marca del dibujo</summary>
+    <p>Mira la franja <em>Por guardar</em>, debajo del dibujo: ahí quedan los dientes con cambios sin guardar. Toca <em>Guardar todo</em>. Si cierras la sesión sin guardarlas, <em>Guardar sesión</em> las guarda primero.</p></details>
+  <details><summary>Qué significa el visto sobre el número de un diente</summary>
+    <p>Verde: el diente ya tiene un trabajo guardado (un tratamiento en una sesión, o una resina, endodoncia, corona, brackets, implante o prótesis marcados). Gris: tiene un tratamiento de esta visita que todavía no se guarda. Caries y ausente no llevan visto, porque son diagnóstico y no un trabajo.</p></details>
   <details><summary>Me equivoqué al agregar un tratamiento</summary>
     <p>Mientras no hayas guardado la sesión, toca <em>Quitar</em> en la lista. Una vez guardada, la sesión no se edita: se registra una nueva con lo que corresponde.</p></details>
   <details><summary>Quiero ver cómo estaba el odontograma otro día</summary>

@@ -67,6 +67,8 @@
 .od-d[aria-pressed="true"]{outline:3px solid var(--fx-deep,#111);outline-offset:2px;background:color-mix(in srgb,var(--fx-accent,#c4c7cc) 30%,transparent)}
 .od-d:focus-visible{outline:3px solid var(--fx-deep,#111);outline-offset:2px}
 .od-d.pend .od-n::after{content:"•";color:#C9435A;margin-left:1px}
+.od-n{display:grid;justify-items:center;gap:0}.od-v{font-style:normal;font-weight:900;font-size:1em;line-height:.9;visibility:hidden;color:#1d6b3a}.od-v.ok,.od-v.hoy{visibility:visible}.od-v.hoy{color:#8a8d93;opacity:.9}
+.od-leyenda{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;font:500 .82rem/1.3 var(--fx-font-txt,sans-serif);color:color-mix(in srgb,var(--fx-ink,#111) 70%,#fff)}.od-leyenda .od-v{visibility:visible;margin-right:4px;font-size:.95em}
 .od-inf .od-d{grid-template-rows:auto auto}
 .od-tit{font:700 .8rem/1 var(--fx-font-txt,sans-serif);letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--fx-ink,#111) 60%,#fff);text-align:center;margin-bottom:4px}
 .od-ed{display:grid;gap:18px;grid-template-columns:minmax(0,230px) minmax(0,1fr);align-items:start;padding:18px;border-radius:16px;background:#fff;border:1px solid color-mix(in srgb,var(--fx-ink,#111) 12%,transparent)}
@@ -95,13 +97,14 @@
   function montar(raiz, op) {
     inyectar();
     op = Object.assign({ filas: [], escribir: true, superficies: true, temporales: false, nota: true, aviso: '', msg: e => (e && e.message) || String(e) }, op);
-    let filas = op.filas, sel = 16, selE = 'caries', temp = op.temporales, nota = '', err = '', cola = {}, enviando = false, seg = false;
+    let trab = op.trabajados || {}, filas = op.filas, sel = 16, selE = 'caries', temp = op.temporales, nota = '', err = '', cola = {}, enviando = false, seg = false;
     const avisa = () => { if (op.alCambiar) op.alCambiar(); };
     const hayCola = () => Object.keys(cola).filter(n => (cola[n] || []).length);
     const q = (s, r) => (r || raiz).querySelector(s), qq = (s, r) => [...(r || raiz).querySelectorAll(s)];
 
+    const nn = n => `<span class="od-n"><i class="od-v${trab[n] ? ' ' + trab[n] : ''}" aria-hidden="true">✓</i>${n}</span>`;   // el visto ocupa siempre su lugar para que las filas no se desalineen
     const diente = (n, st, arriba) => { const c = cola[n] || [], v = aplicar(st, c);
-      return `<button type="button" class="od-d${c.length ? ' pend' : ''}" data-n="${n}" aria-pressed="${n === sel}" aria-label="Diente ${n}: ${esc(resumen(aplicar(st, c)))}${c.length ? ' (cambios sin guardar)' : ''}">${arriba ? `<span class="od-n">${n}</span>${svg(n, v)}` : `${svg(n, v)}<span class="od-n">${n}</span>`}</button>`; };
+      return `<button type="button" class="od-d${c.length ? ' pend' : ''}" data-n="${n}" aria-pressed="${n === sel}" data-t="${trab[n] || ''}" aria-label="Diente ${n}: ${esc(resumen(aplicar(st, c)))}${trab[n] === 'ok' ? '. Trabajado: tiene tratamiento guardado' : trab[n] === 'hoy' ? '. Tiene un tratamiento de esta visita sin guardar' : ''}${c.length ? ' (cambios sin guardar)' : ''}">${arriba ? `${nn(n)}${svg(n, v)}` : `${svg(n, v)}${nn(n)}`}</button>`; };
     const arco = (a, R, arriba) => { const h = a.length / 2; return `<div class="od-fila ${arriba ? 'od-sup' : 'od-inf'}"><div class="od-mitad">${a.slice(0, h).map(n => diente(n, R[n], arriba)).join('')}</div><div class="od-mitad">${a.slice(h).map(n => diente(n, R[n], arriba)).join('')}</div></div>`; };
 
     function pintar() {
@@ -113,6 +116,7 @@
           <div class="od-bloque"><p class="od-tit">Dientes permanentes</p>${arco(SUP, R, true)}${arco(INF, R, false)}</div>
           ${temp ? `<div class="od-bloque"><p class="od-tit">Dientes temporales</p>${arco(TSUP, R, true)}${arco(TINF, R, false)}</div>` : ''}
         </div>
+        <p class="od-leyenda no-print"><span><i class="od-v ok" aria-hidden="true">✓</i>Diente trabajado (tiene un tratamiento guardado)</span><span><i class="od-v hoy" aria-hidden="true">✓</i>Con tratamiento de esta visita, sin guardar</span></p>
         <div class="estados no-print" id="od-estados" role="group" aria-label="Estado que vas a marcar">${ESTADOS.map(([k, n, c]) => `<button type="button" class="cb" data-e="${k}" aria-pressed="${k === selE}"><i style="--c:${c}"></i>${n}</button>`).join('')}</div>
         <label class="od-seg no-print"><input type="checkbox" id="od-seg" ${seg ? 'checked' : ''}><span>Es el <b>2.º tratamiento</b> de este diente (se suma al primero, no lo reemplaza)</span></label>
         <div class="od-pend no-print" id="od-pend" role="status" ${hayCola().length ? '' : 'hidden'}><b>Por guardar:</b>${hayCola().map(n => `<button type="button" class="od-chip" data-pn="${n}">${n} · ${cola[n].length} ${cola[n].length === 1 ? 'cambio' : 'cambios'}</button>`).join('')}<button type="button" class="btn" id="od-guardar-todo" ${op.escribir && !enviando ? '' : 'disabled'}>${enviando ? 'Guardando…' : `Guardar todo (${hayCola().reduce((t, n) => t + cola[n].length, 0)})`}</button></div>
@@ -168,7 +172,7 @@
       enviando = false; pintar(); avisa(); return ok;
     }
     pintar();
-    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); }, diente: () => sel, guardarTodo,
+    return { actualizar(f) { filas = f || []; pintar(); }, seleccionar(n) { sel = n; pintar(); }, diente: () => sel, guardarTodo, trabajados(m) { m = m || {}; if (JSON.stringify(m) === JSON.stringify(trab)) return; trab = m; pintar(); },
       pendientes: () => hayCola().flatMap(n => cola[n].map(c => ({ diente: +n, superficie: c.s === '*' ? null : c.s, estado: c.e, capa: c.capa || 1 }))) };
   }
 
