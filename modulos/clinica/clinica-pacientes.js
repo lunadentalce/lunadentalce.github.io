@@ -19,7 +19,7 @@
     try {
       const l = await C.rpc('pacientes_buscar', { p_q: $('#pa-q').value });
       cont.innerHTML = l.length ? l.map(p => `<button type="button" class="sol" data-p="${p.id}" style="text-align:left;cursor:pointer"><h3>${esc(p.nombre)}</h3>
-        <div class="meta"><span>📱 ${esc(tel09(p.telefono))}</span>${p.cedula ? `<span>CI ${esc(p.cedula)}</span>` : ''}<span>${p.citas} ${p.citas === 1 ? 'cita' : 'citas'}</span>${p.ultima ? `<span>Última: ${esc(fechaCorta(p.ultima))}</span>` : ''}${p.proxima ? `<span class="pill ok">Próxima: ${esc(fechaCorta(p.proxima))}</span>` : ''}</div></button>`).join('') : '<p class="vacio">No encontramos pacientes con eso.</p>';
+        <div class="meta"><span class="pill" title="Número de historia clínica">${esc(hc(p.historia))}</span><span>📱 ${esc(tel09(p.telefono))}</span>${p.cedula ? `<span>CI ${esc(p.cedula)}</span>` : ''}<span>${p.citas} ${p.citas === 1 ? 'cita' : 'citas'}</span>${p.ultima ? `<span>Última: ${esc(fechaCorta(p.ultima))}</span>` : ''}${p.proxima ? `<span class="pill ok">Próxima: ${esc(fechaCorta(p.proxima))}</span>` : ''}</div></button>`).join('') : '<p class="vacio">No encontramos pacientes con eso.</p>';
       $$('[data-p]', cont).forEach(b => b.onclick = () => abrir(+b.dataset.p));
     } catch (e) { cont.innerHTML = `<p class="vacio">${esc(msgErr(e))}</p>`; }
   }
@@ -32,6 +32,7 @@
   }
   function volver() { F = null; $('#pa-ficha').hidden = true; $('#pa-buscar').hidden = false; buscar(); }
 
+  const hc = n => n == null ? '' : 'HC-' + String(n).padStart(6, '0');   // número de historia clínica, con ceros a la izquierda
   /* ---------- ficha ---------- */
   function mostrar() {
     $('#pa-buscar').hidden = true; const f = $('#pa-ficha'); f.hidden = false;
@@ -40,11 +41,14 @@
     if (!tabs.some(t => t[0] === sub)) sub = 'datos';
     f.innerHTML = `<div class="no-print" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px"><button type="button" class="cb" id="fi-volver">← Pacientes</button>${nuevo ? '' : `<button type="button" class="cb" id="fi-print">Imprimir ficha</button>`}</div>
       <h2 style="margin-bottom:2px">${nuevo ? 'Nuevo paciente' : esc(F.nombre)}</h2>
-      ${nuevo ? '' : `<p class="sub" style="margin-bottom:10px">${e != null ? `${e} años · ` : ''}📱 ${esc(tel09(F.telefono))} · <a href="${wa(F.telefono, `Hola ${F.nombre.split(' ')[0]}, te escribimos de ${DEMO.cliente}.`)}" target="_blank" rel="noopener">WhatsApp</a> · paciente desde ${esc(fechaCorta(F.creado))}</p>`}
+      ${nuevo ? '' : `<p class="sub" style="margin-bottom:4px"><span id="fi-hc"><b>Historia clínica N.º ${esc(hc(F.historia))}</b>${P.puedePres() ? ' · <button type="button" class="mini no-print" id="fi-hc-cambiar">Cambiar número</button>' : ''}</span></p><p class="sub" style="margin-bottom:10px">${e != null ? `${e} años · ` : ''}📱 ${esc(tel09(F.telefono))} · <a href="${wa(F.telefono, `Hola ${F.nombre.split(' ')[0]}, te escribimos de ${DEMO.cliente}.`)}" target="_blank" rel="noopener">WhatsApp</a> · paciente desde ${esc(fechaCorta(F.creado))}</p>`}
       ${!nuevo && !clin ? '<p class="nota-d" style="margin:0 0 10px">La parte clínica (historia, odontograma, evolución) la ven los doctores y la administración.</p>' : ''}
       <div class="ctrl no-print" role="tablist" aria-label="Secciones de la ficha">${tabs.map(([k, t]) => `<button type="button" class="cb" role="tab" data-sub="${k}" aria-pressed="${k === sub}">${esc(t)}</button>`).join('')}</div>
       <div id="fi-cuerpo"></div>`;
     $('#fi-volver').onclick = volver; const pr = $('#fi-print'); if (pr) pr.onclick = () => { document.body.classList.add('print-ficha'); window.print(); setTimeout(() => document.body.classList.remove('print-ficha'), 500); };
+    { const cb = $('#fi-hc-cambiar'); if (cb) cb.onclick = () => { $('#fi-hc').innerHTML = `<form id="fi-hc-form" class="fila no-print" style="margin:0 0 6px"><div class="campo"><label for="fi-hc-num">Nuevo número de historia (1 a 999999)</label><input id="fi-hc-num" type="number" min="1" max="999999" value="${F.historia}" required></div><button class="btn" type="submit">Guardar número</button><button class="btn btn-linea" type="button" id="fi-hc-no">Cancelar</button></form><p class="err-f" id="fi-hc-err" role="alert"></p>`;
+      $('#fi-hc-no').onclick = () => abrir(F.id, sub);
+      $('#fi-hc-form').onsubmit = async e => { e.preventDefault(); try { await C.rpc('historia_asignar', { p_id: F.id, p_numero: +$('#fi-hc-num').value }); aviso('Número de historia guardado.'); abrir(F.id, sub); } catch (x) { falla('#fi-hc-err', x); } }; }; }
     $$('[data-sub]', f).forEach(b => b.onclick = () => { sub = b.dataset.sub; mostrar(); });
     ({ datos: pDatos, citas: pCitas, cobros: pCobros, clinico: pClinico, odo: pOdo, evo: pEvo, accesos: pAccesos })[sub]();
   }
@@ -95,7 +99,7 @@
       <div class="aviso">Borrador: un asesor legal debe revisar este texto antes de usarlo con pacientes. Esta franja no sale al imprimir.</div>
       <button onclick="window.print()">Imprimir</button>
       <div class="clin">${esc(DEMO.cliente)}</div><h1>${esc(K.titulo)}</h1>
-      <div class="datos"><b>Paciente:</b> ${esc(F.nombre)}${d.cedula ? ` · <b>Cédula:</b> ${esc(d.cedula)}` : ''}${d.nacimiento ? ` · <b>Nacimiento:</b> ${esc(d.nacimiento)}` : ''}<br><b>Celular:</b> ${esc(tel09(F.telefono))}${menor ? `<br><b>Representante legal:</b> ${rep}` : ''}</div>
+      <div class="datos"><b>Paciente:</b> ${esc(F.nombre)} · <b>Historia clínica:</b> ${esc(hc(F.historia))}${d.cedula ? ` · <b>Cédula:</b> ${esc(d.cedula)}` : ''}${d.nacimiento ? ` · <b>Nacimiento:</b> ${esc(d.nacimiento)}` : ''}<br><b>Celular:</b> ${esc(tel09(F.telefono))}${menor ? `<br><b>Representante legal:</b> ${rep}` : ''}</div>
       <p>${menor ? `Yo, ${rep}, representante legal del paciente indicado,` : `Yo, ${esc(F.nombre)},`} declaro lo siguiente:</p>
       ${K.secciones.map(x => `<h2>${esc(x.t)}</h2><p>${sub(esc(x.p))}</p>`).join('')}
       <h2>Fotografías (marca lo que autorizas)</h2><p><span class="caja"></span>${esc(K.imagenes)}</p><p><span class="caja"></span>${esc(K.imagenes_difusion)}</p>
@@ -293,7 +297,7 @@
         button{font:inherit;padding:8px 16px;margin:0 0 10px} ${CLODO.estaticoCSS} @media print{button{display:none}body{padding:0}} @page{size:A4;margin:12mm}</style></head><body>
         <button onclick="window.print()">Imprimir</button>
         <div class="cab"><div><small>${esc(DEMO.cliente)}</small><b>Odontograma y sesión de tratamiento</b></div><div style="text-align:right;font-size:9.5pt">${esc(x.dia)}${x.doctor ? `<br>Doctor/a: ${esc(x.doctor)}` : ''}<br>Registró: ${esc(x.autor || '—')}</div></div>
-        <div class="pac"><span><b>Paciente:</b> ${esc(F.nombre)}</span><span><b>Cédula:</b> ${esc(d.cedula || '—')}</span><span><b>Edad:</b> ${a != null ? a + ' años' : '—'}</span><span><b>Celular:</b> ${esc(tel09(F.telefono))}</span></div>
+        <div class="pac"><span><b>Paciente:</b> ${esc(F.nombre)}</span><span><b>Historia clínica:</b> ${esc(hc(F.historia))}</span><span><b>Cédula:</b> ${esc(d.cedula || '—')}</span><span><b>Edad:</b> ${a != null ? a + ' años' : '—'}</span><span><b>Celular:</b> ${esc(tel09(F.telefono))}</span></div>
         <h2>Odontograma al cierre de esta sesión</h2>${CLODO.estatico(filas, { temporales: (a != null && a < 14) })}
         <h2>Marcas de la sesión</h2>${marcas ? `<table><thead><tr><th>Diente</th><th>Superficie</th><th>Estado</th><th>Nota</th></tr></thead><tbody>${marcas}</tbody></table>` : '<p>No se marcó nada nuevo en el odontograma en esta sesión.</p>'}
         <h2>Tratamientos realizados</h2>${items ? `<table><thead><tr><th>Dónde</th><th>Tratamiento</th><th class="n">Precio</th></tr></thead><tbody>${items}</tbody></table><div class="tot"><span>Total de la sesión</span><span>${usd(x.total)}</span></div>` : '<p>No se agregaron tratamientos con precio en esta sesión.</p>'}

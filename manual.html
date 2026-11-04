@@ -97,8 +97,9 @@
     <p>Aquí llegan las citas que piden los pacientes desde la página. En cada una puedes <b>Agendar</b> (eliges día y hora, y la cita queda confirmada con el doctor), <b>Escribir por WhatsApp</b> al paciente o <b>Descartar</b>. El número en la pestaña dice cuántas hay por atender.</p></details>
   <details><summary>Agenda</summary>
     <p>Las citas de todos los doctores, por día o por semana, con filtro por doctor. Puedes crear una cita nueva, marcarla como atendida, no vino o cancelada, y confirmarla por WhatsApp con un toque.</p></details>
-  <details><summary>Pacientes y su ficha</summary>
-    <p>Busca por nombre, cédula o celular, o crea un paciente nuevo. Cada ficha tiene estas pestañas:</p>
+  <details open><summary>Pacientes y su ficha</summary>
+    <p class="nota"><b>Cada paciente tiene un número de historia clínica que lo identifica</b> (HC-000001, HC-000002…). Se asigna solo al registrarlo y es siempre el mismo, aunque vuelva años después. Lo ves arriba de su ficha, en la lista de pacientes y en las hojas impresas, y sirve para buscarlo.</p>
+    <p>Busca por nombre, cédula, celular o <b>número de historia clínica</b> (por ejemplo «HC-000123» o solo «123»), o crea un paciente nuevo. Cada paciente tiene su <b>número de historia clínica</b>, único y seguido (HC-000001, HC-000002…), que se asigna solo al registrarlo y aparece arriba de la ficha, en la lista y en las hojas impresas. Quienes vuelven cada año conservan el mismo número. La doctora o la dueña pueden cambiarlo con <em>Cambiar número</em> (por ejemplo, para respetar la numeración de las historias en papel); no se puede repetir entre dos pacientes. Cada ficha tiene estas pestañas:</p>
     <ul><li><b>Datos:</b> contacto, representante si es menor, y el <b>consentimiento de tratamiento</b>. Sin ese consentimiento no se puede escribir en la parte clínica. Se puede imprimir para que lo firme.</li>
       <li><b>Citas</b> y <b>Cobros y presupuestos:</b> todo lo que el paciente ha tenido y pagado.</li>
       <li><b>Historia clínica:</b> alergias, medicamentos y antecedentes. Cada cambio guarda una versión nueva; la anterior no se pierde.</li>
@@ -121,7 +122,7 @@
   <h2 id="dia">5. Un día de trabajo, paso a paso</h2>
   <ol class="paso">
     <li><b>Llega una solicitud.</b> Suena el aviso. En <em>Solicitudes</em>, toca <em>Agendar</em>, elige día y hora.</li>
-    <li><b>El paciente llega.</b> Búscalo en <em>Pacientes</em>. Si es la primera vez, completa sus datos y registra el consentimiento de tratamiento.</li>
+    <li><b>El paciente llega.</b> Búscalo en <em>Pacientes</em> por su nombre, cédula, celular o número de historia clínica. Si es la primera vez, completa su ficha (ver «Qué llenar en la ficha de un paciente nuevo», en el punto 6) y registra el consentimiento de tratamiento.</li>
     <li><b>Marca el odontograma.</b> En <em>Odontograma</em>, elige el estado (caries, resina, endodoncia…) y toca el diente o la cara. Puedes marcar varios dientes seguidos: todo lo que no has guardado aparece en <em>Por guardar</em>, con un botón por diente. Toca <em>Guardar todo</em> cuando termines.</li>
     <li><b>Sesión de hoy, paso 1: agrega lo que hiciste.</b> Elige el <em>diente o la zona</em> (un diente, toda la boca, arcada superior o arcada inferior) y el tratamiento, y toca <em>Agregar a la sesión</em>. Repite por cada tratamiento. Una limpieza o profilaxis se agrega a «Toda la boca».</li>
     <li><b>Paso 2: revisa la lista.</b> En <em>Lo que llevas en esta visita</em> aparecen solas las marcas del odontograma (en verde las guardadas, en amarillo las que faltan por guardar) y los tratamientos con su precio y el total. Si algo sobra, toca <em>Quitar</em>.</li>
@@ -132,6 +133,14 @@
   </ol>
 
   <h2 id="casos">6. Casos frecuentes</h2>
+  <details open><summary>Qué llenar en la ficha de un paciente nuevo</summary>
+    <p><b>Pestaña Datos</b> (se guarda con el botón de guardar):</p>
+    <ul><li><b>Obligatorios:</b> nombre y apellido, y celular (10 números que empiezan con 09, por ejemplo 0991234567). Si el paciente es menor de 18 años, también el <b>representante</b> (madre, padre o quien lo autoriza).</li>
+      <li><b>Muy recomendados:</b> cédula, fecha de nacimiento (con ella la ficha calcula la edad y muestra los dientes temporales de los niños), correo, dirección y el contacto de emergencia con su teléfono. La cédula y el celular no se pueden repetir entre dos pacientes.</li>
+      <li><b>Consentimiento de tratamiento:</b> imprímelo, que el paciente (o su representante) lo firme, y regístralo en la ficha indicando quién lo dio. Sin él no se puede marcar el odontograma ni escribir en la parte clínica.</li>
+      <li><b>Número de historia clínica:</b> no hay que escribirlo, se asigna solo al guardar al paciente.</li></ul>
+    <p><b>Pestaña Historia clínica</b> (la llena la doctora en la primera consulta): alergias, medicamentos que toma, antecedentes médicos (enfermedades, cirugías, embarazo), antecedentes odontológicos, hábitos (fuma, bruxismo, higiene) y observaciones. Cada vez que se guarda queda una versión nueva; la anterior no se pierde.</p>
+    <p><b>Después, en cada consulta:</b> odontograma, sesión de hoy y, si hace falta, nota de evolución.</p></details>
   <details><summary>El paciente ya viene con una corona o le falta un diente</summary>
     <p>Márcalo en el odontograma con su estado (Corona, Ausente, Implante…) y escribe en la nota «previo, de otra clínica». No lo agregues a la sesión, porque eso suma un precio. Al guardar la sesión sin tratamientos, queda el registro con total $0.00.</p></details>
   <details><summary>En un mismo diente hay dos tratamientos (endodoncia y corona, por ejemplo)</summary>
