@@ -66,7 +66,7 @@
   .riel button { flex: 1 0 25%; min-height: 60px; border-left: 0; border-bottom: 4px solid transparent; }
   .riel button[aria-selected="true"] { border-bottom-color: var(--fx-rosa, var(--fx-accent)); }
 }
-@media print { body * { visibility: hidden; } .hoja-p, .hoja-p * { visibility: visible; } .hoja-p { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; transform: none; } }
+/* (la regla de impresión de la hoja de presupuesto, .hoja-p, vive solo en la demo clinica.html; aquí ocultaba TODA la página al imprimir la ficha o el resumen) */
 
 /* ---- Equipo y dueño (producción) ---- */
 .puerta-card { max-width: 520px; margin: clamp(10px, 4vw, 40px) auto; background: var(--fx-paper); border-radius: var(--fx-radio, 24px); padding: clamp(22px, 4vw, 36px); box-shadow: 0 24px 60px color-mix(in srgb, var(--fx-ink) 16%, transparent); border: 1px solid color-mix(in srgb, var(--fx-ink) 10%, transparent); display: grid; gap: 14px; }
