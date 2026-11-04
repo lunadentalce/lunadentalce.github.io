@@ -130,7 +130,7 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
   body.print-ficha .app { box-shadow: none; border: 0; display: block; } body.print-ficha .vista[hidden] { display: none !important; } body.print-ficha { background: #fff; }
   /* ficha impresa con la pestaña Odontograma: el dibujo cabe en la hoja, sin los controles de edición ni los avisos */
   body.print-ficha .od { --t: 30px; } body.print-ficha .od-cuadro { overflow: visible; padding-inline: 0; } body.print-ficha .od-fila { gap: 10px; }
-  body.print-ficha .od-ed, body.print-ficha .estados, body.print-ficha .od-seg, body.print-ficha .od-pend, body.print-ficha .od-leyenda, body.print-ficha .ses-barra, body.print-ficha #od-limpiar, body.print-ficha #aviso-clin, body.print-ficha .od-acc { display: none !important; } }
+  body.print-ficha .od-ed, body.print-ficha .estados, body.print-ficha .od-seg, body.print-ficha .od-pend, body.print-ficha .od-leyenda, body.print-ficha .ses-barra, body.print-ficha #od-limpiar, body.print-ficha #pln-barra-wrap, body.print-ficha #aviso-clin, body.print-ficha .od-acc { display: none !important; } }
 
 /* Plan de tratamiento debajo del odontograma */
 .plan-trat { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--fx-line, #E2E3E6); }
@@ -152,8 +152,9 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
 @keyframes ses-recien { from { background: color-mix(in srgb, var(--fx-accent) 55%, transparent); } to { background: color-mix(in srgb, var(--fx-accent) 10%, transparent); } }
 @keyframes ses-recien-t { from { box-shadow: 0 0 0 8px color-mix(in srgb, var(--fx-accent) 60%, transparent); } to { box-shadow: 0 0 0 3px color-mix(in srgb, var(--fx-accent) 70%, transparent); } }
 @media (prefers-reduced-motion: reduce) { .plan-trat tr.recien td, .plan-trat article.recien { animation: none; } }
-.plan-trat .ses-barra { position: sticky; bottom: 10px; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding: 10px 12px 10px 16px; border-radius: 16px; background: var(--fx-deep); color: var(--fx-bg); box-shadow: 0 10px 28px rgba(0, 0, 0, .3); font-size: .95rem; }
-.plan-trat .ses-barra .btn { min-height: 42px; padding: 0 16px; font-size: .92rem; flex: none; }
+#pln-barra-wrap { position: sticky; bottom: 8px; z-index: 6; }
+.ses-barra { position: sticky; bottom: 10px; z-index: 6; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding: 10px 12px 10px 16px; border-radius: 16px; background: var(--fx-deep); color: var(--fx-bg); box-shadow: 0 10px 28px rgba(0, 0, 0, .3); font-size: .95rem; }
+.ses-barra .btn { min-height: 42px; padding: 0 16px; font-size: .92rem; flex: none; }
 @media (max-width: 640px) { .plan-trat #pln-form { grid-template-columns: 1fr; } .plan-trat #pln-form .btn { width: 100%; } .plan-trat .ses-paso { font-size: .98rem; } }
 .plan-trat .ses-marcas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
 

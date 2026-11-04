@@ -9,7 +9,7 @@
         od.actualizar(filas)  ·  filas = [{ id, diente, superficie|null, estado, nota, dia }] (el último estado de cada diente y de cada cara). */
 (() => {
   const ESTADOS = [['sano', 'Sano', '#FFFFFF'], ['caries', 'Caries', '#C9435A'], ['resina', 'Resina', '#4A78C2'], ['endodoncia', 'Endodoncia', '#2E8B6F'], ['corona', 'Corona', '#E0A030'],
-    ['brackets', 'Brackets', '#6B5BA8'], ['implante', 'Implante', '#17A2B8'], ['protesis', 'Prótesis', '#8D6E63'], ['ausente', 'Ausente', '#8E8F94']];
+    ['brackets', 'Brackets', '#6B5BA8'], ['implante', 'Implante', '#17A2B8'], ['protesis', 'Prótesis', '#8D6E63'], ['ausente', 'Ausente', '#8E8F94'], ['extraccion', 'Extracción', '#D32F2F']];
   const ESTADO = Object.fromEntries(ESTADOS.map(e => [e[0], e]));
   const POR_CARA = ['sano', 'caries', 'resina'];   // se marcan por superficie; los demás son del diente completo
   const SUP = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28], INF = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
@@ -19,6 +19,7 @@
   const TXT = { top: [20, 7], bottom: [20, 36], left: [6, 21], right: [34, 21], c: [20, 21] };
   const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const color = e => (ESTADO[e] || ESTADO.sano)[2];
+  const colorCara = e => e === 'extraccion' ? '#FFFFFF' : color(e);   // la extracción no pinta las caras: se marca con una X roja encima
 
   /* qué superficie queda en cada posición del dibujo según el cuadrante FDI (1,2,5,6 = arcada superior; 1,4,5,8 = lado derecho del paciente = izquierda del dibujo) */
   const mapa = n => { const q = Math.floor(n / 10), sup = [1, 2, 5, 6].includes(q), izq = [1, 4, 5, 8].includes(q);
@@ -46,14 +47,15 @@
 
   function svg(n, st, o) {
     o = o || {}; const m = mapa(n), ausente = !!(st && st.todo && st.todo.estado === 'ausente' && !Object.keys(st.caras).length);
-    const polis = Object.entries(PTS).map(([pos, pts]) => { const s = m[pos], e = ausente ? 'sano' : estadoCara(st, s), fondo = ausente ? '#ECECEE' : color(e);
+    const polis = Object.entries(PTS).map(([pos, pts]) => { const s = m[pos], e = ausente ? 'sano' : estadoCara(st, s), fondo = ausente ? '#ECECEE' : colorCara(e);
       const pend = o.cola && o.cola.some(c => c.s === s || c.s === '*');
       const base = `<polygon points="${pts}" fill="${fondo}" ${pend ? 'fill-opacity=".6"' : ''}${o.editor ? ` data-s="${s}" class="od-f"` : ''}/>`;
       if (!o.editor) return base;
       return `<g role="button" tabindex="0" class="od-fg" data-s="${s}" aria-label="${esc(CARA[s])}: ${esc(ESTADO[e][1])}${pend ? ' (cambio pendiente)' : ''}">${base}<text x="${TXT[pos][0]}" y="${TXT[pos][1]}" text-anchor="middle" dominant-baseline="central" class="od-l" fill="${['caries', 'brackets', 'protesis', 'implante', 'ausente', 'endodoncia'].includes(e) ? '#fff' : '#111'}">${s}</text></g>`; }).join('');
     const x = ausente ? '<path d="M3 3 37 37M37 3 3 37" stroke="#555" stroke-width="2" fill="none"/>' : '';
-    const seg = st && st.todo2 && st.todo2.estado !== 'sano' && !ausente ? `<rect x="-.2" y="-.2" width="40.4" height="40.4" rx="3" fill="none" stroke="${color(st.todo2.estado)}" stroke-width="3.4"/>` : '';
-    return `<svg viewBox="-1 -1 42 42" class="od-svg${o.editor ? ' od-grande' : ''}" aria-hidden="${o.editor ? 'false' : 'true'}" focusable="false">${polis}${x}${seg}</svg>`;
+    const extr = st && ((st.todo && st.todo.estado === 'extraccion') || (st.todo2 && st.todo2.estado === 'extraccion')) ? '<path d="M3.5 3.5 36.5 36.5M36.5 3.5 3.5 36.5" stroke="#D32F2F" stroke-width="4" stroke-linecap="round" fill="none"/>' : '';
+    const seg = st && st.todo2 && st.todo2.estado !== 'sano' && st.todo2.estado !== 'extraccion' && !ausente ? `<rect x="-.2" y="-.2" width="40.4" height="40.4" rx="3" fill="none" stroke="${color(st.todo2.estado)}" stroke-width="3.4"/>` : '';
+    return `<svg viewBox="-1 -1 42 42" class="od-svg${o.editor ? ' od-grande' : ''}" aria-hidden="${o.editor ? 'false' : 'true'}" focusable="false">${polis}${x}${extr}${seg}</svg>`;
   }
 
   const CSS = `.od{--t:clamp(24px,calc((100vw - 64px)/17.5),50px);display:grid;gap:18px}
@@ -121,19 +123,18 @@
         <p class="od-leyenda no-print"><span><i class="od-v ok" aria-hidden="true">✓</i>Diente trabajado (tiene un tratamiento guardado)</span><span><i class="od-v hoy" aria-hidden="true">✓</i>Con tratamiento de esta visita, sin guardar</span></p>
         <div class="estados no-print" id="od-estados" role="group" aria-label="Estado que vas a marcar">${ESTADOS.map(([k, n, c]) => `<button type="button" class="cb" data-e="${k}" aria-pressed="${k === selE}"><i style="--c:${c}"></i>${n}</button>`).join('')}</div>
         <label class="od-seg no-print"><input type="checkbox" id="od-seg" ${seg ? 'checked' : ''}><span>Es el <b>2.º tratamiento</b> de este diente (se suma al primero, no lo reemplaza)</span></label>
-        <div class="od-pend no-print" id="od-pend" role="status" ${hayCola().length ? '' : 'hidden'}><b>Por guardar:</b>${hayCola().map(n => `<button type="button" class="od-chip" data-pn="${n}">${n} · ${cola[n].length} ${cola[n].length === 1 ? 'cambio' : 'cambios'}</button>`).join('')}<button type="button" class="btn" id="od-guardar-todo" ${op.escribir && !enviando ? '' : 'disabled'}>${enviando ? 'Guardando…' : `Guardar todo (${hayCola().reduce((t, n) => t + cola[n].length, 0)})`}</button></div>
+        <div class="od-pend no-print" id="od-pend" role="status" ${hayCola().length ? '' : 'hidden'}><b>Por guardar:</b>${hayCola().map(n => `<button type="button" class="od-chip" data-pn="${n}">${n} · ${cola[n].length} ${cola[n].length === 1 ? 'cambio' : 'cambios'}</button>`).join('')}<span class="od-pend-n">Quedan como borrador. Se guardan todos juntos con <b>Guardar sesión</b>, abajo.</span></div>
         <div class="od-ed">
           <div>${svg(sel, v, { editor: true, cola: cl })}</div>
           <div>
             <h3>Diente ${sel}</h3>
             <p class="od-ayuda" style="margin-top:0">${esc(resumen(v))}${st && st.todo && st.todo.dia ? ` · último registro ${esc(st.todo.dia)}` : ''}</p>
             <ul class="od-caras">${Object.entries(CARA).map(([s, nom]) => `<li><i style="--c:${color(estadoCara(v, s))}"></i><b>${s}</b> ${nom}: ${esc(ESTADO[estadoCara(v, s)][1])}${cl.some(c => c.s === s || c.s === '*') ? ' · <em>sin guardar</em>' : ''}</li>`).join('')}</ul>
-            <p class="od-ayuda no-print">${op.superficies ? (porCara ? `Toca una superficie del diente para marcarla como <b>${esc(ESTADO[selE][1].toLowerCase())}</b>.` : `<b>${esc(ESTADO[selE][1])}</b> es del diente completo: toca cualquier superficie para aplicarlo.`) : `Marca el diente completo: toca cualquier superficie. (Para marcar por superficie falta actualizar la base de datos con la migración 011.)`} Se guarda con el botón; cada cambio queda en el historial.</p>
+            <p class="od-ayuda no-print">${op.superficies ? (porCara ? `Toca una superficie del diente para marcarla como <b>${esc(ESTADO[selE][1].toLowerCase())}</b>.` : `<b>${esc(ESTADO[selE][1])}</b> es del diente completo: toca cualquier superficie para aplicarlo.`) : `Marca el diente completo: toca cualquier superficie. (Para marcar por superficie falta actualizar la base de datos con la migración 011.)`} Tus cambios quedan como borrador y se guardan todos juntos con <b>Guardar sesión</b>, abajo.</p>
             <div class="od-acc no-print">
               ${op.nota ? `<div class="campo"><label for="od-nota">Nota (opcional)</label><input id="od-nota" maxlength="200" value="${esc(nota)}" placeholder="ej.: lesión cervical, revisar en el control"></div>` : ''}
               ${porCara ? '<button type="button" class="btn btn-linea" id="od-todo">Todo el diente</button>' : ''}
-              <button type="button" class="btn btn-linea" id="od-deshacer" ${cl.length ? '' : 'disabled'}>Deshacer</button>
-              <button type="button" class="btn" id="od-guardar" ${cl.length && op.escribir && !enviando ? '' : 'disabled'}>${enviando ? 'Guardando…' : cl.length ? `Guardar ${cl.length} ${cl.length === 1 ? 'cambio' : 'cambios'}` : 'Guardar'}</button>
+              <button type="button" class="btn btn-linea" id="od-deshacer" ${cl.length ? '' : 'disabled'}>Deshacer este diente</button>
             </div>
             <p class="od-err" id="od-err" role="alert">${esc(err)}</p>
           </div>
@@ -146,22 +147,13 @@
       const t = q('#od-todo'); if (t) t.onclick = () => marca('*');
       q('#od-seg').onchange = e => { seg = e.target.checked; };
       qq('[data-pn]').forEach(b => b.onclick = () => { sel = +b.dataset.pn; pintar(); if (op.alElegir) op.alElegir(sel); });
-      const gt = q('#od-guardar-todo'); if (gt) gt.onclick = () => guardarTodo();
       q('#od-deshacer').onclick = () => { cola[sel] = []; err = ''; pintar(); avisa(); };
       const i = q('#od-nota'); if (i) i.oninput = () => { nota = i.value; recordar(); };
-      q('#od-guardar').onclick = guardar;
       recordar();
     }
     function marca(s) {   // una cara se marca una vez (la nueva reemplaza a la anterior de esa cara); el diente completo reemplaza todo lo pendiente
       const c = s === '*' ? (seg ? (cola[sel] || []).filter(x => !(x.s === '*' && x.capa === 2)) : []) : (cola[sel] || []).filter(x => x.s !== s);
       c.push({ s, e: selE, capa: s === '*' && seg ? 2 : 1 }); cola[sel] = c; err = ''; pintar(); avisa(); const g = s === '*' ? null : q(`.od-fg[data-s="${s}"]`); if (g) g.focus();
-    }
-    async function guardar() {
-      const cl = cola[sel] || []; if (!cl.length || enviando) return;
-      enviando = true; err = ''; pintar();
-      try { await op.guardar(sel, cl.map(c => ({ superficie: c.s === '*' ? null : c.s, estado: c.e, capa: c.capa || 1 })), nota.trim()); cola[sel] = []; nota = ''; }
-      catch (e) { err = op.msg(e); }
-      enviando = false; pintar(); avisa();
     }
     async function guardarTodo() {   // guarda, diente por diente y en orden, todo lo que quedó por guardar; si uno falla se detiene y lo demás sigue pendiente
       if (enviando) return true;
@@ -188,6 +180,6 @@
     return `<div class="odo"><div class="bloque"><p class="tit">Dientes permanentes</p>${arco(SUP, true)}${arco(INF, false)}</div>${temp ? `<div class="bloque"><p class="tit">Dientes temporales</p>${arco(TSUP, true)}${arco(TINF, false)}</div>` : ''}
       <p class="ley">${ESTADOS.map(([k, n, c]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join('')}<span><i class="aro"></i>Aro de color: 2.º tratamiento del diente</span></p></div>`;
   };
-  const estaticoCSS = '.odo{display:grid;gap:14px;justify-items:center}.bloque{display:grid;gap:6px}.tit{margin:0;text-align:center;font:700 8pt Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#555}.fila{display:flex;gap:14px;justify-content:center}.mitad{display:flex;gap:3px}.d{width:30px;display:grid;gap:2px;justify-items:center;font:700 8pt Arial,sans-serif}.d svg{width:100%;height:auto;display:block}.d polygon{stroke:#111;stroke-width:1.4;stroke-linejoin:round}.ley{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;margin:0;font:8.5pt Arial,sans-serif}.ley i{display:inline-block;width:10px;height:10px;border:1px solid #333;margin-right:4px;vertical-align:-1px}.ley i.aro{background:#fff;border:2.5px solid #E0A030}';
+  const estaticoCSS = '.odo{display:grid;gap:14px;justify-items:center}.bloque{display:grid;gap:6px}.tit{margin:0;text-align:center;font:700 8pt Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#555}.fila{display:flex;gap:14px;justify-content:center}.mitad{display:flex;gap:3px}.d{width:30px;display:grid;gap:2px;justify-items:center;font:700 8pt Arial,sans-serif}.d svg{width:100%;height:auto;display:block}.d polygon{stroke:#111;stroke-width:1.4;stroke-linejoin:round}.ley{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;margin:0;font:8.5pt Arial,sans-serif}.ley i{display:inline-block;width:10px;height:10px;border:1px solid #333;margin-right:4px;vertical-align:-1px}.ley i.aro{background:#fff;border:2.5px solid #E0A030}.ley i.extr{background:#fff;border-color:#D32F2F;color:#D32F2F;font:900 9px/10px Arial;text-align:center}';
   window.CLODO = { estatico, estaticoCSS, ESTADOS, ESTADO, POR_CARA, CARA, SUP, INF, TSUP, TINF, mapa, resolver, aplicar, resumen, svg, montar };
 })();

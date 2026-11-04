@@ -41,7 +41,7 @@
     leer: () => { let e = ODO_MEM[id]; if (!e) { try { const x = JSON.parse(localStorage.getItem(CLAVE_COLA(id)) || 'null'); if (x && Date.now() - x.t < 12 * 3600e3) e = ODO_MEM[id] = { cola: x.cola }; else if (x) localStorage.removeItem(CLAVE_COLA(id)); } catch (x) { /* sin almacenamiento */ } } return e || null; },
     guardar: s => { ODO_MEM[id] = s; try { if (colaVacia(s.cola)) localStorage.removeItem(CLAVE_COLA(id)); else localStorage.setItem(CLAVE_COLA(id), JSON.stringify({ t: Date.now(), cola: s.cola })); } catch (x) { /* sin almacenamiento */ } }
   });
-  window.CLPACIENTES = { olvidarCambios: () => { try { Object.keys(localStorage).filter(k => k.startsWith('odo_cola_')).forEach(k => localStorage.removeItem(k)); } catch (x) { /* nada */ } } };
+  window.CLPACIENTES = { guardarMarcas: () => (odoUI ? odoUI.guardarTodo() : false), olvidarCambios: () => { try { Object.keys(localStorage).filter(k => k.startsWith('odo_cola_')).forEach(k => localStorage.removeItem(k)); } catch (x) { /* nada */ } } };
   /* ---------- ficha ---------- */
   function mostrar() {
     $('#pa-buscar').hidden = true; const f = $('#pa-ficha'); f.hidden = false;
@@ -169,7 +169,7 @@
       return;
     }
     const a = edad(F.datos && F.datos.nacimiento);
-    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p><div class="no-print" id="od-limpiar"></div><section class="plan-trat" id="pln" aria-labelledby="pln-h"></section>`;
+    $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p><div class="no-print" id="od-limpiar"></div><section class="plan-trat" id="pln" aria-labelledby="pln-h"></section><div id="pln-barra-wrap" class="no-print"></div>`;
     odoUI = CLODO.montar($('#od-raiz'), { persistir: persistirOdo(F.id), filas: ODO, escribir: consiente(), superficies: odoSup, temporales: (a != null && a < 14) || ODO.some(o => o.diente > 50), msg: msgErr, alCambiar: () => pintarMarcasSes(), alElegir: n => { const s = $('#pln-d'); if (s) s.value = String(n); },
       aviso: odoSup ? '' : 'Marcar por superficie queda pendiente de actualizar la base de datos (migración 011). Por ahora se marca el diente completo.',
       guardar: async (diente, cambios, nota) => {
@@ -188,7 +188,24 @@
   const lugar = i => i.zona ? ZONA[i.zona] : i.diente;   // un renglón del plan es de un diente o de una zona (profilaxis: toda la boca)
   const ETQ = e => (CLODO.ESTADO[e] || [])[1] || e;
   /* marcas del odontograma de esta visita: las ya guardadas (entran solas a la sesión) y las que todavía están por guardar en el dibujo */
-  let PLAN_M = [];
+  let PLAN_M = [], PLAN_L = { items: [], total: 0 }, guardandoSesion = false;
+  /* El único botón de guardar de la ficha: «Guardar sesión». Va pegado abajo y siempre a la vista; guarda de una vez las marcas del odontograma que estén por guardar, los tratamientos y el total. */
+  function pintarBarra() {
+    const w = $('#pln-barra-wrap'); if (!w) return;
+    const pend = odoUI ? odoUI.pendientes() : [], nM = PLAN_M.length + pend.length, nT = (PLAN_L.items || []).length, algo = nM + nT > 0;
+    w.innerHTML = `<div class="ses-barra" role="group" aria-label="Guardar la sesión"><span>${algo ? `<b>${nM}</b> ${nM === 1 ? 'marca' : 'marcas'} · <b>${nT}</b> ${nT === 1 ? 'tratamiento' : 'tratamientos'} · <b>${usd(PLAN_L.total)}</b> · sin guardar` : 'Marca el odontograma o agrega tratamientos; aquí se guarda todo.'}</span>
+      <button type="button" class="btn" id="pln-guardar" ${consiente() && algo && !guardandoSesion ? '' : 'disabled'}>${guardandoSesion ? 'Guardando…' : 'Guardar sesión'}</button></div>`;
+    $('#pln-guardar').onclick = guardarSesion;
+  }
+  async function guardarSesion() {
+    if (guardandoSesion) return;
+    const val = id => { const e = $(id); return e ? e.value : ''; }, err = t => { const e = $('#pln-err'); if (e) e.textContent = t; };
+    err(''); guardandoSesion = true; pintarBarra();
+    const datos = { p_id: F.id, p_cita: val('#pln-cita') ? +val('#pln-cita') : null, p_doctor: val('#pln-doc') ? +val('#pln-doc') : null, p_nota: val('#pln-nota') };   // se leen antes: guardar las marcas vuelve a pintar el panel
+    if (odoUI && odoUI.pendientes().length && !(await odoUI.guardarTodo())) { guardandoSesion = false; pintarBarra(); err('No se pudo guardar una marca del odontograma: revisa el aviso rojo del dibujo y vuelve a intentar.'); return; }
+    try { const x = await C.rpc('sesion_guardar', datos); guardandoSesion = false; aviso(`Sesión guardada: ${usd(x.total)}. Quedó en el «Historial de sesiones» de abajo.`); pintarPlan({ sesion: true }); }
+    catch (x) { guardandoSesion = false; pintarBarra(); falla('#pln-err', x); }
+  }
   const RESTAURA = ['resina', 'endodoncia', 'corona', 'brackets', 'implante', 'protesis'];   // estados que ya son un trabajo hecho (caries y ausente son diagnóstico)
   function marcarTrabajados(L, H) {   // visto chico sobre el número del diente: ok = ya tiene un trabajo guardado; hoy = tratamiento de esta visita todavía sin guardar
     const m = {};
@@ -204,7 +221,7 @@
     c.innerHTML = PLAN_M.length || pend.length ? `${PLAN_M.map(m => `<span class="pill ok" title="Guardada en el odontograma">${esc(txtMarca(m))}</span>`).join('')}${pend.map(m => `<span class="pill esp" title="Todavía no se guardó">${esc(txtMarca(m))} · sin guardar</span>`).join('')}`
       : '<span class="nota-d">Todavía no hay marcas. Toca un diente en el dibujo de arriba y márcalo.</span>';
     const t = $('#pln-marcas'); if (t) t.textContent = `Se guardarán con esta sesión: ${$$('#pln-tabla tbody [data-it]').length} tratamiento(s) y ${PLAN_M.length + pend.length} marca(s) del odontograma.`;
-    const g = $('#pln-guardar'); if (g && !g.dataset.ocupado) g.disabled = !(consiente() && ($$('#pln-tabla tbody [data-it]').length || PLAN_M.length || pend.length));
+    pintarBarra();
   }
   /* limpiar el odontograma: el dibujo vuelve a empezar, pero las marcas, las sesiones y las proformas se conservan (solo administración y doctor) */
   let limpiando = false;
@@ -232,7 +249,7 @@
     const temp = ODO.some(o => o.diente > 50) || (edad(F.datos && F.datos.nacimiento) != null && edad(F.datos.nacimiento) < 14), sel = odoUI ? odoUI.diente() : 16;
     const dientes = [...CLODO.SUP, ...CLODO.INF, ...(temp ? [...CLODO.TSUP, ...CLODO.TINF] : [])].sort((a, b) => a - b), tar = P.tar().filter(t => t.activo !== false);
     const docs = P.docs().filter(d => d.activo), citas = F.citas.filter(c => c.estado !== 'cancelada'), puede = P.puedeProforma(), conH = H !== null;
-    PLAN_M = L.marcas || [];
+    PLAN_M = L.marcas || []; PLAN_L = L;
     marcarTrabajados(L, H);
     pintarLimpiar(L);
     const piezas = it => it.map(i => `<li>${esc(lugar(i))} · ${esc(i.descripcion)} · ${usd(i.precio)}</li>`).join('');
@@ -246,12 +263,10 @@
       <p class="nota-d" style="margin:14px 0 4px"><b>Tratamientos</b> · con su precio:</p>
       <div style="overflow-x:auto"><table class="tabla" id="pln-tabla"><thead><tr><th>Dónde</th><th>Tratamiento</th><th class="n">Precio</th><th></th></tr></thead><tbody>${L.items.map(i => `<tr data-it="${i.id}"${foco && foco.item === i.id ? ' class="recien"' : ''}><td>${esc(lugar(i))}</td><td>${esc(i.descripcion)}</td><td class="n">${usd(i.precio)}</td><td class="no-print"><button type="button" class="mini" data-pq="${i.id}" aria-label="Quitar ${esc(i.descripcion)} de ${i.zona ? esc(ZONA[i.zona].toLowerCase()) : 'diente ' + i.diente}">Quitar</button></td></tr>`).join('') || '<tr><td colspan="4">Todavía no hay tratamientos en esta visita. Elige un diente y un tratamiento arriba y pulsa «Agregar a la sesión».</td></tr>'}</tbody></table></div>
       <div class="tot" style="display:flex;justify-content:space-between;font:800 1.2rem var(--fx-font-disp);padding-top:8px;margin-top:6px;border-top:2px solid var(--fx-deep)"><span>Total de la sesión</span><span id="pln-total">${usd(L.total)}</span></div>
-      ${L.items.length ? `<div class="ses-barra no-print" id="pln-barra"><span><b>${L.items.length}</b> en esta visita · <b>${usd(L.total)}</b> · sin guardar</span><button type="button" class="btn" id="pln-ir">Ir a guardar ↓</button></div>` : ''}
-      ${conH ? `<p class="ses-paso"><b>3</b>Guarda la sesión</p><p class="nota-d" id="pln-marcas">Se guardarán con esta sesión: ${L.items.length} tratamiento(s) y ${L.marcas_nuevas || 0} marca(s) nueva(s) del odontograma.</p>
+      ${conH ? `<p class="ses-paso"><b>3</b>Cita, doctor y nota (opcional)</p><p class="nota-d" id="pln-marcas">Todo se guarda de una vez con el botón <b>Guardar sesión</b>, que queda siempre a la vista abajo.</p>
       <div class="fila no-print"><div class="campo"><label for="pln-cita">Cita</label><select id="pln-cita"><option value="">Sin cita</option>${citas.map(c => `<option value="${c.id}">${esc(fechaCorta(c.dia))} ${esc(c.hora)} · ${esc(c.servicio)}</option>`).join('')}</select></div>
         <div class="campo"><label for="pln-doc">Doctor</label><select id="pln-doc"><option value="">—</option>${docs.map(d => `<option value="${d.id}">${esc(d.nombre)}</option>`).join('')}</select></div>
-        <div class="campo" style="grid-column:1/-1"><label for="pln-nota">Nota de la sesión (opcional)</label><input id="pln-nota" maxlength="300"></div>
-        <button type="button" class="btn" id="pln-guardar" ${consiente() && (L.items.length || L.marcas_nuevas) ? '' : 'disabled'}>Guardar sesión</button></div>
+        <div class="campo" style="grid-column:1/-1"><label for="pln-nota">Nota de la sesión (opcional)</label><input id="pln-nota" maxlength="300"></div></div>
       <h3 id="ses-h" style="font:800 1.15rem var(--fx-font-disp);margin:26px 0 8px">Historial de sesiones</h3>
       ${foco && foco.sesion && H[0] ? `<div class="ses-ok no-print" role="status"><span><b>✓ Sesión guardada.</b> ¿Quieres imprimir el odontograma con todo lo de esta sesión?</span><button type="button" class="btn" data-imp="${H[0].id}">Imprimir odontograma y sesión</button></div>` : ''}
       ${(L.reinicios || []).map(r => `<p class="nota-d" style="margin:0 0 6px">🧹 Odontograma limpiado el ${esc(r.dia)}${r.quien ? ' por ' + esc(r.quien) : ''}: ${esc(r.motivo)}. Las sesiones anteriores se conservan abajo.</p>`).join('')}
@@ -268,17 +283,11 @@
       try { idn = await C.rpc('plan_agregar', zona ? { p_id: F.id, p_diente: null, p_tarifario: +$('#pln-tr').value, p_zona: zona } : { p_id: F.id, p_diente: +dn, p_tarifario: +$('#pln-tr').value }); } catch (x) { falla('#pln-err', x); return; }
       aviso(`Agregado a la lista de esta visita: ${nom} · ${donde}.`); pintarPlan({ item: idn }); };
     $$('[data-pq]', r).forEach(b => b.onclick = async () => { try { await C.rpc('plan_quitar', { p_item: +b.dataset.pq }); aviso('Quitado de la visita.'); } catch (x) { falla('#pln-err', x); } pintarPlan(); });
-    const g = $('#pln-guardar'); if (g) g.onclick = async () => { $('#pln-err').textContent = ''; g.disabled = true; g.dataset.ocupado = '1';
-      const datos = { p_id: F.id, p_cita: $('#pln-cita').value ? +$('#pln-cita').value : null, p_doctor: $('#pln-doc').value ? +$('#pln-doc').value : null, p_nota: $('#pln-nota').value };   // se leen antes: guardar las marcas vuelve a pintar el panel
-      if (odoUI && odoUI.pendientes().length && !(await odoUI.guardarTodo())) { delete g.dataset.ocupado; g.disabled = false; $('#pln-err').textContent = 'No se pudo guardar una marca del odontograma: revisa el aviso rojo del dibujo y vuelve a intentar.'; return; }
-      try { const x = await C.rpc('sesion_guardar', datos); aviso(`Sesión guardada: ${usd(x.total)}. Quedó en el «Historial de sesiones» de abajo.`); pintarPlan({ sesion: true }); }
-      catch (x) { falla('#pln-err', x); delete g.dataset.ocupado; g.disabled = false; } };
     pintarMarcasSes();
     $$('[data-imp]', r).forEach(b => b.onclick = () => imprimirSesion(+b.dataset.imp));
     $$('[data-oda]', r).forEach(b => b.onclick = async () => { const cont = $(`[data-odb="${b.dataset.oda}"]`, r); if (cont.innerHTML) { cont.innerHTML = ''; return; }
       try { const f = await C.rpc('odontograma_en', { p_sesion: +b.dataset.oda }); cont.innerHTML = '<p class="nota-d">Así estaba el odontograma al cerrar esa sesión (solo lectura).</p><div class="od-hist"></div>';
         CLODO.montar($('.od-hist', cont), { filas: f, escribir: false, superficies: true, temporales: f.some(o => o.diente > 50), msg: msgErr, guardar: async () => {} }); } catch (x) { falla('#pln-err', x); } });
-    const ir = $('#pln-ir'); if (ir) ir.onclick = () => { const g2 = $('#pln-guardar'); if (g2) g2.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); };
     if (foco) { const quiere = foco.item ? $(`[data-it="${foco.item}"]`, r) : foco.sesion ? $('[data-ses]', r) : null; if (quiere) { if (foco.sesion) quiere.classList.add('recien'); quiere.scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } }
     $$('[data-pro]', r).forEach(b => b.onclick = async () => { $('#pln-err').textContent = '';
       try { const x = await C.rpc('sesion_a_presupuesto', { p_sesion: +b.dataset.pro, p_doctor: null, p_descuento: Math.round(+$(`[data-dsc="${b.dataset.pro}"]`).value || 0), p_seguimiento: null }); aviso(`Proforma creada: ${usd(x.total)}.`); abrir(F.id, 'cobros'); }
