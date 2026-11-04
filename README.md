@@ -24,3 +24,5 @@ Sitio estático (HTML/CSS/JS sin build) publicado en GitHub Pages. La base es Su
 - Caja, presupuestos y sellos son inmutables: se corrigen con anulación. El precio de un presupuesto sale del tarifario en SQL, no del navegador.
 - **La ficha clínica guarda datos de salud (sensibles, LOPDP):** solo la ven administración y doctores, exige el consentimiento del paciente, no se edita ni se borra (se corrige con una nota nueva) y cada acceso queda en la auditoría. Antes de usarla con pacientes reales: revisión legal de `privacidad.html`, política de respaldos y formato de consentimiento firmado en persona. Radiografías y fotos no están incluidas.
 - Pruebas del módulo: `PG_URI=… python3 modulos/clinica/probar.py` (en el repo de la agencia, `landing-base`).
+
+Última publicación: odontograma con Extracción (X roja) y un solo botón Guardar sesión.
