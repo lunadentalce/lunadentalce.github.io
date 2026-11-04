@@ -127,7 +127,10 @@ button.sol { font: inherit; color: inherit; border: 1px solid color-mix(in srgb,
 button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--fx-accent) 50%, transparent); }
 .sol p { max-width: 70ch; }
 @media print { body.print-ficha header.cabecera, body.print-ficha .riel, body.print-ficha .barra-sesion, body.print-ficha .cab-pag, body.print-ficha .no-print, body.print-ficha footer { display: none !important; }
-  body.print-ficha .app { box-shadow: none; border: 0; display: block; } body.print-ficha .vista[hidden] { display: none !important; } body.print-ficha { background: #fff; } }
+  body.print-ficha .app { box-shadow: none; border: 0; display: block; } body.print-ficha .vista[hidden] { display: none !important; } body.print-ficha { background: #fff; }
+  /* ficha impresa con la pestaña Odontograma: el dibujo cabe en la hoja, sin los controles de edición ni los avisos */
+  body.print-ficha .od { --t: 30px; } body.print-ficha .od-cuadro { overflow: visible; padding-inline: 0; } body.print-ficha .od-fila { gap: 10px; }
+  body.print-ficha .od-ed, body.print-ficha .estados, body.print-ficha .od-seg, body.print-ficha .od-pend, body.print-ficha .od-leyenda, body.print-ficha .ses-barra, body.print-ficha #od-limpiar, body.print-ficha #aviso-clin, body.print-ficha .od-acc { display: none !important; } }
 
 /* Plan de tratamiento debajo del odontograma */
 .plan-trat { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--fx-line, #E2E3E6); }

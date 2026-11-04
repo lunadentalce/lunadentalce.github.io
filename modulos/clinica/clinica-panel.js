@@ -207,7 +207,7 @@ async function cargarBase() {
 async function iniciar(yo) {
   YO = yo; $('#s-rol').textContent = { admin: 'Administración', doctor: 'Doctor', recepcion: 'Recepción' }[yo.rol] || yo.rol; $('#s-nombre').textContent = yo.nombre;
   { const d = $('#s-dueno'); if (d) d.hidden = yo.rol !== 'admin'; }
-  $('#s-salir').onclick = () => { C.staff.salir(); location.reload(); };
+  $('#s-salir').onclick = () => { if (window.CLPACIENTES) CLPACIENTES.olvidarCambios(); C.staff.salir(); location.reload(); };
   try { await cargarBase(); } catch (e) { aviso(msgErr(e), 'mal'); }
   try { const cfg = await C.rpc('config_admin'); const hs = (cfg.horario || []).filter(h => h.abre); if (hs.length) HORARIO = { paso: +(cfg.config || {}).paso_min || 30, h0: Math.min(...hs.map(h => +h.abre.slice(0, 2))), h1: Math.max(...hs.map(h => Math.ceil(+h.cierra.slice(0, 2) + (+h.cierra.slice(3, 5) ? .5 : 0)))) }; } catch (e) { /* horario por defecto 8–17 */ }
   pintarPres(); ir(tabs[0]);

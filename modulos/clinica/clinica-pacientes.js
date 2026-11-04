@@ -33,6 +33,15 @@
   function volver() { F = null; $('#pa-ficha').hidden = true; $('#pa-buscar').hidden = false; buscar(); }
 
   const hc = n => n == null ? '' : 'HC-' + String(n).padStart(6, '0');   // número de historia clínica, con ceros a la izquierda
+  /* Estado del odontograma por paciente: pestaña, diente elegido y cambios por guardar. Los cambios por guardar también se guardan en este dispositivo (12 h) para que no se pierdan
+     si se cambia de pestaña, se recarga o el celular cierra la página; se borran al guardarlos, al limpiar el odontograma y al salir. */
+  const ODO_MEM = {}, CLAVE_COLA = id => `odo_cola_${(DEMO.clinica && DEMO.clinica.schema) || 'clinica'}_${id}`;
+  const colaVacia = c => !Object.keys(c || {}).some(n => (c[n] || []).length);
+  const persistirOdo = id => ({
+    leer: () => { let e = ODO_MEM[id]; if (!e) { try { const x = JSON.parse(localStorage.getItem(CLAVE_COLA(id)) || 'null'); if (x && Date.now() - x.t < 12 * 3600e3) e = ODO_MEM[id] = { cola: x.cola }; else if (x) localStorage.removeItem(CLAVE_COLA(id)); } catch (x) { /* sin almacenamiento */ } } return e || null; },
+    guardar: s => { ODO_MEM[id] = s; try { if (colaVacia(s.cola)) localStorage.removeItem(CLAVE_COLA(id)); else localStorage.setItem(CLAVE_COLA(id), JSON.stringify({ t: Date.now(), cola: s.cola })); } catch (x) { /* sin almacenamiento */ } }
+  });
+  window.CLPACIENTES = { olvidarCambios: () => { try { Object.keys(localStorage).filter(k => k.startsWith('odo_cola_')).forEach(k => localStorage.removeItem(k)); } catch (x) { /* nada */ } } };
   /* ---------- ficha ---------- */
   function mostrar() {
     $('#pa-buscar').hidden = true; const f = $('#pa-ficha'); f.hidden = false;
@@ -161,7 +170,7 @@
     }
     const a = edad(F.datos && F.datos.nacimiento);
     $('#fi-cuerpo').innerHTML = `${bannerConsent()}<div id="od-raiz"></div><p class="nota-d">Cada marca queda en el historial y no se edita; el dibujo muestra el último estado de cada diente y de cada superficie.</p><div class="no-print" id="od-limpiar"></div><section class="plan-trat" id="pln" aria-labelledby="pln-h"></section>`;
-    odoUI = CLODO.montar($('#od-raiz'), { filas: ODO, escribir: consiente(), superficies: odoSup, temporales: (a != null && a < 14) || ODO.some(o => o.diente > 50), msg: msgErr, alCambiar: () => pintarMarcasSes(), alElegir: n => { const s = $('#pln-d'); if (s) s.value = String(n); },
+    odoUI = CLODO.montar($('#od-raiz'), { persistir: persistirOdo(F.id), filas: ODO, escribir: consiente(), superficies: odoSup, temporales: (a != null && a < 14) || ODO.some(o => o.diente > 50), msg: msgErr, alCambiar: () => pintarMarcasSes(), alElegir: n => { const s = $('#pln-d'); if (s) s.value = String(n); },
       aviso: odoSup ? '' : 'Marcar por superficie queda pendiente de actualizar la base de datos (migración 011). Por ahora se marca el diente completo.',
       guardar: async (diente, cambios, nota) => {
         try {

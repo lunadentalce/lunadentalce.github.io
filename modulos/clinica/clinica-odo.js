@@ -98,6 +98,8 @@
     inyectar();
     op = Object.assign({ filas: [], escribir: true, superficies: true, temporales: false, nota: true, aviso: '', msg: e => (e && e.message) || String(e) }, op);
     let trab = op.trabajados || {}, filas = op.filas, sel = 16, selE = 'caries', temp = op.temporales, nota = '', err = '', cola = {}, enviando = false, seg = false;
+    if (op.persistir) { const e = op.persistir.leer(); if (e) { sel = e.sel || sel; selE = e.selE || selE; seg = !!e.seg; nota = e.nota || ''; cola = e.cola || {}; if (e.temp != null) temp = e.temp; } }   // al volver a la pestaña, el dibujo sigue como se dejó
+    const recordar = () => { if (op.persistir) op.persistir.guardar({ sel, selE, seg, nota, temp, cola }); };
     const avisa = () => { if (op.alCambiar) op.alCambiar(); };
     const hayCola = () => Object.keys(cola).filter(n => (cola[n] || []).length);
     const q = (s, r) => (r || raiz).querySelector(s), qq = (s, r) => [...(r || raiz).querySelectorAll(s)];
@@ -146,8 +148,9 @@
       qq('[data-pn]').forEach(b => b.onclick = () => { sel = +b.dataset.pn; pintar(); if (op.alElegir) op.alElegir(sel); });
       const gt = q('#od-guardar-todo'); if (gt) gt.onclick = () => guardarTodo();
       q('#od-deshacer').onclick = () => { cola[sel] = []; err = ''; pintar(); avisa(); };
-      const i = q('#od-nota'); if (i) i.oninput = () => { nota = i.value; };
+      const i = q('#od-nota'); if (i) i.oninput = () => { nota = i.value; recordar(); };
       q('#od-guardar').onclick = guardar;
+      recordar();
     }
     function marca(s) {   // una cara se marca una vez (la nueva reemplaza a la anterior de esa cara); el diente completo reemplaza todo lo pendiente
       const c = s === '*' ? (seg ? (cola[sel] || []).filter(x => !(x.s === '*' && x.capa === 2)) : []) : (cola[sel] || []).filter(x => x.s !== s);
