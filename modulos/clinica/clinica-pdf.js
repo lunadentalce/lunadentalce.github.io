@@ -1,9 +1,9 @@
 /* clinica-pdf.js · arma el PDF del presupuesto (clínica, paciente, cada tratamiento con su precio y el total) y lo envía por WhatsApp.
    Sin librerías: escribe el PDF a mano con las fuentes estándar (Helvetica) y codificación WinAnsi, así que las tildes y la ñ salen bien.
-   Uso: CLPDF.presupuesto({ clinica, ciudad, telefono, paciente, doctor, fecha, items: [{ descripcion, cant, precio }], descuento, total, seguimiento }) → Blob (application/pdf)
-        CLPDF.enviar({ blob, nombre, texto, telefono, wa }) → 'compartido' | 'descargado' | 'cancelado'
-   En celular y tablet abre el menú de compartir con el PDF adjunto (WhatsApp, entre otros); en computador descarga el PDF y abre el chat con el mensaje, para adjuntarlo.
-   WhatsApp no deja adjuntar un archivo desde un enlace: por eso es el menú de compartir o adjuntar a mano. Todo lo que viene de la base se escribe como texto del PDF (no es HTML). */
+   Uso: CLPDF.presupuesto({ corto, clinica, ciudad, telefono, paciente, doctor, fecha, ref, items: [{ descripcion, cant, precio }], descuento, total, seguimiento }) → Blob (application/pdf)
+        CLPDF.enviar({ blob, nombre, texto, enlace, telefono, wa }) → 'compartido' | 'enlace' | 'cancelado'
+   En celular y tablet abre el menú de compartir con el PDF adjunto (WhatsApp, entre otros). Donde el navegador no puede adjuntar archivos (computador), WhatsApp recibe un mensaje con un ENLACE
+   al presupuesto (presupuesto.html): ahí el paciente ve el detalle y descarga el PDF con un toque. WhatsApp no deja adjuntar un archivo desde un enlace de una página web. Todo lo que viene de la base se escribe como texto del PDF (no es HTML). */
 (() => {
   const AN = [278, 278, 355, 556, 556, 889, 667, 191, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556, 556, 556, 556, 556, 556, 556, 556, 278, 278, 584, 584, 584, 556, 1015, 667, 667, 722, 722, 667, 611, 778, 722, 278, 500, 667, 556, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 278, 278, 278, 469, 556, 333, 556, 556, 500, 556, 556, 278, 556, 556, 222, 222, 500, 222, 833, 556, 556, 556, 556, 333, 500, 278, 556, 500, 722, 500, 500, 500, 334, 260, 334, 584];
   const NE = [278, 333, 474, 556, 556, 889, 722, 238, 333, 333, 389, 584, 278, 333, 278, 278, 556, 556, 556, 556, 556, 556, 556, 556, 556, 556, 333, 333, 584, 584, 584, 611, 975, 722, 722, 722, 722, 667, 611, 778, 722, 278, 556, 722, 611, 833, 722, 778, 667, 778, 722, 667, 611, 722, 667, 944, 667, 667, 611, 333, 278, 333, 584, 556, 333, 556, 611, 556, 611, 556, 333, 611, 611, 278, 278, 556, 278, 889, 611, 611, 611, 611, 389, 556, 333, 611, 556, 778, 556, 556, 500, 389, 280, 389, 584];
@@ -35,7 +35,7 @@
     t(M, A4[1] - 46, d.corto || d.clinica || 'Presupuesto', 2, 24, '1 1 1');
     if (d.corto && d.clinica && d.clinica !== d.corto) t(M, A4[1] - 66, d.clinica, 1, 9.5, '0.82 0.82 0.84');
     t(M, A4[1] - 82, [d.ciudad, d.telefono].filter(Boolean).join(' · '), 1, 9.5, '0.82 0.82 0.84');
-    t(DER, A4[1] - 46, 'PRESUPUESTO', 2, 13, ORO, 'der'); t(DER, A4[1] - 66, d.fecha || '', 1, 10, '0.82 0.82 0.84', 'der');
+    t(DER, A4[1] - 46, 'PRESUPUESTO' + (d.ref ? ' N.º ' + d.ref : ''), 2, 13, ORO, 'der'); t(DER, A4[1] - 66, d.fecha || '', 1, 10, '0.82 0.82 0.84', 'der');
     y = A4[1] - 146;
     t(M, y, 'Paciente', 1, 9, GRIS); t(M, y - 15, d.paciente || '', 2, 13);
     if (d.doctor) { t(DER, y, 'Doctor', 1, 9, GRIS, 'der'); t(DER, y - 15, d.doctor, 2, 13, NEG, 'der'); }
@@ -76,16 +76,24 @@
   }
 
   const limpio = t => base(String(t || '')).replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  /* Enlace al presupuesto: lleva los datos en el «#» de la dirección (el navegador no los manda a ningún servidor), así que se abre en cualquier teléfono y ahí se descarga el PDF. */
+  const b64 = t => btoa(String.fromCharCode(...new TextEncoder().encode(t))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const deb64 = t => new TextDecoder().decode(Uint8Array.from(atob(t.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
+  const enlace = (d, pagina) => { const o = { n: d.paciente || '', f: d.fechaIso || '', d: d.doctor || '', i: (d.items || []).map(x => [x.descripcion, +x.cant || 1, +x.precio || 0]), x: +d.descuento || 0, t: +d.total || 0, s: d.seguimientoIso || '', r: d.ref || '' };
+    return new URL(pagina || 'presupuesto.html', location.href).href.split('#')[0] + '#d=' + b64(JSON.stringify(o)); };
+  const leerEnlace = hash => { try { const m = /(?:^|[#&])d=([^&]+)/.exec(hash || ''); if (!m) return null; const o = JSON.parse(deb64(m[1]));
+    return { paciente: String(o.n || ''), fechaIso: String(o.f || ''), doctor: String(o.d || ''), items: (Array.isArray(o.i) ? o.i : []).slice(0, 40).map(r => ({ descripcion: String(r[0] || ''), cant: Math.max(1, Math.min(99, +r[1] || 1)), precio: Math.max(0, +r[2] || 0) })), descuento: Math.max(0, Math.min(100, +o.x || 0)), total: Math.max(0, +o.t || 0), seguimientoIso: String(o.s || ''), ref: String(o.r || '') }; } catch (e) { return null; } };
+  const descargar = (blob, nombre) => { const url = URL.createObjectURL(blob), a = document.createElement('a'); a.href = url; a.download = nombre; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000); };
   async function enviar(o) {
     const nombre = o.nombre || 'Presupuesto.pdf', file = new File([o.blob], nombre, { type: 'application/pdf' });
     const tactil = /android|iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
     if (tactil && navigator.canShare && navigator.canShare({ files: [file] })) {
-      try { await navigator.share({ files: [file], title: nombre, text: o.texto }); return 'compartido'; }
-      catch (e) { if (e && e.name === 'AbortError') return 'cancelado'; }   // otro error: se sigue con la descarga
+      try { await navigator.share({ files: [file], title: nombre, text: o.textoArchivo || o.texto }); return 'compartido'; }
+      catch (e) { if (e && e.name === 'AbortError') return 'cancelado'; }   // otro error: se sigue con el enlace
     }
-    const url = URL.createObjectURL(o.blob), a = document.createElement('a'); a.href = url; a.download = nombre; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 30000);
-    if (o.wa) window.open(o.wa(o.telefono || '', o.texto + '\n(Te adjunto el presupuesto en PDF.)'), '_blank', 'noopener');
-    return 'descargado';
+    // sin menú de compartir (computador, o un navegador que no deja adjuntar): WhatsApp recibe un mensaje con el enlace al presupuesto; ahí se ve el detalle y se descarga el PDF
+    if (o.wa) window.open(o.wa(o.telefono || '', o.texto + (o.enlace ? '\n' + o.enlace : '')), '_blank', 'noopener');
+    return 'enlace';
   }
-  window.CLPDF = { presupuesto, enviar, nombreArchivo: (clinica, paciente, fecha) => `Presupuesto-${limpio(clinica)}-${limpio(paciente)}-${fecha || ''}.pdf`.replace(/-+\./, '.'), ancho, usd };
+  window.CLPDF = { presupuesto, enviar, enlace, leerEnlace, descargar, nombreArchivo: (clinica, paciente, fecha) => `Presupuesto-${limpio(clinica)}-${limpio(paciente)}-${fecha || ''}.pdf`.replace(/-+\./, '.'), ancho, usd };
 })();

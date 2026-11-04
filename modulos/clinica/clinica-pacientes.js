@@ -119,12 +119,13 @@
         <div class="campo"><label for="k-doc">Doctor</label><select id="k-doc"><option value="">Sin doctor</option>${P.docs().filter(d => d.activo).map(d => `<option value="${d.id}">${esc(d.nombre)}</option>`).join('')}</select></div><button class="btn" type="submit">Registrar cobro</button></form><p class="err-f" id="fi-err" role="alert"></p>
       <div style="overflow-x:auto"><table class="tabla"><thead><tr><th>Fecha</th><th>Descripción</th><th class="n">Importe</th></tr></thead><tbody>${F.cobros.map(m => `<tr class="${m.anulado ? 'anulado' : ''}"><td>${esc(fechaCorta(m.dia))}</td><td>${esc(m.descripcion)}${m.anulado ? ' (anulado)' : ''}</td><td class="n ${m.tipo}">${m.tipo === 'egr' ? '−' : '+'}${usd(m.importe)}</td></tr>`).join('') || '<tr><td colspan="3">Sin cobros todavía.</td></tr>'}</tbody></table></div>
       <h3 style="font:800 1.05rem var(--fx-font-disp);margin:20px 0 8px">Presupuestos</h3>${P.puedePres() ? '<div class="acciones no-print" style="margin-bottom:8px"><button type="button" class="btn" id="fi-np">+ Nuevo presupuesto para este paciente</button></div>' : ''}
-      <div class="tarjetas">${F.presupuestos.map(p => `<article class="sol"><h3>${usd(p.total)} · ${esc(fechaCorta(p.dia))}</h3><div class="meta"><span class="pill ${PRES[p.estado][1]}">${PRES[p.estado][0]}</span>${p.descuento ? `<span>desc. ${p.descuento} %</span>` : ''}</div><div class="meta">${(p.items || []).map(i => `${i.cant} × ${esc(i.descripcion)}`).join(' · ')}</div><div class="acciones no-print"><button type="button" class="btn btn-linea" data-pdfp="${p.id}">Enviar PDF por WhatsApp</button></div></article>`).join('') || '<p class="vacio">Sin presupuestos todavía.</p>'}</div>`;
+      <div class="tarjetas">${F.presupuestos.map(p => `<article class="sol"><h3>${usd(p.total)} · ${esc(fechaCorta(p.dia))}</h3><div class="meta"><span class="pill ${PRES[p.estado][1]}">${PRES[p.estado][0]}</span>${p.descuento ? `<span>desc. ${p.descuento} %</span>` : ''}</div><div class="meta">${(p.items || []).map(i => `${i.cant} × ${esc(i.descripcion)}`).join(' · ')}</div><div class="acciones no-print"><button type="button" class="btn btn-linea" data-pdfp="${p.id}">Enviar por WhatsApp</button><button type="button" class="mini" data-pdfpd="${p.id}">Descargar PDF</button></div></article>`).join('') || '<p class="vacio">Sin presupuestos todavía.</p>'}</div>`;
     $('#fi-cobro').onsubmit = async e => { e.preventDefault(); $('#fi-err').textContent = '';
       try { await C.rpc('caja_registrar', { p_descripcion: $('#k-desc').value, p_importe: parseFloat($('#k-imp').value), p_tipo: 'ing', p_doctor: $('#k-doc').value ? +$('#k-doc').value : null, p_clienta: F.id }); aviso('Cobro registrado.'); abrir(F.id, 'cobros'); } catch (x) { falla('#fi-err', x); } };
     if ($('#fi-np')) $('#fi-np').onclick = () => P.presupuestoPara(F);
     $$('[data-pdfp]').forEach(b => b.onclick = async () => { const pr = F.presupuestos.find(x => x.id === +b.dataset.pdfp); if (!pr) return; b.disabled = true;
-      try { await P.enviarPresupuesto({ paciente: F.nombre, telefono: F.telefono, items: pr.items || [], descuento: pr.descuento, total: pr.total, fecha: pr.dia }); } catch (x) { falla('#fi-err', x); } b.disabled = false; });
+      try { await P.enviarPresupuesto({ paciente: F.nombre, telefono: F.telefono, items: pr.items || [], descuento: pr.descuento, total: pr.total, fecha: pr.dia, ref: pr.id }); } catch (x) { falla('#fi-err', x); } b.disabled = false; });
+    $$('[data-pdfpd]').forEach(b => b.onclick = () => { const pr = F.presupuestos.find(x => x.id === +b.dataset.pdfpd); if (pr) P.descargarPresupuesto({ paciente: F.nombre, items: pr.items || [], descuento: pr.descuento, total: pr.total, fecha: pr.dia, ref: pr.id }); });
   }
 
   /* ---- historia clínica ---- */
@@ -239,13 +240,14 @@
         <div class="campo" style="grid-column:1/-1"><label for="pln-nota">Nota de la sesión (opcional)</label><input id="pln-nota" maxlength="300"></div>
         <button type="button" class="btn" id="pln-guardar" ${consiente() && (L.items.length || L.marcas_nuevas) ? '' : 'disabled'}>Guardar sesión</button></div>
       <h3 id="ses-h" style="font:800 1.15rem var(--fx-font-disp);margin:26px 0 8px">Historial de sesiones</h3>
+      ${foco && foco.sesion && H[0] ? `<div class="ses-ok no-print" role="status"><span><b>✓ Sesión guardada.</b> ¿Quieres imprimir el odontograma con todo lo de esta sesión?</span><button type="button" class="btn" data-imp="${H[0].id}">Imprimir odontograma y sesión</button></div>` : ''}
       ${(L.reinicios || []).map(r => `<p class="nota-d" style="margin:0 0 6px">🧹 Odontograma limpiado el ${esc(r.dia)}${r.quien ? ' por ' + esc(r.quien) : ''}: ${esc(r.motivo)}. Las sesiones anteriores se conservan abajo.</p>`).join('')}
       <div class="tarjetas">${H.map(x => `<article class="sol" data-ses="${x.id}"><h3>${esc(x.dia)} · ${usd(x.total)}</h3>
         <div class="meta">${x.doctor ? `<span>${esc(x.doctor)}</span>` : ''}<span>Registró: ${esc(x.autor || '—')}</span>${x.presupuestada ? '<span class="pill ok">Proforma creada</span>' : ''}${x.previa_reinicio ? '<span class="pill">Antes de limpiar el odontograma</span>' : ''}</div>
         ${x.nota ? `<p>${esc(x.nota)}</p>` : ''}
         ${x.items.length ? `<p><b>Tratamientos realizados</b></p><ul class="lista-ses">${piezas(x.items)}</ul>` : ''}
         ${x.marcas.length ? `<p><b>Marcas del odontograma</b></p><p class="meta">${x.marcas.map(m => `${m.diente}${m.superficie ? '/' + m.superficie : ''} ${esc(ETQ(m.estado))}`).join(' · ')}</p>` : ''}
-        <div class="acciones no-print"><button type="button" class="mini" data-oda="${x.id}">Ver el odontograma de ese día</button>
+        <div class="acciones no-print"><button type="button" class="mini" data-oda="${x.id}">Ver el odontograma de ese día</button><button type="button" class="mini" data-imp="${x.id}">Imprimir</button>
           ${puede && x.pendiente_proforma ? `<label class="mini-lbl">Descuento (%) <input type="number" min="0" max="50" value="0" data-dsc="${x.id}" style="width:64px"></label><button type="button" class="btn" data-pro="${x.id}">Pasar a proforma</button>` : ''}</div>
         <div data-odb="${x.id}"></div></article>`).join('') || '<p class="vacio">Todavía no hay sesiones guardadas.</p>'}</div>` : '<p class="nota-d">El historial de sesiones queda pendiente de actualizar la base de datos (migración 014).</p>'}`;
     $('#pln-form').onsubmit = async e => { e.preventDefault(); $('#pln-err').textContent = '';
@@ -259,6 +261,7 @@
       try { const x = await C.rpc('sesion_guardar', datos); aviso(`Sesión guardada: ${usd(x.total)}. Quedó en el «Historial de sesiones» de abajo.`); pintarPlan({ sesion: true }); }
       catch (x) { falla('#pln-err', x); delete g.dataset.ocupado; g.disabled = false; } };
     pintarMarcasSes();
+    $$('[data-imp]', r).forEach(b => b.onclick = () => imprimirSesion(+b.dataset.imp));
     $$('[data-oda]', r).forEach(b => b.onclick = async () => { const cont = $(`[data-odb="${b.dataset.oda}"]`, r); if (cont.innerHTML) { cont.innerHTML = ''; return; }
       try { const f = await C.rpc('odontograma_en', { p_sesion: +b.dataset.oda }); cont.innerHTML = '<p class="nota-d">Así estaba el odontograma al cerrar esa sesión (solo lectura).</p><div class="od-hist"></div>';
         CLODO.montar($('.od-hist', cont), { filas: f, escribir: false, superficies: true, temporales: f.some(o => o.diente > 50), msg: msgErr, guardar: async () => {} }); } catch (x) { falla('#pln-err', x); } });
@@ -267,6 +270,37 @@
     $$('[data-pro]', r).forEach(b => b.onclick = async () => { $('#pln-err').textContent = '';
       try { const x = await C.rpc('sesion_a_presupuesto', { p_sesion: +b.dataset.pro, p_doctor: null, p_descuento: Math.round(+$(`[data-dsc="${b.dataset.pro}"]`).value || 0), p_seguimiento: null }); aviso(`Proforma creada: ${usd(x.total)}.`); abrir(F.id, 'cobros'); }
       catch (x) { falla('#pln-err', x); } });
+  }
+
+  /* ---- hoja para imprimir: el odontograma tal como quedó en la sesión, con sus marcas, los tratamientos con su precio, el total y las firmas ---- */
+  async function imprimirSesion(id) {
+    const w = window.open('', '_blank'); if (!w) { aviso('Permite las ventanas emergentes para imprimir.', 'mal'); return; }
+    w.document.write('<p style="font:16px Arial,sans-serif;padding:24px">Preparando la hoja para imprimir…</p>');
+    try {
+      const [filas, hist] = await Promise.all([C.rpc('odontograma_en', { p_sesion: id }), C.rpc('sesiones_lista', { p_id: F.id })]);
+      const x = hist.find(h => h.id === id); if (!x) throw new Error('Sesión no encontrada.');
+      const d = F.datos || {}, a = edad(d.nacimiento), lug = i => i.zona ? ZONA[i.zona] : 'Diente ' + i.diente;
+      const marcas = x.marcas.map(m => `<tr><td>${m.diente}</td><td>${m.superficie ? esc(CLODO.CARA[m.superficie]) : 'Diente completo'}${m.capa === 2 ? ' (2.º tratamiento)' : ''}</td><td>${esc(ETQ(m.estado))}</td><td>${esc(m.nota || '')}</td></tr>`).join('');
+      const items = x.items.map(i => `<tr><td>${esc(lug(i))}</td><td>${esc(i.descripcion)}</td><td class="n">${usd(i.precio)}</td></tr>`).join('');
+      w.document.open();
+      w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Odontograma y sesión · ${esc(F.nombre)}</title><style>
+        *{box-sizing:border-box} body{font:10.5pt/1.4 "Helvetica Neue",Arial,sans-serif;color:#111;max-width:780px;margin:0 auto;padding:18px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+        .cab{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:3px solid #C39A45;padding-bottom:8px;margin-bottom:10px}.cab b{font-size:15pt}.cab small{display:block;color:#555;font-size:9pt;letter-spacing:.05em;text-transform:uppercase}
+        .pac{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 18px;border:1px solid #999;padding:8px 12px;margin:8px 0 12px;font-size:10pt}
+        h2{font-size:11pt;margin:14px 0 4px;border-bottom:1px solid #bbb;padding-bottom:2px} table{width:100%;border-collapse:collapse;font-size:9.5pt} th,td{border-bottom:1px solid #ddd;padding:4px 6px;text-align:left;vertical-align:top} th{font-size:8.5pt;text-transform:uppercase;letter-spacing:.04em} .n{text-align:right;white-space:nowrap}
+        .tot{display:flex;justify-content:flex-end;gap:18px;margin-top:6px;font-weight:700;font-size:11pt}.nota{border:1px dashed #999;padding:6px 10px;margin-top:6px}
+        .firmas{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:46px}.raya{border-top:1px solid #111;margin-bottom:3px}.firmas span{font-size:9pt;color:#444}
+        button{font:inherit;padding:8px 16px;margin:0 0 10px} ${CLODO.estaticoCSS} @media print{button{display:none}body{padding:0}} @page{size:A4;margin:12mm}</style></head><body>
+        <button onclick="window.print()">Imprimir</button>
+        <div class="cab"><div><small>${esc(DEMO.cliente)}</small><b>Odontograma y sesión de tratamiento</b></div><div style="text-align:right;font-size:9.5pt">${esc(x.dia)}${x.doctor ? `<br>Doctor/a: ${esc(x.doctor)}` : ''}<br>Registró: ${esc(x.autor || '—')}</div></div>
+        <div class="pac"><span><b>Paciente:</b> ${esc(F.nombre)}</span><span><b>Cédula:</b> ${esc(d.cedula || '—')}</span><span><b>Edad:</b> ${a != null ? a + ' años' : '—'}</span><span><b>Celular:</b> ${esc(tel09(F.telefono))}</span></div>
+        <h2>Odontograma al cierre de esta sesión</h2>${CLODO.estatico(filas, { temporales: (a != null && a < 14) })}
+        <h2>Marcas de la sesión</h2>${marcas ? `<table><thead><tr><th>Diente</th><th>Superficie</th><th>Estado</th><th>Nota</th></tr></thead><tbody>${marcas}</tbody></table>` : '<p>No se marcó nada nuevo en el odontograma en esta sesión.</p>'}
+        <h2>Tratamientos realizados</h2>${items ? `<table><thead><tr><th>Dónde</th><th>Tratamiento</th><th class="n">Precio</th></tr></thead><tbody>${items}</tbody></table><div class="tot"><span>Total de la sesión</span><span>${usd(x.total)}</span></div>` : '<p>No se agregaron tratamientos con precio en esta sesión.</p>'}
+        ${x.nota ? `<h2>Nota de la sesión</h2><div class="nota">${esc(x.nota)}</div>` : ''}
+        <div class="firmas"><div><div class="raya"></div><b>Firma del odontólogo o la odontóloga</b><br><span>Nombre y registro: ______________________</span></div><div><div class="raya"></div><b>Firma del paciente</b><br><span>C.I.: ______________</span></div></div></body></html>`);
+      w.document.close(); w.focus();
+    } catch (e) { try { w.close(); } catch (x) { /* ventana ya cerrada */ } aviso(msgErr(e), 'mal'); }
   }
 
   /* ---- evolución (notas de cada consulta; no se editan: se corrigen con una nota nueva) ---- */

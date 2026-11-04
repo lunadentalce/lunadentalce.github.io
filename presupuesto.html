@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#111113">
+<link rel="icon" href="assets/emblema.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&amp;display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&amp;display=swap"></noscript>
+<link rel="stylesheet" href="estilos/base.css">
+<link rel="stylesheet" href="efectos/base.css">
+<link rel="stylesheet" href="efectos/calma.css">
+<link rel="stylesheet" href="efectos/toque.css">
+<link rel="stylesheet" href="efectos/transicion.css">
+<link rel="stylesheet" href="efectos/clinica.css">
+<link rel="stylesheet" href="efectos/centro.css">
+<link rel="stylesheet" href="efectos/oro.css">
+<style>:root { --fx-bg: #FAF8F3; --fx-paper: #FFFFFF; --fx-accent: #C39A45; --fx-ink: #111113; --fx-deep: #111113; --fx-pop: #F1E6C8; --fx-mancha-1: #E7CB82; --fx-mancha-2: #C39A45; --fx-mancha-3: #111113; --fx-font: "Montserrat", sans-serif; --fx-font-disp: "Montserrat", sans-serif; --fx-font-txt: "Montserrat", sans-serif; --fx-rosa: #F1E6C8; --fx-rosa-2: #E7CB82; --fx-metal-1: #8F6A22; --fx-metal-2: #C39A45; --fx-metal-3: #E7CB82; --fx-tinte-1: #F0DFB0; --fx-tinte-2: #F8F0DA; --fx-tinte-3: #E8D49A; --fx-tinte-4: #F3E6C4; }</style>
+
+<title>Tu presupuesto · Luna Dental</title>
+<meta name="description" content="Detalle de tu presupuesto en Luna Dental: cada tratamiento con su precio y el total.">
+<meta property="og:title" content="Tu presupuesto · Luna Dental">
+<meta property="og:description" content="Detalle de tu presupuesto en Luna Dental: cada tratamiento con su precio y el total.">
+<meta property="og:image" content="assets/og.jpg">
+<style>
+.pv { max-width: 760px; margin-inline: auto; } .pv h1 { margin-bottom: 8px; }
+.pv-tarjeta { margin-top: 18px; padding: clamp(16px, 4vw, 28px); border-radius: 22px; background: var(--fx-paper); box-shadow: 0 14px 36px color-mix(in srgb, var(--fx-ink) 10%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--fx-accent) 40%, transparent); }
+.pv-dato { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; } .pv-dato small { display: block; color: color-mix(in srgb, var(--fx-ink) 60%, var(--fx-bg)); font: 600 .8rem var(--fx-font-txt); } .pv-dato b { font: 800 1.15rem var(--fx-font-disp); }
+.pv table { width: 100%; border-collapse: collapse; font-size: .98rem; } .pv th, .pv td { padding: 10px 6px; text-align: left; border-bottom: 1px solid color-mix(in srgb, var(--fx-ink) 12%, transparent); vertical-align: top; }
+.pv th { font: 800 .78rem var(--fx-font-txt); letter-spacing: .06em; text-transform: uppercase; } .pv .n { text-align: right; white-space: nowrap; }
+.pv-tot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; padding: 14px 18px; border-radius: 16px; background: var(--fx-deep); color: var(--fx-bg); font: 800 1.35rem var(--fx-font-disp); }
+.pv-sub { display: flex; justify-content: space-between; margin-top: 8px; font-size: .98rem; }
+.pv-nota { margin-top: 16px; font-size: .88rem; color: color-mix(in srgb, var(--fx-ink) 65%, var(--fx-bg)); line-height: 1.5; }
+.pv-acc { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; } .pv-acc .btn { min-height: 52px; }
+.pv-vacio { text-align: center; padding: 30px 8px; }
+@media print { .cabecera, footer, .pv-acc { display: none; } .pv-tarjeta { box-shadow: none; } }
+</style>
+</head>
+<body class="lp-centro" data-pagina="Presupuesto" data-secciones='["Presupuesto"]'>
+<header class="cabecera"><div class="wrap">
+  <a class="marca marca-ancho" href="index.html" aria-label="Luna Dental Centro de Especialidades Odontológicas"><img src="assets/logo-ancho.webp" alt="Luna Dental Centro de Especialidades Odontológicas" width="900" height="166"></a>
+  <a class="volver" href="index.html">Ir a la página</a>
+</div></header>
+<main><section class="sec"><div class="wrap pv">
+  <h1 class="doble"><span>Tu</span>presupuesto</h1>
+  <div id="pv-cont" aria-live="polite"></div>
+</div></section></main>
+<footer><div class="wrap"><div>Luna Dental Centro de Especialidades Odontológicas Baños de Agua Santa · 096 905 8510</div></div></footer>
+<script src="config.js"></script>
+<script src="modulos/clinica/clinica-pdf.js"></script>
+<script>
+const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const usd = n => '$' + (Math.round((+n || 0) * 100) / 100).toFixed(2), fmt = iso => iso ? iso.slice(0, 10).split('-').reverse().join('/') : '';
+const d = CLPDF.leerEnlace(location.hash), cont = document.getElementById('pv-cont');
+if (!d || !d.items.length) {
+  cont.innerHTML = `<div class="pv-tarjeta pv-vacio"><p><b>No pudimos abrir este presupuesto.</b></p><p>El enlace está incompleto. Pídele a la clínica que te lo envíe otra vez.</p><div class="pv-acc" style="justify-content:center"><a class="btn" data-wa="Hola, no pude abrir mi presupuesto. ¿Me lo pueden enviar otra vez?">Escribir por WhatsApp</a></div></div>`;
+} else {
+  const sub = d.items.reduce((s, i) => s + i.cant * i.precio, 0), desc = Math.round(sub * d.descuento) / 100;
+  cont.innerHTML = `<div class="pv-tarjeta">
+    <div class="pv-dato"><div><small>Paciente</small><b>${esc(d.paciente)}</b></div>${d.doctor ? `<div><small>Doctor</small><b>${esc(d.doctor)}</b></div>` : ''}<div><small>Fecha${d.ref ? ' · N.º ' + esc(d.ref) : ''}</small><b>${esc(fmt(d.fechaIso))}</b></div></div>
+    <table><thead><tr><th>Tratamiento</th><th class="n">Cant.</th><th class="n">Precio</th><th class="n">Importe</th></tr></thead><tbody>${d.items.map(i => `<tr><td>${esc(i.descripcion)}</td><td class="n">${i.cant}</td><td class="n">${usd(i.precio)}</td><td class="n">${usd(i.cant * i.precio)}</td></tr>`).join('')}</tbody></table>
+    <div class="pv-sub"><span>Subtotal</span><span>${usd(sub)}</span></div>${d.descuento ? `<div class="pv-sub"><span>Descuento (${Math.round(d.descuento)} %)</span><span>-${usd(desc)}</span></div>` : ''}
+    <div class="pv-tot"><span>Total</span><span>${usd(d.total)}</span></div>
+    <p class="pv-nota">Presupuesto sujeto a valoración del odontólogo; puede variar si el diagnóstico cambia. Válido por 15 días.${d.seguimientoIso ? ` Seguimiento: ${esc(fmt(d.seguimientoIso))}.` : ''} Los precios son en dólares. Este documento es informativo: la clínica confirma el valor en la valoración${d.ref ? ` (presupuesto N.º ${esc(d.ref)})` : ''}.</p>
+    <div class="pv-acc"><button type="button" class="btn" id="pv-pdf">Descargar PDF</button><a class="btn btn-linea" data-wa="Hola, vi mi presupuesto${d.ref ? ' N.º ' + d.ref : ''} (total ${usd(d.total)}) y quiero agendar mi cita.">Escribir a la clínica por WhatsApp</a><button type="button" class="btn btn-linea" id="pv-imp">Imprimir</button></div>
+  </div>`;
+  document.getElementById('pv-pdf').onclick = () => { const blob = CLPDF.presupuesto({ corto: DEMO.corto, clinica: DEMO.cliente, ciudad: DEMO.ciudad, telefono: String(DEMO.waCliente).replace(/^593/, '0'), paciente: d.paciente, doctor: d.doctor, fecha: fmt(d.fechaIso), ref: d.ref, items: d.items, descuento: d.descuento, total: d.total, seguimiento: fmt(d.seguimientoIso) });
+    CLPDF.descargar(blob, CLPDF.nombreArchivo(DEMO.corto, d.paciente, d.fechaIso.slice(0, 10))); };
+  document.getElementById('pv-imp').onclick = () => window.print();
+}
+document.querySelectorAll('[data-wa]').forEach(a => { a.href = `https://wa.me/${String(DEMO.waCliente).replace(/\D/g, '')}?text=${encodeURIComponent(a.dataset.wa)}`; a.target = '_blank'; a.rel = 'noopener'; });
+</script>
+</body>
+</html>

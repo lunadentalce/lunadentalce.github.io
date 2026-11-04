@@ -176,5 +176,15 @@
       pendientes: () => hayCola().flatMap(n => cola[n].map(c => ({ diente: +n, superficie: c.s === '*' ? null : c.s, estado: c.e, capa: c.capa || 1 }))) };
   }
 
-  window.CLODO = { ESTADOS, ESTADO, POR_CARA, CARA, SUP, INF, TSUP, TINF, mapa, resolver, aplicar, resumen, svg, montar };
+  /* Dibujo del odontograma sin botones, para la hoja impresa: devuelve el HTML (con su estilo en CLODO.estaticoCSS) de los dientes con su número, sus caras coloreadas y la leyenda de colores. */
+  const estatico = (filas, op) => {
+    op = op || {}; const R = resolver(filas);
+    const dte = (n, arriba) => { const num = `<span class="n">${n}</span>`, sv = svg(n, aplicar(R[n], []), {}); return `<div class="d">${arriba ? num + sv : sv + num}</div>`; };
+    const arco = (a, arriba) => { const h = a.length / 2; return `<div class="fila"><div class="mitad">${a.slice(0, h).map(n => dte(n, arriba)).join('')}</div><div class="mitad">${a.slice(h).map(n => dte(n, arriba)).join('')}</div></div>`; };
+    const temp = op.temporales || (filas || []).some(f => f.diente > 50);
+    return `<div class="odo"><div class="bloque"><p class="tit">Dientes permanentes</p>${arco(SUP, true)}${arco(INF, false)}</div>${temp ? `<div class="bloque"><p class="tit">Dientes temporales</p>${arco(TSUP, true)}${arco(TINF, false)}</div>` : ''}
+      <p class="ley">${ESTADOS.map(([k, n, c]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join('')}<span><i class="aro"></i>Aro de color: 2.º tratamiento del diente</span></p></div>`;
+  };
+  const estaticoCSS = '.odo{display:grid;gap:14px;justify-items:center}.bloque{display:grid;gap:6px}.tit{margin:0;text-align:center;font:700 8pt Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#555}.fila{display:flex;gap:14px;justify-content:center}.mitad{display:flex;gap:3px}.d{width:30px;display:grid;gap:2px;justify-items:center;font:700 8pt Arial,sans-serif}.d svg{width:100%;height:auto;display:block}.d polygon{stroke:#111;stroke-width:1.4;stroke-linejoin:round}.ley{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;margin:0;font:8.5pt Arial,sans-serif}.ley i{display:inline-block;width:10px;height:10px;border:1px solid #333;margin-right:4px;vertical-align:-1px}.ley i.aro{background:#fff;border:2.5px solid #E0A030}';
+  window.CLODO = { estatico, estaticoCSS, ESTADOS, ESTADO, POR_CARA, CARA, SUP, INF, TSUP, TINF, mapa, resolver, aplicar, resumen, svg, montar };
 })();
