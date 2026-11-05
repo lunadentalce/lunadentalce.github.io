@@ -54,7 +54,13 @@
       ${!nuevo && !clin ? '<p class="nota-d" style="margin:0 0 10px">La parte clínica (historia, odontograma, evolución) la ven los doctores y la administración.</p>' : ''}
       <div class="ctrl no-print" role="tablist" aria-label="Secciones de la ficha">${tabs.map(([k, t]) => `<button type="button" class="cb" role="tab" data-sub="${k}" aria-pressed="${k === sub}">${esc(t)}</button>`).join('')}</div>
       <div id="fi-cuerpo"></div>`;
-    $('#fi-volver').onclick = volver; const pr = $('#fi-print'); if (pr) pr.onclick = () => { document.body.classList.add('print-ficha'); window.print(); setTimeout(() => document.body.classList.remove('print-ficha'), 500); };
+    $('#fi-volver').onclick = volver; const pr = $('#fi-print'); if (pr) pr.onclick = () => {
+      /* En iPhone/iPad window.print() no espera: si se quita la clase enseguida, la hoja sale como estaba la pantalla. Se quita al terminar de imprimir (afterprint), con un respaldo largo. En la app instalada (pantalla de inicio) iOS no imprime: se avisa. */
+      if (window.navigator.standalone) { aviso('Desde la app instalada del iPhone no se puede imprimir. Abre este mismo panel en Safari, toca Imprimir ficha o usa Compartir → Imprimir.', 'mal'); return; }
+      const quitar = () => { document.body.classList.remove('print-ficha'); window.removeEventListener('afterprint', quitar); };
+      document.body.classList.add('print-ficha'); window.addEventListener('afterprint', quitar); setTimeout(quitar, 60000);
+      setTimeout(() => window.print(), 150);
+    };
     { const cb = $('#fi-hc-cambiar'); if (cb) cb.onclick = () => { $('#fi-hc').innerHTML = `<form id="fi-hc-form" class="fila no-print" style="margin:0 0 6px"><div class="campo"><label for="fi-hc-num">Nuevo número de historia (1 a 999999)</label><input id="fi-hc-num" type="number" min="1" max="999999" value="${F.historia}" required></div><button class="btn" type="submit">Guardar número</button><button class="btn btn-linea" type="button" id="fi-hc-no">Cancelar</button></form><p class="err-f" id="fi-hc-err" role="alert"></p>`;
       $('#fi-hc-no').onclick = () => abrir(F.id, sub);
       $('#fi-hc-form').onsubmit = async e => { e.preventDefault(); try { await C.rpc('historia_asignar', { p_id: F.id, p_numero: +$('#fi-hc-num').value }); aviso('Número de historia guardado.'); abrir(F.id, sub); } catch (x) { falla('#fi-hc-err', x); } }; }; }
