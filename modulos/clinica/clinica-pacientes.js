@@ -48,15 +48,15 @@
     const nuevo = F.id == null, e = edad((F.datos || {}).nacimiento), clin = F.acceso_clinico;
     const tabs = nuevo ? [['datos', 'Datos']] : [['datos', 'Datos'], ['citas', `Citas (${F.citas.length})`], ['cobros', 'Cobros y presupuestos'], ...(clin ? [['clinico', 'Historia clínica'], ['odo', 'Odontograma'], ['evo', `Evolución (${(F.evoluciones || []).length})`]] : []), ...(rol() === 'admin' ? [['accesos', 'Accesos']] : [])];
     if (!tabs.some(t => t[0] === sub)) sub = 'datos';
-    f.innerHTML = `<div class="no-print" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px"><button type="button" class="cb" id="fi-volver">← Pacientes</button>${nuevo ? '' : `<button type="button" class="cb" id="fi-print">Imprimir ficha</button>`}</div>
+    f.innerHTML = `<div class="no-print" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px"><button type="button" class="cb" id="fi-volver">← Pacientes</button>${nuevo ? '' : `<button type="button" class="cb" id="fi-print">Imprimir ficha</button><button type="button" class="cb" id="fi-pdf">PDF de la ficha</button>`}</div>
       <h2 style="margin-bottom:2px">${nuevo ? 'Nuevo paciente' : esc(F.nombre)}</h2>
       ${nuevo ? '' : `<p class="sub" style="margin-bottom:4px"><span id="fi-hc"><b>Historia clínica N.º ${esc(hc(F.historia))}</b>${P.puedePres() ? ' · <button type="button" class="mini no-print" id="fi-hc-cambiar">Cambiar número</button>' : ''}</span></p><p class="sub" style="margin-bottom:10px">${e != null ? `${e} años · ` : ''}📱 ${esc(tel09(F.telefono))} · <a href="${wa(F.telefono, `Hola ${F.nombre.split(' ')[0]}, te escribimos de ${DEMO.cliente}.`)}" target="_blank" rel="noopener">WhatsApp</a> · paciente desde ${esc(fechaCorta(F.creado))}</p>`}
       ${!nuevo && !clin ? '<p class="nota-d" style="margin:0 0 10px">La parte clínica (historia, odontograma, evolución) la ven los doctores y la administración.</p>' : ''}
       <div class="ctrl no-print" role="tablist" aria-label="Secciones de la ficha">${tabs.map(([k, t]) => `<button type="button" class="cb" role="tab" data-sub="${k}" aria-pressed="${k === sub}">${esc(t)}</button>`).join('')}</div>
       <div id="fi-cuerpo"></div>`;
-    $('#fi-volver').onclick = volver; const pr = $('#fi-print'); if (pr) pr.onclick = () => {
+    $('#fi-volver').onclick = volver; const bp = $('#fi-pdf'); if (bp) bp.onclick = fichaPdf; const pr = $('#fi-print'); if (pr) pr.onclick = () => {
       /* En iPhone/iPad window.print() no espera: si se quita la clase enseguida, la hoja sale como estaba la pantalla. Se quita al terminar de imprimir (afterprint), con un respaldo largo. En la app instalada (pantalla de inicio) iOS no imprime: se avisa. */
-      if (window.navigator.standalone) { aviso('Desde la app instalada del iPhone no se puede imprimir. Abre este mismo panel en Safari, toca Imprimir ficha o usa Compartir → Imprimir.', 'mal'); return; }
+      if (window.navigator.standalone) { fichaPdf(); return; }   // la app instalada del iPhone no imprime: se arma el PDF y se comparte (Compartir → Imprimir)
       const quitar = () => { document.body.classList.remove('print-ficha'); window.removeEventListener('afterprint', quitar); };
       document.body.classList.add('print-ficha'); window.addEventListener('afterprint', quitar); setTimeout(quitar, 60000);
       setTimeout(() => window.print(), 150);
@@ -157,6 +157,28 @@
       <p class="nota-d">${c.actualizado ? `Última actualización: ${esc(c.actualizado)}. ` : 'Todavía no hay historia clínica registrada. '}Cada guardado conserva la versión anterior.</p>`;
     $('#fi-clin').onsubmit = async e => { e.preventDefault(); $('#fi-err').textContent = '';
       try { await C.rpc('paciente_clinico_guardar', { p_id: F.id, p_alergias: $('#h-ale').value, p_medicamentos: $('#h-med').value, p_antecedentes_medicos: $('#h-ant').value, p_antecedentes_odonto: $('#h-odo').value, p_habitos: $('#h-hab').value, p_observaciones: $('#h-obs').value }); aviso('Historia clínica guardada.'); abrir(F.id, 'clinico'); } catch (x) { falla('#fi-err', x); } };
+  }
+
+  /* PDF de la ficha del paciente: datos, odontograma, estado por diente e historial de sesiones. En celular abre el menú de compartir (ahí está «Imprimir»); en computador lo descarga. */
+  async function fichaPdf() {
+    const b = $('#fi-pdf'); if (b) { if (b.disabled) return; b.disabled = true; b.textContent = 'Preparando…'; }
+    try {
+      if (ODOid !== F.id || ODO === null) await cargarOdo();
+      const hist = await C.rpc('sesiones_lista', { p_id: F.id }).catch(e => { if (/sesiones_lista|PGRST202|Could not find/i.test(String((e && (e.message || e.code)) || e))) return []; throw e; });
+      const dd = F.datos || {}, a = edad(dd.nacimiento), temporales = ODO.some(o => o.diente > 50) || (a != null && a < 14), dientes = {}, estados = [];
+      const nums = CLODO.SUP.concat(CLODO.INF).concat(temporales ? CLODO.TSUP.concat(CLODO.TINF) : []);
+      nums.forEach(n => { const x = CLODO.dibujo(ODO, n); dientes[n] = x; if (x.registro) { const r = CLODO.resumenDiente(ODO, n); if (r !== 'sano') estados.push([n, r]); } });
+      const usados = new Set(ODO.map(o => o.estado)), lug = i => i.zona ? ZONA[i.zona] : 'Diente ' + i.diente;
+      const fecha = new Date().toLocaleDateString('es-EC', { day: 'numeric', month: 'long', year: 'numeric', timeZone: CLUI.TZ });
+      const datos = { corto: DEMO.corto, clinica: DEMO.cliente, ciudad: DEMO.ciudad, telefono: tel09(DEMO.waCliente), paciente: F.nombre, historia: hc(F.historia), fecha, temporales, dientes, estados,
+        leyenda: CLODO.ESTADOS.filter(e => e[0] !== 'sano' && usados.has(e[0])).map(e => [e[1], e[2]]),
+        datos: [['Celular', F.telefono || ''], ['Cédula', dd.cedula || ''], ['Nacimiento', dd.nacimiento ? dd.nacimiento + (a != null ? ` (${a} años)` : '') : ''], ['Correo', dd.email || ''], ['Dirección', dd.direccion || ''], ['Contacto de emergencia', [dd.contacto_nombre, dd.contacto_tel].filter(Boolean).join(' · ')], ['Representante', dd.representante || '']],
+        sesiones: (hist || []).map(x => ({ dia: x.dia, doctor: x.doctor, registro: x.autor || '', total: x.total, nota: x.nota, marcas: (x.marcas || []).map(m => `${m.diente} ${m.superficie ? CLODO.CARA[m.superficie].split(' ')[0].toLowerCase() : 'completo'} ${ETQ(m.estado).toLowerCase()}`), items: (x.items || []).map(i => ({ lugar: lug(i), descripcion: i.descripcion, precio: i.precio })) })) };
+      const blob = CLPDF.ficha(datos), nombre = CLPDF.nombreFicha(DEMO.corto, F.nombre, hoy());
+      const r = await CLPDF.enviar({ blob, nombre, texto: '', textoArchivo: 'Ficha de ' + F.nombre, telefono: '', wa: null, soloArchivo: true });
+      if (r === 'descargar') { CLPDF.descargar(blob, nombre); aviso('PDF de la ficha descargado.'); }
+    } catch (e) { aviso(msgErr(e), 'mal'); }
+    finally { if (b) { b.disabled = false; b.textContent = 'PDF de la ficha'; } }
   }
 
   /* ---- odontograma por superficies (numeración FDI; el dibujo y las marcas viven en clinica-odo.js) ---- */

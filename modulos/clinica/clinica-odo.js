@@ -181,5 +181,10 @@
       <p class="ley">${ESTADOS.map(([k, n, c]) => `<span><i style="background:${c}"></i>${esc(n)}</span>`).join('')}<span><i class="aro"></i>Aro de color: 2.º tratamiento del diente</span></p></div>`;
   };
   const estaticoCSS = '.odo{display:grid;gap:14px;justify-items:center}.bloque{display:grid;gap:6px}.tit{margin:0;text-align:center;font:700 8pt Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#555}.fila{display:flex;gap:14px;justify-content:center}.mitad{display:flex;gap:3px}.d{width:30px;display:grid;gap:2px;justify-items:center;font:700 8pt Arial,sans-serif}.d svg{width:100%;height:auto;display:block}.d polygon{stroke:#111;stroke-width:1.4;stroke-linejoin:round}.ley{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;margin:0;font:8.5pt Arial,sans-serif}.ley i{display:inline-block;width:10px;height:10px;border:1px solid #333;margin-right:4px;vertical-align:-1px}.ley i.aro{background:#fff;border:2.5px solid #E0A030}.ley i.extr{background:#fff;border-color:#D32F2F;color:#D32F2F;font:900 9px/10px Arial;text-align:center}';
-  window.CLODO = { estatico, estaticoCSS, ESTADOS, ESTADO, POR_CARA, CARA, SUP, INF, TSUP, TINF, mapa, resolver, aplicar, resumen, svg, montar };
+  /* para el PDF: cómo se ve un diente (color de cada cara, ausente, extracción, 2.º tratamiento) sin pasar por HTML */
+  const dibujo = (filas, n) => { const st = resolver(filas)[n], m = mapa(n), ausente = !!(st && st.todo && st.todo.estado === 'ausente' && !Object.keys(st.caras).length), fill = {};
+    Object.keys(PTS).forEach(pos => { fill[pos] = ausente ? '#ECECEE' : colorCara(estadoCara(st, m[pos])); });
+    return { fill, ausente, extr: !!(st && ((st.todo && st.todo.estado === 'extraccion') || (st.todo2 && st.todo2.estado === 'extraccion'))),
+      seg: st && st.todo2 && st.todo2.estado !== 'sano' && st.todo2.estado !== 'extraccion' && !ausente ? color(st.todo2.estado) : '', registro: !!st }; };
+  window.CLODO = { dibujo, resumenDiente: (filas, n) => resumen(resolver(filas)[n]), PTS, estatico, estaticoCSS, ESTADOS, ESTADO, POR_CARA, CARA, SUP, INF, TSUP, TINF, mapa, resolver, aplicar, resumen, svg, montar };
 })();
