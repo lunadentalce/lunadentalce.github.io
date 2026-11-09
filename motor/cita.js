@@ -12,7 +12,7 @@
   const AG = Object.assign({ dias: [1, 2, 3, 4, 5, 6], abre: '09:00', cierra: '18:00', pausa: null, visibles: 21 }, D.agenda || {});
   const items = new Map(); M.categorias.forEach(c => c.items.forEach(i => items.set(i.id, i)));
   const hm = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
-  const corte = AG.pausa || ['13:00', '14:00'];
+  const corte = AG.pausa || ['13:00', '13:00'];   // sin pausa: la mañana llega hasta la 1 y la tarde sigue desde ahí
   const FRANJAS = [
     { v: 'Mañana', k: 'manana', t: 'Mañana', h: `${AG.abre} a ${corte[0]}`, ini: hm(AG.abre), fin: hm(corte[0]), ico: 'M12 4v2M12 18v2M4 12h2M18 12h2M6.3 6.3l1.4 1.4M16.3 16.3l1.4 1.4M17.7 6.3l-1.4 1.4M7.7 16.3l-1.4 1.4M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z' },
     { v: 'Tarde', k: 'tarde', t: 'Tarde', h: `${corte[1]} a ${AG.cierra}`, ini: hm(corte[1]), fin: hm(AG.cierra), ico: 'M3.5 17.5h17M7 17.5a5 5 0 0 1 10 0M12 6v2.5M5.5 9.5 7.3 11M18.5 9.5 16.7 11' },

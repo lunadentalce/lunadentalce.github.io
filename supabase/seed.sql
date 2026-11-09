@@ -1,4 +1,4 @@
--- Semilla de Luna Dental Centro de Especialidades Odontológicas · se corre UNA vez, después de las migraciones 001–020. Lo marcado CONFIRMAR lo da la clínica.
+-- Semilla de Luna Dental Centro de Especialidades Odontológicas · se corre UNA vez, después de las migraciones 001–021. Lo marcado CONFIRMAR lo da la clínica.
 -- Los nombres de los tratamientos deben ser IGUALES a los de la carta de la página (menu.js): así se une la solicitud con su tratamiento.
 insert into luna_dental.servicios (nombre, categoria, duracion_min, fidelidad, orden) values
   ('Valoración inicial', 'Tratamientos', 40, false, 1),
@@ -10,10 +10,10 @@ insert into luna_dental.servicios (nombre, categoria, duracion_min, fidelidad, o
   ('Cirugía oral', 'Tratamientos', 40, false, 7);   -- CONFIRMAR: duración real de cada tratamiento (40 min por ahora)
 
 -- Las citas se ofrecen cada 20 min dentro del horario (con tratamientos de 40 min, 20 deja encajar bien antes y después del almuerzo).
-update luna_dental.config set paso_min = 20 where id = 1;
+update luna_dental.config set paso_min = 20, capacidad = 2 where id = 1;   -- capacidad = sillones: pacientes a la vez en el mismo horario
 
 -- Horario de atención (1 = lunes … 7 = domingo), con pausa de almuerzo donde no se agenda. CONFIRMAR con la clínica:
-insert into luna_dental.horario (dia_semana, abre, cierra, pausa_ini, pausa_fin) values (1, '09:00', '18:00', '13:00', '14:00'), (2, '09:00', '18:00', '13:00', '14:00'), (3, '09:00', '18:00', '13:00', '14:00'), (4, '09:00', '18:00', '13:00', '14:00'), (5, '09:00', '18:00', '13:00', '14:00'), (6, '09:00', '18:00', '13:00', '14:00');
+insert into luna_dental.horario (dia_semana, abre, cierra, pausa_ini, pausa_fin) values (1, '09:00', '18:00', null, null), (2, '09:00', '18:00', null, null), (3, '09:00', '18:00', null, null), (4, '09:00', '18:00', null, null), (5, '09:00', '18:00', null, null), (6, '09:00', '18:00', null, null);
 
 -- Doctores y tarifario los carga el administrador desde equipo.html › Ajustes (nombres y precios reales).
 

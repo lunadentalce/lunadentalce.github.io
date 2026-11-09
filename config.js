@@ -65,10 +65,6 @@ window.DEMO = {
     ],
     "abre": "09:00",
     "cierra": "18:00",
-    "pausa": [
-      "13:00",
-      "14:00"
-    ],
     "sub": "Pide tu cita",
     "texto_dias": "de lunes a sábado",
     "simple": true

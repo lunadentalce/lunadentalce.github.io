@@ -59,7 +59,7 @@
         if (hs.length) P.horario = { paso: +c2.config.paso_min || 30, h0: Math.min(...hs.map(x => +x.abre.slice(0, 2))), h1: Math.max(...hs.map(x => Math.ceil(+x.cierra.slice(0, 2) + (+x.cierra.slice(3, 5) ? .5 : 0)))) };
       } catch (x) { falla('#hor-err', x); } });
   }
-  $('#cfg-guardar').onclick = async () => { try { await cargarCfg(); await C.rpc('config_guardar', { p_capacidad: parseInt($('#cfg-cab').value), p_meta: CFG.config.sellos_meta }); aviso('Cupos guardados.'); } catch (x) { falla('#hor-err', x); } };
+  $('#cfg-guardar').onclick = async () => { try { await cargarCfg(); await C.rpc('config_guardar', { p_capacidad: parseInt($('#cfg-cab').value), p_meta: CFG.config.sellos_meta }); aviso('Sillones guardados.'); } catch (x) { falla('#hor-err', x); } };
 
   async function pintarCuentas() {
     limpiar('#eq-err');

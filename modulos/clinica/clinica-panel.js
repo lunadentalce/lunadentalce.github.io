@@ -14,7 +14,7 @@ tabs.forEach(b => { b.onclick = () => ir(b); b.onkeydown = e => { const v = visi
 /* ---------- solicitudes ---------- */
 const FR = { manana: 'Mañana', tarde: 'Tarde', cualquiera: 'Cualquier horario' };
 let solEstado = 'nueva';
-const horas = () => { const o = []; for (let m = HORARIO.h0 * 60; m < HORARIO.h1 * 60; m += HORARIO.paso) o.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); return o; };
+const horas = () => { const o = []; for (let m = 6 * 60; m < 22 * 60; m += HORARIO.paso)   /* de 6:00 a 22:00: el personal agenda a cualquier hora, también en el almuerzo o después del cierre */ o.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); return o; };
 async function pintarSolicitudes() {
   const cont = $('#sol-lista');
   try {
@@ -67,7 +67,8 @@ function pintarAgenda() {
   const cols = ag.vista === 'dia'
     ? [...activos.filter(d => ag.docs.has(d.id)).map(d => ({ t: d.nombre, f: c => c.doctor_id === d.id })), ...(sinAsignar ? [{ t: 'Sin asignar', f: c => c.doctor_id == null }] : [])]
     : [0, 1, 2, 3, 4, 5].map(i => { const dia = suma(lunes(ag.dia), i); return { t: fechaCorta(dia), f: c => c.dia === dia && (c.doctor_id == null || ag.docs.has(c.doctor_id)) }; });
-  const H0 = HORARIO.h0 * 60, filas = (HORARIO.h1 - HORARIO.h0) * 2, g = $('#ag-grid');
+  const lo = Math.min(HORARIO.h0, ...ag.citas.map(c => Math.floor(mins(c.hora) / 60))), hi = Math.max(HORARIO.h1, ...ag.citas.map(c => Math.ceil((mins(c.hora) + c.duracion) / 60)));   // la rejilla crece si hay citas fuera del horario
+  const H0 = lo * 60, filas = (hi - lo) * 2, g = $('#ag-grid');
   g.style.gridTemplateColumns = `56px repeat(${Math.max(cols.length, 1)}, minmax(130px, 1fr))`;
   let h = `<div class="ag-cab">${ag.vista === 'dia' ? esc(fechaCorta(ag.dia)) : 'Semana'}</div>` + cols.map(c => `<div class="ag-cab">${esc(c.t)}</div>`).join('');
   h += `<div>${Array.from({ length: filas }, (_, i) => `<div class="ag-hora">${i % 2 ? '' : hm(H0 + i * 30)}</div>`).join('')}</div>`;
