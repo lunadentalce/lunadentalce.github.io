@@ -172,3 +172,4 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
 .rep-bloque .rep-ayuda:empty { display: none; }
 .rep-bloque.menor { border: 2px solid #C9435A; background: #fff5f6; }
 .rep-bloque.falta input { border-color: #C9435A; box-shadow: 0 0 0 3px rgba(201, 67, 90, .25); }
+.campo.falta input { border-color: #C9435A; box-shadow: 0 0 0 3px rgba(201, 67, 90, .25); }
