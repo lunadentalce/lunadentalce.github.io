@@ -9,9 +9,9 @@
         od.actualizar(filas)  ·  filas = [{ id, diente, superficie|null, estado, nota, dia }] (el último estado de cada diente y de cada cara). */
 (() => {
   const ESTADOS = [['sano', 'Sano', '#FFFFFF'], ['caries', 'Caries', '#C9435A'], ['resina', 'Resina', '#4A78C2'], ['endodoncia', 'Endodoncia', '#2E8B6F'], ['corona', 'Corona', '#E0A030'],
-    ['brackets', 'Brackets', '#6B5BA8'], ['implante', 'Implante', '#17A2B8'], ['protesis', 'Prótesis', '#8D6E63'], ['ausente', 'Ausente', '#8E8F94'], ['extraccion', 'Extracción', '#D32F2F']];
+    ['brackets', 'Brackets', '#6B5BA8'], ['implante', 'Implante', '#17A2B8'], ['protesis', 'Prótesis', '#8D6E63'], ['ausente', 'Ausente', '#8E8F94'], ['extraccion', 'Extracción', '#D32F2F'], ['sellante', 'Sellante', '#9BC53D']];
   const ESTADO = Object.fromEntries(ESTADOS.map(e => [e[0], e]));
-  const POR_CARA = ['sano', 'caries', 'resina'];   // se marcan por superficie; los demás son del diente completo
+  const POR_CARA = ['sano', 'caries', 'resina', 'sellante'];   // se marcan por superficie; los demás son del diente completo
   const SUP = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28], INF = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
   const TSUP = [55, 54, 53, 52, 51, 61, 62, 63, 64, 65], TINF = [85, 84, 83, 82, 81, 71, 72, 73, 74, 75];
   const CARA = { O: 'Oclusal / incisal', V: 'Vestibular', L: 'Lingual / palatina', M: 'Mesial', D: 'Distal' };
