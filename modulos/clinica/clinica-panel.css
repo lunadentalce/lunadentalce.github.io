@@ -165,3 +165,10 @@ button.sol:hover, button.sol:focus-visible { border-color: var(--fx-deep); outli
 
 .plan-trat .ses-ok { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 14px; margin: 0 0 12px; padding: 12px 14px; border-radius: 14px; background: color-mix(in srgb, #2E8B6F 14%, var(--fx-bg)); box-shadow: inset 0 0 0 1px color-mix(in srgb, #2E8B6F 55%, transparent); }
 .plan-trat .ses-ok .btn { min-height: 44px; padding: 0 18px; font-size: .95rem; }
+
+/* representante del paciente menor de edad: ocupa todo el ancho y se resalta cuando la fecha de nacimiento es de un menor */
+.rep-bloque { grid-column: 1 / -1; padding: 10px; border-radius: 12px; border: 1px dashed transparent; }
+.rep-bloque .rep-ayuda { margin: 6px 0 0; font-size: .85rem; line-height: 1.35; color: #8a2438; font-weight: 600; }
+.rep-bloque .rep-ayuda:empty { display: none; }
+.rep-bloque.menor { border: 2px solid #C9435A; background: #fff5f6; }
+.rep-bloque.falta input { border-color: #C9435A; box-shadow: 0 0 0 3px rgba(201, 67, 90, .25); }

@@ -75,7 +75,8 @@
     $('#fi-cuerpo').innerHTML = `<form class="fila" id="fi-datos" autocomplete="off">
         ${campo('d-nombre', 'Nombre y apellido', F.nombre, 'maxlength="80" required')}${campo('d-tel', 'Celular', F.telefono ? tel09(F.telefono) : '', 'type="tel" inputmode="tel" maxlength="14" required')}${campo('d-ced', 'Cédula', d.cedula, 'maxlength="20"')}
         ${campo('d-nac', 'Fecha de nacimiento', d.nacimiento, `type="date" max="${hoy()}"`)}${campo('d-mail', 'Correo', d.email, 'type="email" maxlength="80"')}${campo('d-dir', 'Dirección', d.direccion, 'maxlength="200"')}
-        ${campo('d-cn', 'Contacto de emergencia', d.contacto_nombre, 'maxlength="80"')}${campo('d-ct', 'Teléfono del contacto', d.contacto_tel, 'type="tel" maxlength="20"')}${campo('d-rep', 'Representante (si es menor de edad)', d.representante, 'maxlength="80"')}
+        ${campo('d-cn', 'Contacto de emergencia', d.contacto_nombre, 'maxlength="80"')}${campo('d-ct', 'Teléfono del contacto', d.contacto_tel, 'type="tel" maxlength="20"')}
+        <div class="campo rep-bloque" id="d-rep-bloque"><label for="d-rep">Representante: papá, mamá o tutor</label><input id="d-rep" value="${esc(d.representante || '')}" maxlength="80" placeholder="Solo si el paciente es menor de 18 años"><p class="rep-ayuda" id="d-rep-ayuda"></p></div>
         <button class="btn" type="submit">${nuevo ? 'Crear paciente' : 'Guardar datos'}</button></form><p class="err-f" id="fi-err" role="alert"></p>
       ${nuevo ? '' : `<h3 style="font:800 1.05rem var(--fx-font-disp);margin:18px 0 8px">Consentimientos</h3>
         <div class="tarjetas"><div class="sol"><div class="meta"><b>Tratamiento y atención</b> ${estado('tratamiento')}</div><div class="meta"><b>Uso de datos</b> ${estado('datos')}</div><div class="meta"><b>Fotos e imágenes</b> ${estado('imagenes')}</div>
@@ -84,9 +85,13 @@
             <button class="btn" type="submit" value="1">Registrar</button><button class="btn btn-linea" type="button" id="c-retirar">Retirar</button></form>
           <div class="acciones no-print"><button type="button" class="btn btn-linea" id="c-imprimir">Imprimir consentimiento para firmar</button></div>
           <p class="nota-d" style="margin:0">El paciente (o su representante) lo firma en el consultorio. Cuando esté firmado, regístralo aquí arriba.</p></div></div>`}`;
-    $('#fi-datos').onsubmit = async e => { e.preventDefault(); $('#fi-err').textContent = '';
+    const marcarRep = () => { const e = edad($('#d-nac').value), menor = e != null && e < 18, b = $('#d-rep-bloque');   // si la fecha de nacimiento es de un menor, el recuadro del representante se resalta y se explica
+      b.classList.toggle('menor', menor); $('#d-rep-ayuda').textContent = menor ? `El paciente tiene ${e} ${e === 1 ? 'año' : 'años'}: escribe aquí el nombre completo de su papá, mamá o tutor. Es obligatorio.` : '';
+      $('#d-rep').placeholder = menor ? 'Nombre completo del papá, mamá o tutor' : 'Solo si el paciente es menor de 18 años'; };
+    $('#d-nac').oninput = marcarRep; $('#d-nac').onchange = marcarRep; marcarRep();
+    $('#fi-datos').onsubmit = async e => { e.preventDefault(); $('#fi-err').textContent = ''; $('#d-rep-bloque').classList.remove('falta');
       try { const r = await C.rpc('paciente_guardar', { p_id: F.id, p_nombre: $('#d-nombre').value, p_telefono: $('#d-tel').value.replace(/[\s-]/g, ''), p_cedula: $('#d-ced').value, p_nacimiento: $('#d-nac').value || null, p_email: $('#d-mail').value, p_direccion: $('#d-dir').value, p_contacto_nombre: $('#d-cn').value, p_contacto_tel: $('#d-ct').value, p_representante: $('#d-rep').value });
-        aviso(nuevo ? 'Paciente creado.' : 'Datos guardados.'); abrir(r.id, 'datos'); } catch (x) { falla('#fi-err', x); } };
+        aviso(nuevo ? 'Paciente creado.' : 'Datos guardados.'); abrir(r.id, 'datos'); } catch (x) { falla('#fi-err', x); if (/representante/i.test(msgErr(x))) { const b = $('#d-rep-bloque'); b.classList.add('falta'); b.scrollIntoView({ block: 'center', behavior: 'smooth' }); $('#d-rep').focus({ preventScroll: true }); } } };
     if (!nuevo) {
       const reg = async otorgado => { try { await C.rpc('consentimiento_registrar', { p_id: F.id, p_tipo: $('#c-tipo2').value, p_otorgado: otorgado, p_quien: $('#c-quien').value }); aviso(otorgado ? 'Consentimiento registrado.' : 'Consentimiento retirado.'); abrir(F.id, 'datos'); } catch (x) { aviso(msgErr(x), 'mal'); } };
       $('#c-imprimir').onclick = imprimirConsentimiento;
